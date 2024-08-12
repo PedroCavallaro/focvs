@@ -1,0 +1,10 @@
+export enum AUHT_FORM_STATE {
+  "LOGIN",
+  "REGISTER",
+}
+
+export enum RECOVER_PASSWORD_STATE {
+  "GET_CODE",
+  "TYPE_CODE",
+  "CHANGE_PASSWORD",
+}
