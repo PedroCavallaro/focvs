@@ -1,14 +1,10 @@
-import {
-  Slot,
-  usePathname,
-  useRootNavigationState,
-  useRouter,
-} from "expo-router";
-import { Animated, ScrollView, StatusBar, View } from "react-native";
-import React, { useCallback, useEffect } from "react";
+import { Slot } from "expo-router";
+import { StatusBar, View } from "react-native";
+import React from "react";
 import "react-native-reanimated";
 import "./global.css";
 import {
+  Mulish_300Light,
   Mulish_500Medium,
   Mulish_400Regular,
   useFonts,
@@ -18,6 +14,7 @@ export { ErrorBoundary } from "expo-router";
 
 export default function RootLayout() {
   const [loaded, _] = useFonts({
+    Mulish_300Light,
     Mulish_500Medium,
     Mulish_400Regular,
   });

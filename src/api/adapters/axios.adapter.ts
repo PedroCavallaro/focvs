@@ -1,11 +1,12 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { HttpClient, RequestOptions } from "../http";
+import { router } from "expo-router";
 
 export class AxiosClient extends HttpClient {
   protected async doRequest<T>(
     method: string,
     url: string,
-    options: RequestOptions
+    options: RequestOptions,
   ): Promise<T> {
     if (!this.skipAuthTokenUrls.includes(url)) {
       const authHeader = await this.getAuthTokenHeader();
@@ -16,6 +17,7 @@ export class AxiosClient extends HttpClient {
       };
     }
 
+    // add interceptors
     const request: AxiosRequestConfig = {
       baseURL: this._concatEndpoint(url, options),
       data: options.body,

@@ -11,7 +11,7 @@ type InputProps = {
   variant?: Variants;
 };
 
-function Input({ children, variant = "primary", error }: InputProps) {
+function Input({ children, variant = "primary" }: InputProps) {
   return (
     <View
       className={clsx(

@@ -5,14 +5,14 @@ import { Button } from "./button";
 import { colors } from "../style";
 
 export function Footer() {
-  const route = usePathname() as "/" | "/statistics" | "/search";
+  const route = usePathname() as "/" | "/(home)" | "/statistics" | "/search";
 
   return (
-    <View className="absolute w-full flex items-center justify-center bottom-5">
-      <View className="w-4/5 h-20 flex-row items-center justify-around  rounded-2xl bg-zinc-950 z-10 ">
+    <View className="absolute bottom-5 flex w-full items-center justify-center">
+      <View className="z-10 h-20 w-4/5 flex-row items-center justify-around rounded-2xl bg-zinc-950">
         <Button
-          onPress={() => router.push("/")}
-          className={`w-12 h-12 rounded-2xl  flex items-center justify-center ${
+          onPress={() => router.push("/(home)")}
+          className={`flex h-12 w-12 items-center justify-center rounded-2xl ${
             route === "/" ? "opacity-100" : "opacity-50"
           }`}
         >
@@ -20,7 +20,7 @@ export function Footer() {
         </Button>
         <Button
           onPress={() => router.push("/search")}
-          className={`w-12 h-12 rounded-2xl  flex items-center justify-center ${
+          className={`flex h-12 w-12 items-center justify-center rounded-2xl ${
             route === "/search" ? "opacity-100" : "opacity-50"
           }`}
         >
@@ -28,7 +28,7 @@ export function Footer() {
         </Button>
         <Button
           onPress={() => router.push("/statistics")}
-          className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
+          className={`flex h-12 w-12 items-center justify-center rounded-2xl ${
             route === "/statistics" ? "opacity-100" : "opacity-50"
           }`}
         >

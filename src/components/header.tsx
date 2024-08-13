@@ -4,7 +4,7 @@ import { colors } from "../style/colors";
 
 export function Header() {
   return (
-    <View className="w-full items-center h-24 px-2  justify-between flex-row">
+    <View className="mt-6 h-24 w-full flex-row items-center justify-between px-2">
       <TouchableOpacity>
         <Menu size={25} color={colors.orange[500]} />
       </TouchableOpacity>
