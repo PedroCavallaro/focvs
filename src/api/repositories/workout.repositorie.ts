@@ -1,3 +1,4 @@
+import { MuscleDto } from "../dtos";
 import { Repositorie } from "./repositorie";
 
 export class WorkoutRepositorie extends Repositorie {

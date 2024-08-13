@@ -51,11 +51,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
-    "@rocketseat/eslint-config": "^2.2.2",
     "@types/jwt-decode": "^3.1.0",
     "@types/react": "^18.2.79",
     "autoprefixer": "^10.4.20",
-    "eslint": "9.x",
     "jest": "^29.7.0",
     "jest-expo": "^51.0.3",
     "prettier-plugin-tailwindcss": "^0.6.6",

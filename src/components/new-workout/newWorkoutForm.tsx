@@ -1,11 +1,11 @@
 import { View, Text } from "react-native";
 import { Input } from "../input";
-import React, { useState } from "react";
+import React, { ReactNode,  useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { daysOfWeek } from "@/src/utils";
 import { colors } from "@/src/style";
 
-export function NewWorkoutForm() {
+export function NewWorkoutForm( ) {
   const [day, setDay] = useState<number>(-1);
 
   return (

@@ -1,15 +1,17 @@
-import { ReactNode, useState } from "react";
-import { View, Text, FlatList, ScrollView } from "react-native";
+import { View, Text } from "lucide-react-native";
+import { ReactNode } from "react";
 import { Button } from "../button";
 
-export function MusclePicker({children}: {children: ReactNode}) {
-  return (
-    <View className="flex-col gap-4">
+export function ExercisePicker({children, muscleName} : {children: ReactNode, muscleName: string}) {
+
+
+    return (
+        <View className="flex-col gap-4">
       <View className="flex-row items-center justify-between gap-10">
         <View className="flex-col">
           <View>
             <Text className="relative text-lg font-light text-white opacity-70">
-              Selecione o Músculo
+              Vendo exercicios de {muscleName}
             </Text>
           </View>
         </View>
@@ -19,5 +21,5 @@ export function MusclePicker({children}: {children: ReactNode}) {
       </View>
       {children}
     </View>
-  );
+    )
 }

@@ -19,7 +19,7 @@ export function useAuth() {
   const [user, setUser] = useAtom(userAtom);
 
   const login = useCallbackPlus(async (data: LoginDTO) => {
-    const { token } = await api.auth.login(data);
+     const { token } = await api.auth.login(data);
 
     await SecureStore.setItemAsync(STORAGE_AUTH_KEY, token);
 
@@ -29,7 +29,8 @@ export function useAuth() {
 
     router.push("/(home)");
 
-    return token;
+    return token
+   
   }, []);
 
   const createAccount = useCallbackPlus(async (data: CreateAccountDTO) => {
