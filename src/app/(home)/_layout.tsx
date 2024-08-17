@@ -1,3 +1,4 @@
+import { Drawer } from "@/src/components/drawer";
 import { Footer } from "@/src/components/footer";
 import { Header } from "@/src/components/header";
 import { useFooter } from "@/src/hooks";

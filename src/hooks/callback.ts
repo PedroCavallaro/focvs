@@ -4,7 +4,7 @@ import { AxiosError } from "axios";
 import { useRouter } from "expo-router";
 
 export function useCallbackPlus<T, U = unknown>(
-  callback: (...args: U[]) => Promise<T>,
+  callback: (...args: U[]) => Promise<T> | T,
   deps: React.DependencyList,
   id?: string,
 ) {
@@ -32,10 +32,12 @@ export function useCallbackPlus<T, U = unknown>(
 
         return val;
       } catch (error) {
+        console.log(error);
         if (error instanceof AxiosError) {
           handleAxiosErrors(error);
         }
 
+        
         // do some error handling
       }
     },

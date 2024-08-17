@@ -8,5 +8,6 @@ export const colors = {
   },
   zincBlur: {
     200: "rgba(255, 255, 255, 0.3)",
+    700: "rgba(255, 255, 255, 0.7)",
   },
 };

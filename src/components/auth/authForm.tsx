@@ -93,7 +93,6 @@ export function AuthForm({
             <Mail size={15} color={colors.zincBlur[200]} />
             <Input.Field
               placeholder="Email"
-              value={user?.email}
               onChangeText={(v) => setValue("email", v)}
             />
           </Input>

@@ -3,7 +3,7 @@ import { Platform, TextInput, TextInputProps, View } from "react-native";
 import clsx from "clsx";
 import { colors } from "../style";
 
-type Variants = "primary" | "secondary" | "bordered";
+type Variants = "primary" | "secondary" | "no-border";
 
 type InputProps = {
   children: ReactNode;
@@ -15,10 +15,11 @@ function Input({ children, variant = "primary" }: InputProps) {
   return (
     <View
       className={clsx(
-        "h-14 w-full flex-row items-center justify-center gap-2 rounded-lg border-b-[1px] border-zinc-300 px-2",
+        "h-14 w-full flex-row items-center justify-center gap-2 rounded-lg px-2",
         {
+          "border-b-[1px] border-zinc-300": variant === "primary",
           "bg-black": variant === "secondary",
-          "border-2": variant === "bordered",
+          "": variant === "no-border",
         },
       )}
     >
