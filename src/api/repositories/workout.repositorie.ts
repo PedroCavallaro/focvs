@@ -23,7 +23,7 @@ export class WorkoutRepositorie extends Repositorie {
   }
 
   async getUserWokouts() {
-    const res = await this.api.get<WorkoutDetails>("/workout");
+    const res = await this.api.get<WorkoutDetails[]>("/workout");
 
     return res;
   }

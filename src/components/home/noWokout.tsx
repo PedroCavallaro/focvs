@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import { Button } from "../button";
 import { useRouter } from "expo-router";
 
-export function NoWorkout() {
+export function NoWorkout({openSwitchModal} : {openSwitchModal: () => void}) {
   const router = useRouter();
 
   return (
@@ -14,7 +14,7 @@ export function NoWorkout() {
         <Button.Title>Criar Treino</Button.Title>
       </Button>
       <Text className="text-center font-regular text-lg text-white">Ou</Text>
-      <Button>
+      <Button onPress={openSwitchModal}>
         <Button.Title>Escolher outro treino</Button.Title>
       </Button>
     </View>

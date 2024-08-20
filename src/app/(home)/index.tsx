@@ -13,6 +13,7 @@ import { atomWithStorage } from "jotai/utils";
 import { useModal } from "@/src/providers/ModalProvider";
 import { BaseModal } from "@/src/components/baseModal";
 import { SwitchWorkoutModal } from "@/src/components/home/switchWorkoutModal";
+import { NoWorkout } from "@/src/components/home/noWokout";
 
 const workoutAtom = atomWithStorage("focvs-workout", {} as Workout);
 
@@ -22,6 +23,7 @@ export default function HomePage() {
   const loadingId = "fetch-workout";
   const { handleLoading, loading } = useLoading(loadingId);
 
+  
   const fetchWorkoutOfTheDay = useCallback(async () => {
     try {
       handleLoading(loadingId, true);
@@ -52,7 +54,10 @@ export default function HomePage() {
     <View className="flex-col gap-16">
       {loading === false ? (
         <>
-          <View className="flex-col justify-between gap-4">
+         {
+          workout?.id ? (
+           <>
+             <View className="flex-col justify-between gap-4">
             <View className="flex-row items-center justify-between gap-3">
               <Text className="font-regular text-lg text-white opacity-70">
                 {daysOfWeek[new Date().getDay() as DayOfWeek]}
@@ -81,6 +86,11 @@ export default function HomePage() {
             </View>
           </View>
           <WorkoutExercisesList exercises={workout.exercises} id={workout.id} />
+            </>
+          ) : (
+            <NoWorkout openSwitchModal={openSwichModal}/>
+          )
+         }
         </>
       ) : (
         <WorkoutOfTheDaySkeleton />
