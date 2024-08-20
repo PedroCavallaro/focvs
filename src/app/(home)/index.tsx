@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { View, Text, TouchableOpacity } from "react-native";
-import { Workout } from "@/src/api/dtos";
+import { STORAGE_AUTH_KEY, Workout } from "@/src/api/dtos";
 import { useCallback, useEffect, useState } from "react";
 import { api } from "@/src/api";
 import { useLoading } from "@/src/hooks";
@@ -8,10 +8,17 @@ import { WorkoutExercisesList } from "@/src/components/home/workoutExercisesList
 import { DayOfWeek, daysOfWeek } from "@/src/utils";
 import { ArrowLeftRight, Play } from "lucide-react-native";
 import { WorkoutOfTheDaySkeleton } from "@/src/components/skeletons/workoutOfTheDaySkeleton";
+import { useAtom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
+import { useModal } from "@/src/providers/ModalProvider";
+import { BaseModal } from "@/src/components/baseModal";
+import { SwitchWorkoutModal } from "@/src/components/home/switchWorkoutModal";
+
+const workoutAtom = atomWithStorage("focvs-workout", {} as Workout);
 
 export default function HomePage() {
   const router = useRouter();
-  const [workout, setWorkout] = useState<Workout>({} as Workout);
+  const [workout, setWorkout] = useAtom<Workout>(workoutAtom);
   const loadingId = "fetch-workout";
   const { handleLoading, loading } = useLoading(loadingId);
 
@@ -31,6 +38,15 @@ export default function HomePage() {
   useEffect(() => {
     fetchWorkoutOfTheDay();
   }, [fetchWorkoutOfTheDay]);
+
+  const { openModal: openSwichModal, closeModal: closeSwitchModal } = useModal(
+    () => (
+      <BaseModal title="Trocar treino" onClose={() => closeSwitchModal()}>
+        <SwitchWorkoutModal />
+      </BaseModal>
+    ),
+    [],
+  );
 
   return (
     <View className="flex-col gap-16">
@@ -52,7 +68,10 @@ export default function HomePage() {
                 {workout.name}
               </Text>
               <View className="flex-row gap-4 rounded-lg bg-zinc-950 px-4 py-2">
-                <TouchableOpacity className="rounded-full bg-orange-500 p-2">
+                <TouchableOpacity
+                  onPress={openSwichModal}
+                  className="rounded-full bg-orange-500 p-2"
+                >
                   <ArrowLeftRight size={15} color={"#000"} />
                 </TouchableOpacity>
                 <TouchableOpacity className="rounded-full bg-orange-500 p-2">
