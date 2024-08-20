@@ -4,16 +4,15 @@ import React, { ReactNode, useCallback, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { daysOfWeek } from "@/src/utils";
 import { colors } from "@/src/style";
-import { SaveWorkoutDTO } from "@/src/api/dtos";
 import { ChangeWorkoutInfo } from "@/src/app/(home)/new";
 
 export function NewWorkoutForm({
-  workout,
   changeValue,
 }: {
-  workout: SaveWorkoutDTO;
   changeValue: ({ key, value }: ChangeWorkoutInfo) => void;
 }) {
+  const [day, setDay] = useState(-1);
+
   return (
     <View className="flex-row items-center justify-between gap-2">
       <View className="mt-2 w-2/4 flex-col">
@@ -43,8 +42,11 @@ export function NewWorkoutForm({
               backgroundColor: "#000",
               color: colors.zinc[200],
             }}
-            selectedValue={workout.day}
-            onValueChange={(value) => changeValue({ key: "day", value: Number(value) })}
+            selectedValue={day}
+            onValueChange={(value) => {
+              setDay(value);
+              changeValue({ key: "day", value: Number(value) });
+            }}
           >
             <Picker.Item
               style={{

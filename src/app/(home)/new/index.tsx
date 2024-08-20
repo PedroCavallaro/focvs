@@ -141,7 +141,7 @@ export default function NewWorkout() {
     <View className="flex-col gap-4">
       <View className="flex-col gap-8">
         <Text className="font-light text-lg text-white">Novo treino</Text>
-        <NewWorkoutForm workout={workout} changeValue={changeWorkoutInfo} />
+        <NewWorkoutForm changeValue={changeWorkoutInfo} />
         <View className="flex-row items-center justify-between gap-2">
           <View className="w-3/6">
             <View>
@@ -166,7 +166,7 @@ export default function NewWorkout() {
             onPress={openDrawer}
             className="h-10 w-11/12 justify-center rounded-lg bg-orange-500 p-2"
           >
-            <Text className="text-md ml-10 font-medium text-black">
+            <Text className="text-md ml-16 font-medium text-black">
               Ver treino
             </Text>
           </Button>

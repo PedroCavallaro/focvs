@@ -11,14 +11,16 @@ export function ExerciseCard({
 }) {
   return (
     <View className="flex-col gap-10 border-b-[0.4px] border-white">
-      <View className="flex-row gap-3">
+      <View className="flex-row gap-6">
         <Image
           source={{ uri: exercise.gif_url }}
           className="h-44 w-3/6 bg-white object-cover"
         />
-        <Text className="mb-5 font-medium text-lg text-white">
-          {exercise.name}
-        </Text>
+        <View>
+          <Text className="mb-5 font-medium text-lg text-white">
+            {exercise.name}
+          </Text>
+        </View>
       </View>
       <View className="mb-4">
         <View className="flex-col">
@@ -37,8 +39,9 @@ export function ExerciseCard({
             return (
               <View key={i} className="flex-row gap-7">
                 <View className="w-2/12">
-                  <Input variant={!editable ? "no-border" : "primary"}>
+                  <Input variant={"no-border"}>
                     <Input.Field
+                      editable={false}
                       className="text-center font-regular text-white"
                       value={String(set.set_number)}
                     />
