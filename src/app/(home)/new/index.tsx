@@ -13,9 +13,8 @@ import { ExercisePickerCard } from "@/src/components/new-workout/exercisePIckerC
 import { MuscleCard } from "@/src/components/new-workout/muscleCard";
 import { MusclePicker } from "@/src/components/new-workout/musclePicker";
 import { NewWorkoutForm } from "@/src/components/new-workout/forms/newWorkoutForm";
-import { useCallbackPlus, useLoading } from "@/src/hooks";
+import { useCallbackPlus } from "@/src/hooks";
 import { useModal } from "@/src/providers/ModalProvider";
-import { PaginationDTO } from "@/src/utils/pagination";
 import { useCallback, useEffect, useState } from "react";
 import {
   View,
@@ -30,25 +29,38 @@ import { WorkoutSampling } from "@/src/components/new-workout/workoutSampling";
 import { Button } from "@/src/components/button";
 import { ArrowLeft } from "lucide-react-native";
 import { colors } from "@/src/style";
+import { useQuery } from "@tanstack/react-query";
 
 export type ChangeWorkoutInfo =
   | { key: "day"; value: number }
   | { key: "name"; value: string };
 
 export default function NewWorkout() {
-  const [muscles, setMuscles] = useState<MuscleDto[]>([]);
+  const { isLoading: muscleLoading, data: muscles } = useQuery({
+    queryKey: ["muscles"],
+    queryFn: () => api.exercise.getMuscleList(),
+  });
   const [selectedMuscle, setSelectedMuscle] = useState<MuscleDto>(
     {} as MuscleDto,
   );
-  const [exercises, setExercises] = useState<PaginationDTO<ExerciseDto>>();
+
+  const {
+    data: exercises,
+    isLoading: exerciseLoading,
+    refetch: fetchExercises,
+  } = useQuery({
+    queryKey: ["exercises", selectedMuscle.id],
+    queryFn: () => api.exercise.getExercises(selectedMuscle.id),
+    enabled: false,
+    refetchOnWindowFocus: false,
+  });
+
   const [workout, setWorkout] = useState<SaveWorkoutDTO>({
     name: "",
     day: -1,
     public: true,
     exercises: [],
   });
-  const loadingId = "new-workout";
-  const { handleLoading, loading } = useLoading(loadingId);
 
   const addExerciseToWorkout = useCallbackPlus(
     (exercise: WorkoutExercise) => {
@@ -61,19 +73,6 @@ export default function NewWorkout() {
     [setWorkout],
   );
 
-  const fetchMuscles = useCallback(async () => {
-    try {
-      handleLoading(loadingId, true);
-      const response = await api.exercise.getMuscleList();
-
-      setMuscles(response);
-    } catch (error) {
-      handleLoading(loadingId, false);
-    } finally {
-      handleLoading(loadingId, false);
-    }
-  }, [setMuscles]);
-
   const changeWorkoutInfo = useCallback(({ key, value }: ChangeWorkoutInfo) => {
     setWorkout((prev) => ({
       ...prev,
@@ -81,36 +80,12 @@ export default function NewWorkout() {
     }));
   }, []);
 
-  const fetchExercises = useCallback(
-    async (id: string) => {
-      try {
-        handleLoading(loadingId, true);
-        const response = await api.exercise.getExercises(id);
-
-        setExercises(response);
-      } catch (error) {
-        handleLoading(loadingId, false);
-      } finally {
-        handleLoading(loadingId, false);
-      }
-    },
-    [selectedMuscle],
-  );
-
   const handleSelectMuscle = useCallback(
-    (muscle: MuscleDto) => {
+    async (muscle: MuscleDto) => {
       setSelectedMuscle(muscle);
-
-      if (muscle?.id) {
-        fetchExercises(muscle.id);
-      }
     },
     [setSelectedMuscle],
   );
-
-  useEffect(() => {
-    fetchMuscles();
-  }, [fetchMuscles]);
 
   const { closeDrawer, openDrawer } = useDrawer(() => {
     return (
@@ -136,6 +111,10 @@ export default function NewWorkout() {
     },
     [addExerciseToWorkout],
   );
+
+  useEffect(() => {
+    fetchExercises();
+  }, [selectedMuscle]);
 
   return (
     <View className="flex-col gap-4">
@@ -174,7 +153,7 @@ export default function NewWorkout() {
       </View>
       {selectedMuscle?.id ? (
         <ExercisePicker
-          loading={loading}
+          loading={exerciseLoading}
           muscleName={selectedMuscle.name}
           openDrawer={openDrawer}
         >
@@ -192,7 +171,7 @@ export default function NewWorkout() {
           </ScrollView>
         </ExercisePicker>
       ) : (
-        <MusclePicker openDrawer={openDrawer} loading={loading}>
+        <MusclePicker openDrawer={openDrawer} loading={muscleLoading}>
           <ScrollView horizontal className="flex-row flex-wrap gap-8">
             <FlatList
               data={muscles}

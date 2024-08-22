@@ -38,7 +38,6 @@ export function DrawerProvider({ children }: { children: ReactNode }) {
     setCurrentDrawer(null);
   };
 
-  //todo: this animation
   const animation = useMemo(() => {
     return {
       transform: [

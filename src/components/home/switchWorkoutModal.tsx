@@ -1,30 +1,23 @@
 import { api } from "@/src/api";
-import { WorkoutDetails } from "@/src/api/dtos";
-import { useCallback, useEffect, useState } from "react";
-import { View } from "react-native";
+import { useQuery } from "@tanstack/react-query";
+import { ScrollView, TouchableOpacity, View } from "react-native";
+import { WorkoutDetailsCard } from "../workoutDetailsCard";
 
 export function SwitchWorkoutModal() {
+  const { data } = useQuery({
+    queryKey: ["user-workouts"],
+    queryFn: () => api.workout.getWorkouts(),
+  });
 
-  const [workouts, setWorkouts] = useState<WorkoutDetails[]>([] )
-
-
-  const fetchWorkouts = useCallback(async () => {
-    const workouts = await api.workout.getUserWokouts()
-
-    setWorkouts(workouts)
-
-  }, [])
-
-
-  useEffect(() => {
-    fetchWorkouts()
-  },[fetchWorkouts])
-
-
-
-  return <View className="h-[45rem] w-full flex-col">
-
-
-  
-  </View>;
+  return (
+    <ScrollView className="max-h-[45rem] w-full flex-col gap-4">
+      <View className="mt-6 flex-col gap-6">
+        {data?.map((workout) => (
+          <TouchableOpacity key={workout.id}>
+            <WorkoutDetailsCard workout={workout} />
+          </TouchableOpacity>
+        ))}
+      </View>
+    </ScrollView>
+  );
 }
