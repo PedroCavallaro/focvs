@@ -45,7 +45,10 @@ export default function HomePage() {
   const { openModal: openSwichModal, closeModal: closeSwitchModal } = useModal(
     () => (
       <BaseModal title="Trocar treino" onClose={() => closeSwitchModal()}>
-        <SwitchWorkoutModal />
+        <SwitchWorkoutModal
+          setWorkout={setWorkout}
+          close={() => closeSwitchModal()}
+        />
       </BaseModal>
     ),
     [],

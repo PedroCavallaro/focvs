@@ -39,6 +39,6 @@ export type Workout = z.infer<typeof SaveWorkout> & { id: string };
 export type WorkoutDetails = z.infer<typeof SaveWorkout> & {
   id: string;
   picture_url: string;
-  total_exercises: string;
+  exerciseAmount: number;
 };
 export type WorkoutExercise = z.infer<typeof AddExerciseSchema>;

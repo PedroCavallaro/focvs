@@ -26,6 +26,14 @@ export class WorkoutRepositorie extends Repositorie {
     return res;
   }
 
+  async getWorkout(id: string) {
+    const res = await this.api.get<Workout>(`/workout/user/${id}`);
+
+    console.log(res);
+
+    return res;
+  }
+
   async getUserWokouts() {
     const res = await this.api.get<WorkoutDetails[]>("/workout");
 
