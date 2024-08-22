@@ -1,4 +1,4 @@
-import { string, z } from "zod";
+import { z } from "zod";
 
 export type WorkoutDto = {
   name: string;
@@ -39,5 +39,6 @@ export type Workout = z.infer<typeof SaveWorkout> & { id: string };
 export type WorkoutDetails = z.infer<typeof SaveWorkout> & {
   id: string;
   picture_url: string;
+  exerciseAmount: number;
 };
 export type WorkoutExercise = z.infer<typeof AddExerciseSchema>;
