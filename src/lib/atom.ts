@@ -7,7 +7,7 @@ export const atomWithAsyncStorage = <T>(key: string, initialValue: T) => {
 
   const { getItem, setItem } = storage;
 
-  storage.setItem = (_, value, expireInHours = 12) => {
+  storage.setItem = (_, value, expireInHours = 24) => {
     const expireAt = add(new Date(), { hours: expireInHours });
     const updatedValue = { ...value, expireAt: formatISO(expireAt) };
 

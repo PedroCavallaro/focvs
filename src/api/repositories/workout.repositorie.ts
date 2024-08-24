@@ -1,7 +1,17 @@
 import { SaveWorkoutDTO, Workout, WorkoutDetails } from "../dtos";
-import { Repositorie } from "./repositorie";
+import { HttpClient } from "../http";
 
-export class WorkoutRepositorie extends Repositorie {
+export class WorkoutRepositorie {
+  protected readonly api: HttpClient;
+
+  constructor(api: HttpClient) {
+    this.api = api;
+  }
+
+  static build(api: HttpClient) {
+    return { workout: new WorkoutRepositorie(api) };
+  }
+
   async getWorkouts() {
     try {
       const res = await this.api.get<WorkoutDetails[]>("/workout");
@@ -29,13 +39,23 @@ export class WorkoutRepositorie extends Repositorie {
   async getWorkout(id: string) {
     const res = await this.api.get<Workout>(`/workout/user/${id}`);
 
-    console.log(res);
+    return res;
+  }
+
+  async getFullWorkoutById(id: string) {
+    const res = await this.api.get<Workout & WorkoutDetails>(`/workout/${id}`);
 
     return res;
   }
 
   async getUserWokouts() {
     const res = await this.api.get<WorkoutDetails[]>("/workout");
+
+    return res;
+  }
+
+  async deleteWorkout(id: string) {
+    const res = await this.api.delete<WorkoutDetails[]>(`/workout/${id}`);
 
     return res;
   }

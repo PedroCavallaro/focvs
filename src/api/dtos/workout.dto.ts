@@ -35,10 +35,16 @@ export const SaveWorkout = z.object({
 
 export type ExerciseSet = z.infer<typeof ExerciseSetSchema>;
 export type SaveWorkoutDTO = z.infer<typeof SaveWorkout>;
-export type Workout = z.infer<typeof SaveWorkout> & { id: string };
+export type Workout = z.infer<typeof SaveWorkout> & {
+  id: string;
+};
 export type WorkoutDetails = z.infer<typeof SaveWorkout> & {
   id: string;
   picture_url: string;
+  user: {
+    name: string;
+    image_url: string;
+  };
   exerciseAmount: number;
 };
 export type WorkoutExercise = z.infer<typeof AddExerciseSchema>;

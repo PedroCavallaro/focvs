@@ -26,9 +26,15 @@ export default function HomePage() {
   const [workout, setWorkout] = useAtom(workoutAtom);
 
   const fetchWorkoutOfTheDay = useCallback(async () => {
-    const hasOnStorage = await Storage.getItem("focvs-workout");
+    const hasOnStorage = await Storage.getItem<Workout>("focvs-workout");
 
     if (!hasOnStorage) {
+      const workout = await api.workout.getWorkoutOfTheDay();
+
+      setWorkout(workout);
+    }
+
+    if (hasOnStorage?.day !== new Date().getDay()) {
       const workout = await api.workout.getWorkoutOfTheDay();
 
       setWorkout(workout);
@@ -55,7 +61,7 @@ export default function HomePage() {
   );
 
   return (
-    <View className="flex-col gap-16">
+    <View className="flex-col gap-8">
       {!isLoading ? (
         <>
           {workout?.id ? (

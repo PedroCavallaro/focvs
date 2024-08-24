@@ -3,7 +3,7 @@ import { RequestOptions } from "./http.types";
 import * as SecureStorage from "expo-secure-store";
 
 export abstract class HttpClient {
-  protected readonly skipAuthTokenUrls: string[];
+  private readonly skipAuthTokenUrls: string[];
   private readonly baseUrl: string;
 
   constructor(baseUrl: string) {
@@ -14,7 +14,7 @@ export abstract class HttpClient {
   protected abstract doRequest<T>(
     method: string,
     url: string,
-    options: RequestOptions
+    options: RequestOptions,
   ): Promise<T>;
 
   protected async getAuthTokenHeader() {

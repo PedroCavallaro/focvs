@@ -4,9 +4,19 @@ import {
   GetRecoverPasswordCodeDTO,
   LoginDTO,
 } from "../dtos";
-import { Repositorie } from "./repositorie";
+import { HttpClient } from "../http";
 
-export class AuthRepository extends Repositorie {
+export class AuthRepository {
+  protected readonly api: HttpClient;
+
+  constructor(api: HttpClient) {
+    this.api = api;
+  }
+
+  static build(api: HttpClient) {
+    return { auth: new AuthRepository(api) };
+  }
+
   async login(data: LoginDTO): Promise<AuthResponse> {
     const response = await this.api.post<AuthResponse>("/auth/login", {
       body: data,

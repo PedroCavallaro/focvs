@@ -1,9 +1,14 @@
 import { HttpClient } from "../http";
+import { AuthRepository } from "./auth.repositorie";
+import { ExerciseRepositorie } from "./exercise.repository";
+import { WorkoutRepositorie } from "./workout.repositorie";
 
-export abstract class Repositorie {
-  protected readonly api: HttpClient;
+export interface Api {
+  auth: AuthRepository;
+  workout: WorkoutRepositorie;
+  exercise: ExerciseRepositorie;
+}
 
-  constructor(api: HttpClient) {
-    this.api = api;
-  }
+export interface Repositorie {
+  build(api: HttpClient): Partial<Api>;
 }

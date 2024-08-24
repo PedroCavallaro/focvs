@@ -1,4 +1,4 @@
-import { AxiosClient } from "../adapters";
+import { Api } from "../repositories/repositorie";
 
 export interface RequestOptions {
   headers?: Record<string, string>;
@@ -7,5 +7,5 @@ export interface RequestOptions {
 }
 
 export interface HttpClientFactory {
-  createAxiosClient(): AxiosClient;
+  createAxiosClient(): Api;
 }
