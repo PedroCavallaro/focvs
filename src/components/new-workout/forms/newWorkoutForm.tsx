@@ -1,10 +1,10 @@
 import { View, Text } from "react-native";
 import { Input } from "../../input";
-import React, { ReactNode, useCallback, useState } from "react";
+import React, { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { daysOfWeek } from "@/src/utils";
 import { colors } from "@/src/style";
-import { ChangeWorkoutInfo } from "@/src/app/(home)/new";
+import { ChangeWorkoutInfo } from "@/src/app/home/new";
 
 export function NewWorkoutForm({
   changeValue,

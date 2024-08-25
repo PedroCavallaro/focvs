@@ -25,6 +25,7 @@ export function RecoverPasswordForm({
         return <ChangePasswordForm handleState={handleState} />;
     }
   }, [handleState, state]);
+
   return (
     <View className="w-full flex-col gap-10">
       <View className="w-full items-end px-4">

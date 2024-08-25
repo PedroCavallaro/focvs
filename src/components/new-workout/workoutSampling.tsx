@@ -7,17 +7,25 @@ import { useCallbackPlus } from "@/src/hooks";
 import { api } from "@/src/api";
 import { useRouter } from "expo-router";
 
-export function WorkoutSampling({ workout, close }: { workout: SaveWorkoutDTO, close: () => void }) {
-  const router = useRouter()
-  const saveWorkout = useCallbackPlus(async (workout: SaveWorkoutDTO) => {
+export function WorkoutSampling({
+  workout,
+  close,
+}: {
+  workout: SaveWorkoutDTO;
+  close: () => void;
+}) {
+  const router = useRouter();
+  const saveWorkout = useCallbackPlus(
+    async (workout: SaveWorkoutDTO) => {
+      const parsedWorkout = SaveWorkout.parse(workout);
 
-    const parsedWorkout = SaveWorkout.parse(workout)
+      await api.workout.createWorkout(parsedWorkout);
 
-    await api.workout.createWorkout(parsedWorkout)
-
-    router.replace("/(home)")
-    close()
-  }, [workout, router])
+      router.replace("/home");
+      close();
+    },
+    [workout, router],
+  );
 
   return (
     <View className="h-[82%] flex-col gap-8">
@@ -45,7 +53,9 @@ export function WorkoutSampling({ workout, close }: { workout: SaveWorkoutDTO, c
       <ScrollView>
         <View className="w-full flex-col gap-10">
           {workout.exercises.map((exercise) => {
-            return <ExerciseCard key={exercise.exerciseId} exercise={exercise} />;
+            return (
+              <ExerciseCard key={exercise.exerciseId} exercise={exercise} />
+            );
           })}
         </View>
       </ScrollView>

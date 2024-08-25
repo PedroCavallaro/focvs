@@ -36,7 +36,7 @@ export default function Index() {
       });
 
       if (success) {
-        router.push("/(home)");
+        router.push("/home");
       }
     }
   }, []);

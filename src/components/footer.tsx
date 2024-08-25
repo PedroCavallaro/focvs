@@ -5,15 +5,15 @@ import { Button } from "./button";
 import { colors } from "../style";
 
 export function Footer() {
-  const route = usePathname() as "/" | "/(home)" | "/statistics" | "/search";
+  const route = usePathname() as "/" | "/home" | "/statistics" | "/search";
 
   return (
     <View className="absolute bottom-5 z-10 flex w-full items-center justify-center">
       <View className="h-20 w-4/5 flex-row items-center justify-around rounded-2xl bg-zinc-950">
         <Button
-          onPress={() => router.push("/(home)")}
+          onPress={() => router.push("/home")}
           className={`flex h-12 w-12 items-center justify-center rounded-2xl ${
-            route === "/" ? "opacity-100" : "opacity-50"
+            route === "/home" ? "opacity-100" : "opacity-50"
           }`}
         >
           <Home size={25} color={colors.orange[500]} />

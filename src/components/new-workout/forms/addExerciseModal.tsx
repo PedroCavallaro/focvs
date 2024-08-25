@@ -1,7 +1,7 @@
 import { ExerciseDto, ExerciseSet, WorkoutExercise } from "@/src/api/dtos";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text } from "react-native";
 import { Button } from "../../button";
-import { Check, Plus, Trash2, X } from "lucide-react-native";
+import { Check, Plus, Trash2 } from "lucide-react-native";
 import { colors } from "@/src/style";
 import { useCallback, useState } from "react";
 import { SetRow } from "./setRow";

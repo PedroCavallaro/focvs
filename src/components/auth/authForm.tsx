@@ -24,7 +24,6 @@ export function AuthForm({
   state: AUHT_FORM_STATE;
   handleState: () => void;
 }) {
-  const { user } = useAuth();
   const { login, createAccount } = useAuth();
   const router = useRouter();
   const formInfo = useMemo(() => {
