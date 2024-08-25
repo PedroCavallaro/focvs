@@ -27,14 +27,17 @@ export default function Index() {
     if (!token) return;
 
     const user = jwtDecode<UserDTO>(token);
-    setUser(user);
 
-    const { success } = await LocalAuthentication.authenticateAsync({
-      promptMessage: "Entrar",
-    });
+    if (user) {
+      setUser(user);
 
-    if (success) {
-      router.push("/(home)");
+      const { success } = await LocalAuthentication.authenticateAsync({
+        promptMessage: "Entrar",
+      });
+
+      if (success) {
+        router.push("/(home)");
+      }
     }
   }, []);
 

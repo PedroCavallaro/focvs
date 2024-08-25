@@ -1,6 +1,7 @@
 import { Workout, WorkoutDetails } from "@/src/api/dtos";
+import { useAuth } from "@/src/hooks";
 import { colors } from "@/src/style";
-import { Copy, Share2 } from "lucide-react-native";
+import { Copy, Share2, X } from "lucide-react-native";
 import { Image, Text, View } from "react-native";
 
 export function WorkoutSumary({
@@ -8,6 +9,8 @@ export function WorkoutSumary({
 }: {
   workout: Workout & WorkoutDetails;
 }) {
+  const { user } = useAuth();
+
   return (
     <View className="flex-row gap-4">
       <Image
@@ -22,8 +25,11 @@ export function WorkoutSumary({
           </Text>
         </View>
         <View className="flex-row gap-4">
-          <Copy color={colors.orange[500]} />
-          <Share2 color={colors.orange[500]} />
+          <Copy size={20} color={colors.orange[500]} />
+          <Share2 size={20} color={colors.orange[500]} />
+          {user?.id === workout.user.id && (
+            <X size={20} color={colors.orange[500]} />
+          )}
         </View>
       </View>
     </View>

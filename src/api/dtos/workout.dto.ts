@@ -33,15 +33,31 @@ export const SaveWorkout = z.object({
   }),
 });
 
+export const UpdateWorkout = z.object({
+  id: z.string(),
+  name: z.string().optional(),
+  day: z.number().min(0).max(6).optional(),
+  public: z.boolean().optional(),
+  picture_url: z.string().optional(),
+  exercises: z
+    .array(AddExerciseSchema, {
+      invalid_type_error: "Exercícios devem ser um array",
+    })
+    .optional(),
+});
+
 export type ExerciseSet = z.infer<typeof ExerciseSetSchema>;
 export type SaveWorkoutDTO = z.infer<typeof SaveWorkout>;
 export type Workout = z.infer<typeof SaveWorkout> & {
   id: string;
 };
+export type UpdateWorkoutDTO = z.infer<typeof UpdateWorkout>;
+
 export type WorkoutDetails = z.infer<typeof SaveWorkout> & {
   id: string;
   picture_url: string;
   user: {
+    id: string;
     name: string;
     image_url: string;
   };

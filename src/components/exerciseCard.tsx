@@ -1,6 +1,7 @@
 import { View, Text, Image } from "react-native";
 import { Workout } from "../api/dtos";
 import { Input } from "./input";
+import { CheckBox } from "./checkbox";
 
 export function ExerciseCard({
   editable,
@@ -28,11 +29,14 @@ export function ExerciseCard({
             <Text className="w-2/12 text-center font-regular text-lg text-white opacity-80">
               Série
             </Text>
-            <Text className="w-2/6 text-center font-regular text-lg text-white opacity-80">
+            <Text className="w-3/12 text-center font-regular text-lg text-white opacity-80">
               Repetições
             </Text>
-            <Text className="w-2/6 text-center font-regular text-lg text-white opacity-80">
+            <Text className="w-3/12 text-center font-regular text-lg text-white opacity-80">
               Peso
+            </Text>
+            <Text className="w-[10%] text-center font-regular text-lg text-white opacity-80">
+              Feito
             </Text>
           </View>
           {exercise.sets.map((set, i) => {
@@ -47,7 +51,7 @@ export function ExerciseCard({
                     />
                   </Input>
                 </View>
-                <View className="w-2/6">
+                <View className="w-3/12">
                   <Input variant={!editable ? "no-border" : "primary"}>
                     <Input.Field
                       value={String(set.reps)}
@@ -55,7 +59,7 @@ export function ExerciseCard({
                     />
                   </Input>
                 </View>
-                <View className="w-2/6 flex-row">
+                <View className="w-3/12 flex-row">
                   <Input variant={!editable ? "no-border" : "primary"}>
                     <Input.Field
                       keyboardType="numeric"
@@ -65,6 +69,7 @@ export function ExerciseCard({
                     <Text className="text-white opacity-70">KG</Text>
                   </Input>
                 </View>
+                <CheckBox onCheck={() => console.log("oi")} />
               </View>
             );
           })}

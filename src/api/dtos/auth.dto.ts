@@ -24,7 +24,7 @@ export const GetRecoverPasswordCodeSchema = z.object({
 export type LoginDTO = z.infer<typeof LoginSchema>;
 export type CreateAccountDTO = z.infer<typeof CreateAccountSchema>;
 export type AuthResponse = { token: string };
-export type UserDTO = CreateAccountDTO & { imageUrl?: string };
+export type UserDTO = CreateAccountDTO & { id: string; imageUrl?: string };
 export type GetRecoverPasswordCodeDTO = z.infer<
   typeof GetRecoverPasswordCodeSchema
 >;

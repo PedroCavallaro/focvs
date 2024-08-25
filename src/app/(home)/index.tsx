@@ -6,7 +6,6 @@ import { api } from "@/src/api";
 import { WorkoutExercisesList } from "@/src/components/home/workoutExercisesList";
 import { DayOfWeek, daysOfWeek } from "@/src/utils";
 import { ArrowLeftRight, Play } from "lucide-react-native";
-import { WorkoutOfTheDaySkeleton } from "@/src/components/skeletons/workoutOfTheDaySkeleton";
 import { useAtom } from "jotai";
 import { useModal } from "@/src/providers/ModalProvider";
 import { BaseModal } from "@/src/components/baseModal";
@@ -34,7 +33,7 @@ export default function HomePage() {
       setWorkout(workout);
     }
 
-    if (hasOnStorage?.day !== new Date().getDay()) {
+    if (hasOnStorage?.day != new Date().getDay()) {
       const workout = await api.workout.getWorkoutOfTheDay();
 
       setWorkout(workout);
@@ -62,7 +61,7 @@ export default function HomePage() {
 
   return (
     <View className="flex-col gap-8">
-      {!isLoading ? (
+      {!isLoading && (
         <>
           {workout?.id ? (
             <>
@@ -103,8 +102,6 @@ export default function HomePage() {
             <NoWorkout openSwitchModal={openSwichModal} />
           )}
         </>
-      ) : (
-        <WorkoutOfTheDaySkeleton />
       )}
     </View>
   );

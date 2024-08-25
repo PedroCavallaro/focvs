@@ -1,20 +1,25 @@
 import { api } from "@/src/api";
-import { WorkoutDetails } from "@/src/api/dtos";
+import { UpdateWorkoutDTO, WorkoutDetails } from "@/src/api/dtos";
 import { plural } from "@/src/utils/plural";
 import { useMutation } from "@tanstack/react-query";
-import { Share, X } from "lucide-react-native";
+import { Eye, EyeOff, Share, X } from "lucide-react-native";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 export function WorkoutActionsModal({
   workout,
-  onDelete,
+  onSucces,
 }: {
   workout: WorkoutDetails;
-  onDelete: () => void;
+  onSucces: () => void;
 }) {
   const { mutate: delteWorkout } = useMutation({
     mutationFn: (id: string) => api.workout.deleteWorkout(id),
-    onSuccess: () => onDelete(),
+    onSuccess: () => onSucces(),
+  });
+
+  const { mutate: updateWorkout } = useMutation({
+    mutationFn: (data: UpdateWorkoutDTO) => api.workout.updateWorkout(data),
+    onSuccess: () => onSucces(),
   });
 
   return (
@@ -40,6 +45,24 @@ export function WorkoutActionsModal({
       >
         <X color={"#fff"} size={20} />
         <Text className="font-regular text-lg text-white">Apagar treino</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          updateWorkout({
+            id: workout.id,
+            public: !workout.public,
+          })
+        }
+        className="flex-row items-center gap-2 opacity-70"
+      >
+        {workout.public ? (
+          <EyeOff color={"#fff"} size={20} />
+        ) : (
+          <Eye color={"#fff"} size={20} />
+        )}
+        <Text className="font-regular text-lg text-white">
+          Mudar visibilidade para {workout.public ? "privado" : "publíco"}
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity className="flex-row items-center gap-2 opacity-70">
         <Share color={"#fff"} size={20} />
