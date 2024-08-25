@@ -2,14 +2,18 @@ import { View } from "react-native";
 import { Button } from "./button";
 import { useCallback } from "react";
 import * as SecureStore from "expo-secure-store";
-import { STORAGE_AUTH_KEY } from "../api/dtos";
 import { useRouter } from "expo-router";
+import { STORAGE_KEYS } from "../constants";
+import { Storage } from "../services";
 
 export function NavigationDrawer({ close }: { close: () => void }) {
   const router = useRouter();
 
   const exit = useCallback(async () => {
-    await SecureStore.deleteItemAsync(STORAGE_AUTH_KEY);
+    await Promise.all([
+      SecureStore.deleteItemAsync(STORAGE_KEYS.AUTH_TOKEN),
+      Storage.removeItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY),
+    ]);
 
     router.replace("/");
     close();

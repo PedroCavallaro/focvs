@@ -5,9 +5,10 @@ import { router } from "expo-router";
 import { View, Text } from "react-native";
 import { AuthForm } from "../components/auth/authForm";
 import { AUHT_FORM_STATE } from "./auth/auth.types";
-import { STORAGE_AUTH_KEY, UserDTO } from "../api/dtos";
+import { UserDTO } from "../api/dtos";
 import { useAuth } from "../hooks";
 import { jwtDecode } from "jwt-decode";
+import { STORAGE_KEYS } from "../constants";
 
 export default function Index() {
   const [formState, setFormState] = useState(AUHT_FORM_STATE.LOGIN);
@@ -22,7 +23,7 @@ export default function Index() {
   }, [formState]);
 
   const autheticateWithBiometry = useCallback(async () => {
-    const token = await SecureStorage.getItemAsync(STORAGE_AUTH_KEY);
+    const token = await SecureStorage.getItemAsync(STORAGE_KEYS.AUTH_TOKEN);
 
     if (!token) return;
 

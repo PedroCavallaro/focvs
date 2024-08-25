@@ -2,10 +2,11 @@ import { View, Text } from "react-native";
 import { Input } from "../../input";
 import { Button } from "../../button";
 import { RECOVER_PASSWORD_STATE } from "@/src/app/auth/auth.types";
-import { STORAGE_RECOVER_PASSWORD_TOKEN, UserDTO } from "@/src/api/dtos";
+import { UserDTO } from "@/src/api/dtos";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import * as SecureStorage from "expo-secure-store";
 import { jwtDecode } from "jwt-decode";
+import { STORAGE_KEYS } from "@/src/constants";
 
 export function TypeCodeForm({
   handleState,
@@ -16,7 +17,7 @@ export function TypeCodeForm({
 
   const getToken = useCallback(async () => {
     const res = await SecureStorage.getItemAsync(
-      STORAGE_RECOVER_PASSWORD_TOKEN,
+      STORAGE_KEYS.RECOVER_PASSWORD_TOKEN,
     );
 
     if (res) {
@@ -52,6 +53,7 @@ export function TypeCodeForm({
 
       return email;
     }
+
     return "";
   }, [user]);
 

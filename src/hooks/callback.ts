@@ -12,9 +12,8 @@ export function useCallbackPlus<T, U = unknown>(
   const router = useRouter();
 
   const handleAxiosErrors = useCallback((error: AxiosError) => {
-    
     if (error.status === 401) {
-      router.push("/auth");
+      router.push("/");
     }
   }, []);
 
@@ -38,7 +37,6 @@ export function useCallbackPlus<T, U = unknown>(
           handleAxiosErrors(error);
         }
 
-        
         // do some error handling
       }
     },

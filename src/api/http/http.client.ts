@@ -1,9 +1,9 @@
-import { STORAGE_AUTH_KEY } from "../dtos";
+import { STORAGE_KEYS } from "@/src/constants";
 import { RequestOptions } from "./http.types";
 import * as SecureStorage from "expo-secure-store";
 
 export abstract class HttpClient {
-  private readonly skipAuthTokenUrls: string[];
+  protected readonly skipAuthTokenUrls: string[];
   private readonly baseUrl: string;
 
   constructor(baseUrl: string) {
@@ -18,7 +18,7 @@ export abstract class HttpClient {
   ): Promise<T>;
 
   protected async getAuthTokenHeader() {
-    const token = await SecureStorage.getItemAsync(STORAGE_AUTH_KEY);
+    const token = await SecureStorage.getItemAsync(STORAGE_KEYS.AUTH_TOKEN);
 
     if (!token) {
       return null;

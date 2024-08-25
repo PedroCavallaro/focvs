@@ -5,11 +5,11 @@ import { RECOVER_PASSWORD_STATE } from "@/src/app/auth/auth.types";
 import {
   GetRecoverPasswordCodeDTO,
   GetRecoverPasswordCodeSchema,
-  STORAGE_RECOVER_PASSWORD_TOKEN,
 } from "@/src/api/dtos";
 import { useCallbackPlus, useForm } from "@/src/hooks";
 import { api } from "@/src/api";
 import * as SecureStorage from "expo-secure-store";
+import { STORAGE_KEYS } from "@/src/constants";
 
 export function GetRecoverCode({
   handleState,
@@ -23,7 +23,10 @@ export function GetRecoverCode({
   const submit = useCallbackPlus(async (data: GetRecoverPasswordCodeDTO) => {
     const { token } = await api.auth.getRecoverPasswordToken(data);
 
-    await SecureStorage.setItemAsync(STORAGE_RECOVER_PASSWORD_TOKEN, token);
+    await SecureStorage.setItemAsync(
+      STORAGE_KEYS.RECOVER_PASSWORD_TOKEN,
+      token,
+    );
 
     handleState(RECOVER_PASSWORD_STATE.TYPE_CODE);
   }, []);

@@ -54,7 +54,11 @@ export function WorkoutSampling({
         <View className="w-full flex-col gap-10">
           {workout.exercises.map((exercise) => {
             return (
-              <ExerciseCard key={exercise.exerciseId} exercise={exercise} />
+              <ExerciseCard
+                showCheckBox={false}
+                key={exercise.exerciseId}
+                exercise={exercise}
+              />
             );
           })}
         </View>

@@ -2,13 +2,16 @@ import clsx from "clsx";
 import { Check } from "lucide-react-native";
 import { useCallback, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
+import { colors } from "../style";
 
 export function CheckBox({
   onCheck,
   onUnCheck,
+  disabled,
 }: {
   onCheck?: () => void;
   onUnCheck?: () => void;
+  disabled?: boolean;
 }) {
   const [checked, setChecked] = useState(false);
 
@@ -27,16 +30,17 @@ export function CheckBox({
   return (
     <View className="w-[6%] flex-row items-center justify-center">
       <TouchableOpacity
+        disabled={disabled}
         onPress={handleChecked}
         className={clsx(
           "mt-1 flex h-10 w-10 items-center justify-center rounded-md",
           {
-            "bg-orange-500": checked,
             "bg-zinc-900": !checked,
+            "bg-zinc-950": checked,
           },
         )}
       >
-        {checked && <Check size={15} color={"#000"} />}
+        {checked && <Check size={15} color={colors.orange[500]} />}
       </TouchableOpacity>
     </View>
   );

@@ -14,9 +14,10 @@ import { NoWorkout } from "@/src/components/home/noWokout";
 import { useQuery } from "@tanstack/react-query";
 import { Storage } from "@/src/services";
 import { atomWithAsyncStorage } from "@/src/lib";
+import { STORAGE_KEYS } from "@/src/constants";
 
 const workoutAtom = atomWithAsyncStorage<Workout>(
-  "focvs-workout",
+  STORAGE_KEYS.WORKOUT_OF_THE_DAY,
   {} as Workout,
 );
 
@@ -25,15 +26,11 @@ export default function HomePage() {
   const [workout, setWorkout] = useAtom(workoutAtom);
 
   const fetchWorkoutOfTheDay = useCallback(async () => {
-    const hasOnStorage = await Storage.getItem<Workout>("focvs-workout");
+    const hasOnStorage = await Storage.getItem<Workout>(
+      STORAGE_KEYS.WORKOUT_OF_THE_DAY,
+    );
 
     if (!hasOnStorage) {
-      const workout = await api.workout.getWorkoutOfTheDay();
-
-      setWorkout(workout);
-    }
-
-    if (hasOnStorage?.day != new Date().getDay()) {
       const workout = await api.workout.getWorkoutOfTheDay();
 
       setWorkout(workout);

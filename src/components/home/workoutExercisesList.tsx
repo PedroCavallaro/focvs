@@ -12,7 +12,9 @@ export function WorkoutExercisesList({
     <View>
       <View className="flex-col gap-10">
         {exercises?.map((e, i) => {
-          return <ExerciseCard exercise={e} key={i} editable />;
+          return (
+            <ExerciseCard showCheckBox={true} exercise={e} key={i} editable />
+          );
         })}
       </View>
     </View>

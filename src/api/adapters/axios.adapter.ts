@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { HttpClient, RequestOptions } from "../http";
-import { router } from "expo-router";
 
 export class AxiosClient extends HttpClient {
   protected async doRequest<T>(
