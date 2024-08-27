@@ -67,7 +67,9 @@ export default function HomePage() {
                   <Text className="font-regular text-lg text-white opacity-70">
                     {daysOfWeek[new Date().getDay() as DayOfWeek]}
                   </Text>
-                  <TouchableOpacity onPress={() => router.push("/workouts")}>
+                  <TouchableOpacity
+                    onPress={() => router.push("/home/workouts")}
+                  >
                     <Text className="border-b-[0.7px] border-orange-500 font-regular text-lg text-white opacity-70">
                       Meus treinos
                     </Text>

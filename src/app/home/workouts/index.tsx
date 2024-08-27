@@ -47,7 +47,7 @@ export default function Workouts() {
       <View className="flex-row justify-between">
         <Text className="font-regular text-2xl text-white">Meus Treinos</Text>
         <TouchableOpacity
-          onPress={() => router.push("/new")}
+          onPress={() => router.push("/home/new")}
           className="border-b-[0.7px] border-orange-500 text-white"
         >
           <Plus color={"#FFF"} size={25} />
