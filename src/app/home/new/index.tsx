@@ -15,7 +15,7 @@ import { MusclePicker } from "@/src/components/new-workout/musclePicker";
 import { NewWorkoutForm } from "@/src/components/new-workout/forms/newWorkoutForm";
 import { useCallbackPlus } from "@/src/hooks";
 import { useModal } from "@/src/providers/ModalProvider";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -27,18 +27,25 @@ import { useDrawer } from "@/src/providers/DrawerProvider";
 import { Drawer } from "@/src/components/drawer";
 import { WorkoutSampling } from "@/src/components/new-workout/workoutSampling";
 import { Button } from "@/src/components/button";
-import { ArrowLeft } from "lucide-react-native";
+import { ArrowLeft, Search } from "lucide-react-native";
 import { colors } from "@/src/style";
 import { useQuery } from "@tanstack/react-query";
+import { Input } from "@/src/components/input";
+import debounce from "lodash.debounce";
 
 export type ChangeWorkoutInfo =
   | { key: "day"; value: number }
   | { key: "name"; value: string };
 
 export default function NewWorkout() {
-  const { isLoading: muscleLoading, data: muscles } = useQuery({
+  const [query, setQuery] = useState("");
+  const {
+    isLoading: muscleLoading,
+    data: muscles,
+    refetch: fetchMuscles,
+  } = useQuery({
     queryKey: ["muscles"],
-    queryFn: () => api.exercise.getMuscleList(),
+    queryFn: () => api.exercise.getMuscleList(query),
   });
   const [selectedMuscle, setSelectedMuscle] = useState<MuscleDto>(
     {} as MuscleDto,
@@ -50,7 +57,7 @@ export default function NewWorkout() {
     refetch: fetchExercises,
   } = useQuery({
     queryKey: ["exercises", selectedMuscle.id],
-    queryFn: () => api.exercise.getExercises(selectedMuscle.id),
+    queryFn: () => api.exercise.getExercises(selectedMuscle.id, query),
     enabled: false,
     refetchOnWindowFocus: false,
   });
@@ -61,6 +68,16 @@ export default function NewWorkout() {
     public: true,
     exercises: [],
   });
+
+  const refetchMuscles = useMemo(
+    () => debounce(() => fetchMuscles(), 400),
+    [fetchMuscles],
+  );
+
+  const refetchExercises = useMemo(
+    () => debounce(() => fetchExercises(), 400),
+    [fetchMuscles],
+  );
 
   const addExerciseToWorkout = useCallbackPlus(
     (exercise: WorkoutExercise) => {
@@ -116,6 +133,18 @@ export default function NewWorkout() {
     fetchExercises();
   }, [selectedMuscle]);
 
+  useEffect(() => {
+    if (selectedMuscle.id) {
+      refetchExercises();
+
+      return;
+    }
+
+    refetchMuscles();
+
+    return;
+  }, [query, selectedMuscle]);
+
   return (
     <View className="flex-col gap-4">
       <View className="flex-col gap-8">
@@ -151,6 +180,13 @@ export default function NewWorkout() {
           </Button>
         </View>
       </View>
+      <Input>
+        <Search size={13} color={colors.orange[500]} />
+        <Input.Field
+          onChangeText={(v) => setQuery(v)}
+          placeholder="Pesquisar muscúlo"
+        />
+      </Input>
       {selectedMuscle?.id ? (
         <ExercisePicker
           loading={exerciseLoading}

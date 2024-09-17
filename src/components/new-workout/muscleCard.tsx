@@ -1,4 +1,5 @@
 import { MuscleDto } from "@/src/api/dtos";
+import { plural } from "@/src/utils/plural";
 import { Text, TouchableOpacity, Image, View } from "react-native";
 
 export function MuscleCard({
@@ -16,10 +17,9 @@ export function MuscleCard({
       <View className="items-center gap-2">
         <Text className="font-medium text-2xl text-white">{muscle?.name}</Text>
         <Text className="font-regular text-white opacity-70">
-          15 exercícios
+          {muscle.exerciseCount} {plural("exercício", muscle.exerciseCount)}
         </Text>
       </View>
-
       <Image
         source={{ uri: muscle.picture_url }}
         className="h-40 w-11/12 bg-white object-cover"

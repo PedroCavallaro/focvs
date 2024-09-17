@@ -2,6 +2,7 @@ export interface MuscleDto {
   id: string;
   name: string;
   picture_url: string;
+  exerciseCount: number;
 }
 
 export interface ExerciseDto {
