@@ -4,8 +4,9 @@ import { ExerciseCard } from "../exerciseCard";
 
 export function WorkoutExercisesList({
   exercises,
+  started,
 }: {
-  id?: string;
+  started: number;
   exercises: Workout["exercises"];
 }) {
   return (
@@ -13,7 +14,12 @@ export function WorkoutExercisesList({
       <View className="flex-col gap-10">
         {exercises?.map((e, i) => {
           return (
-            <ExerciseCard showCheckBox={true} exercise={e} key={i} editable />
+            <ExerciseCard
+              showCheckBox={true}
+              exercise={e}
+              key={i}
+              editable={started}
+            />
           );
         })}
       </View>

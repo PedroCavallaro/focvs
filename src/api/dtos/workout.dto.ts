@@ -50,6 +50,7 @@ export type ExerciseSet = z.infer<typeof ExerciseSetSchema>;
 export type SaveWorkoutDTO = z.infer<typeof SaveWorkout>;
 export type Workout = z.infer<typeof SaveWorkout> & {
   id: string;
+  started?: number;
 };
 export type UpdateWorkoutDTO = z.infer<typeof UpdateWorkout>;
 

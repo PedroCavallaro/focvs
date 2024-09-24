@@ -1,11 +1,4 @@
-import { api } from "@/src/api";
-import {
-  ExerciseDto,
-  MuscleDto,
-  AddExerciseSchema,
-  SaveWorkoutDTO,
-  WorkoutExercise,
-} from "@/src/api/dtos";
+import { ExerciseDto, MuscleDto } from "@/src/api/dtos";
 import { BaseModal } from "@/src/components/baseModal";
 import { AddExerciseModal } from "@/src/components/new-workout/forms/addExerciseModal";
 import { ExercisePicker } from "@/src/components/new-workout/exercisePicker";
@@ -13,9 +6,8 @@ import { ExercisePickerCard } from "@/src/components/new-workout/exercisePIckerC
 import { MuscleCard } from "@/src/components/new-workout/muscleCard";
 import { MusclePicker } from "@/src/components/new-workout/musclePicker";
 import { NewWorkoutForm } from "@/src/components/new-workout/forms/newWorkoutForm";
-import { useCallbackPlus } from "@/src/hooks";
 import { useModal } from "@/src/providers/ModalProvider";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import {
   View,
   Text,
@@ -29,80 +21,30 @@ import { WorkoutSampling } from "@/src/components/new-workout/workoutSampling";
 import { Button } from "@/src/components/button";
 import { ArrowLeft, Search } from "lucide-react-native";
 import { colors } from "@/src/style";
-import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/src/components/input";
-import debounce from "lodash.debounce";
+import { useNewWorkout } from "./new-workout";
 
 export type ChangeWorkoutInfo =
   | { key: "day"; value: number }
   | { key: "name"; value: string };
 
 export default function NewWorkout() {
-  const [query, setQuery] = useState("");
   const {
-    isLoading: muscleLoading,
-    data: muscles,
-    refetch: fetchMuscles,
-  } = useQuery({
-    queryKey: ["muscles"],
-    queryFn: () => api.exercise.getMuscleList(query),
-  });
-  const [selectedMuscle, setSelectedMuscle] = useState<MuscleDto>(
-    {} as MuscleDto,
-  );
-
-  const {
-    data: exercises,
-    isLoading: exerciseLoading,
-    refetch: fetchExercises,
-  } = useQuery({
-    queryKey: ["exercises", selectedMuscle.id],
-    queryFn: () => api.exercise.getExercises(selectedMuscle.id, query),
-    enabled: false,
-    refetchOnWindowFocus: false,
-  });
-
-  const [workout, setWorkout] = useState<SaveWorkoutDTO>({
-    name: "",
-    day: -1,
-    public: true,
-    exercises: [],
-  });
-
-  const refetchMuscles = useMemo(
-    () => debounce(() => fetchMuscles(), 400),
-    [fetchMuscles],
-  );
-
-  const refetchExercises = useMemo(
-    () => debounce(() => fetchExercises(), 400),
-    [fetchMuscles],
-  );
-
-  const addExerciseToWorkout = useCallbackPlus(
-    (exercise: WorkoutExercise) => {
-      const parsed = AddExerciseSchema.parse(exercise);
-
-      setWorkout((prev) => {
-        return { ...prev, exercises: [...prev.exercises, parsed] };
-      });
-    },
-    [setWorkout],
-  );
-
-  const changeWorkoutInfo = useCallback(({ key, value }: ChangeWorkoutInfo) => {
-    setWorkout((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  }, []);
-
-  const handleSelectMuscle = useCallback(
-    async (muscle: MuscleDto) => {
-      setSelectedMuscle(muscle);
-    },
-    [setSelectedMuscle],
-  );
+    addExerciseToWorkout,
+    changeWorkoutInfo,
+    exerciseLoading,
+    exercises,
+    selectedMuscle,
+    handleSelectMuscle,
+    muscleLoading,
+    muscles,
+    query,
+    refetchExercises,
+    refetchMuscles,
+    fetchExercises,
+    workout,
+    setQuery,
+  } = useNewWorkout();
 
   const { closeDrawer, openDrawer } = useDrawer(() => {
     return (

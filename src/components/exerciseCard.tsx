@@ -14,7 +14,7 @@ export function ExerciseCard({
   showCheckBox: boolean;
   exercise: Workout["exercises"][0];
   onChange?: (key: "reps" | "weight", v: string) => void;
-  editable?: boolean;
+  editable?: number;
 }) {
   const [completedSets, setCompletedSets] = useState<Record<number, boolean>>(
     {},
@@ -126,7 +126,7 @@ export function ExerciseCard({
                     <Text className="text-white opacity-70">KG</Text>
                   </Input>
                 </View>
-                {showCheckBox && (
+                {showCheckBox && editable && (
                   <View className="ml-4 mt-2">
                     <CheckBox
                       onCheck={() => checkSet(i)}

@@ -5,7 +5,6 @@ import React, { useCallback } from "react";
 import { api } from "@/src/api";
 import { WorkoutExercisesList } from "@/src/components/home/workoutExercisesList";
 import { DayOfWeek, daysOfWeek } from "@/src/utils";
-import { ArrowLeftRight, Play } from "lucide-react-native";
 import { useAtom } from "jotai";
 import { useModal } from "@/src/providers/ModalProvider";
 import { BaseModal } from "@/src/components/baseModal";
@@ -15,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Storage } from "@/src/services";
 import { atomWithAsyncStorage } from "@/src/lib";
 import { STORAGE_KEYS } from "@/src/constants";
+import { WorkoutActions } from "@/src/components/home/workoutActions";
 
 const workoutAtom = atomWithAsyncStorage<Workout>(
   STORAGE_KEYS.WORKOUT_OF_THE_DAY,
@@ -43,6 +43,20 @@ export default function HomePage() {
     queryKey: ["workout-of-the-day"],
     queryFn: () => fetchWorkoutOfTheDay(),
   });
+
+  const startWorkout = useCallback(() => {
+    setWorkout((prev) => ({
+      ...prev,
+      started: 0,
+    }));
+  }, [setWorkout]);
+
+  const finishWorkout = useCallback(() => {
+    setWorkout((prev) => ({
+      ...prev,
+      started: 0,
+    }));
+  }, [setWorkout]);
 
   const { openModal: openSwichModal, closeModal: closeSwitchModal } = useModal(
     () => (
@@ -80,21 +94,18 @@ export default function HomePage() {
                     {workout.name}
                   </Text>
                   <View className="flex-row gap-4 rounded-lg bg-zinc-950 px-4 py-2">
-                    <TouchableOpacity
-                      onPress={openSwichModal}
-                      className="rounded-full bg-orange-500 p-2"
-                    >
-                      <ArrowLeftRight size={15} color={"#000"} />
-                    </TouchableOpacity>
-                    <TouchableOpacity className="rounded-full bg-orange-500 p-2">
-                      <Play size={15} color={"#000"} />
-                    </TouchableOpacity>
+                    <WorkoutActions
+                      openSwichModal={openSwichModal}
+                      finishWorkout={finishWorkout}
+                      startWorkout={startWorkout}
+                      started={workout.started ?? 0}
+                    />
                   </View>
                 </View>
               </View>
               <WorkoutExercisesList
                 exercises={workout.exercises}
-                id={workout.id}
+                started={workout.started ?? 0}
               />
             </>
           ) : (
