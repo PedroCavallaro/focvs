@@ -58,6 +58,15 @@ export default function HomePage() {
     }));
   }, [setWorkout]);
 
+  const onChange = useCallback(
+    (type: "reps" | "weight", v: string, exerciseId: string) => {
+      const exercises = workout.exercises;
+
+      const exercise = exercises.find((e) => e.exerciseId == exerciseId);
+    },
+    [],
+  );
+
   const { openModal: openSwichModal, closeModal: closeSwitchModal } = useModal(
     () => (
       <BaseModal title="Trocar treino" onClose={() => closeSwitchModal()}>

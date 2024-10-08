@@ -13,7 +13,17 @@ export function ExerciseCard({
 }: {
   showCheckBox: boolean;
   exercise: Workout["exercises"][0];
-  onChange?: (key: "reps" | "weight", v: string) => void;
+  onChange?: ({
+    key,
+    index,
+    value,
+    exerciseId,
+  }: {
+    key: "reps" | "weight";
+    value: string;
+    index: number;
+    exerciseId: string;
+  }) => void;
   editable?: number;
 }) {
   const [completedSets, setCompletedSets] = useState<Record<number, boolean>>(
@@ -102,7 +112,14 @@ export function ExerciseCard({
                     <Input.Field
                       value={String(set.reps)}
                       editable={!isChecked}
-                      onChangeText={(v) => onChange?.("reps", v)}
+                      onChangeText={(v) =>
+                        onChange?.({
+                          key: "reps",
+                          value: v,
+                          index: i,
+                          exerciseId: exercise.exerciseId,
+                        })
+                      }
                       className="text-center font-regular text-white"
                     />
                   </Input>
@@ -121,12 +138,19 @@ export function ExerciseCard({
                       className="flex-1 text-center text-white"
                       value={String(set.weight)}
                       editable={!isChecked || !editable}
-                      onChangeText={(v) => onChange?.("weight", v)}
+                      onChangeText={(v) =>
+                        onChange?.({
+                          key: "weight",
+                          index: i,
+                          value: v,
+                          exerciseId: exercise.exerciseId,
+                        })
+                      }
                     />
                     <Text className="text-white opacity-70">KG</Text>
                   </Input>
                 </View>
-                {showCheckBox && editable && (
+                {showCheckBox && (
                   <View className="ml-4 mt-2">
                     <CheckBox
                       onCheck={() => checkSet(i)}

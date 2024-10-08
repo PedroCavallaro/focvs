@@ -27,6 +27,8 @@ export default function Index() {
 
     if (!token) return;
 
+    return router.push("/home");
+
     const user = jwtDecode<UserDTO>(token);
 
     if (user) {

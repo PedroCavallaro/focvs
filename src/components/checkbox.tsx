@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { Check } from "lucide-react-native";
 import { useCallback, useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { colors } from "../style";
 
 export function CheckBox({
@@ -40,7 +40,7 @@ export function CheckBox({
           },
         )}
       >
-        {checked && <Check size={15} color={colors.orange[500]} />}
+        <Text>{checked && <Check size={15} color={colors.orange[500]} />}</Text>
       </TouchableOpacity>
     </View>
   );
