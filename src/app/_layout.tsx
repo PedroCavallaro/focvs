@@ -1,6 +1,5 @@
 import { Slot } from "expo-router";
 import { StatusBar, View } from "react-native";
-import React from "react";
 import "react-native-reanimated";
 import "./global.css";
 import {

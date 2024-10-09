@@ -1,6 +1,6 @@
 import { ExerciseDto, ExerciseSet, WorkoutExercise } from "@/src/api/dtos";
 import { View, Text } from "react-native";
-import { Button } from "../../button";
+import { Button } from "../../../components/button";
 import { Check, Plus, Trash2 } from "lucide-react-native";
 import { colors } from "@/src/style";
 import { useCallback, useState } from "react";

@@ -1,4 +1,4 @@
-import { RecoverPasswordForm } from "@/src/components/auth/recoverPasswordForm";
+import { RecoverPasswordForm } from "@/src/features/auth/recoverPasswordForm";
 import { useCallback, useState } from "react";
 import { RECOVER_PASSWORD_STATE } from "./auth.types";
 

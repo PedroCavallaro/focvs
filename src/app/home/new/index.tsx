@@ -1,11 +1,11 @@
 import { ExerciseDto, MuscleDto } from "@/src/api/dtos";
 import { BaseModal } from "@/src/components/baseModal";
-import { AddExerciseModal } from "@/src/components/new-workout/forms/addExerciseModal";
-import { ExercisePicker } from "@/src/components/new-workout/exercisePicker";
-import { ExercisePickerCard } from "@/src/components/new-workout/exercisePIckerCard";
-import { MuscleCard } from "@/src/components/new-workout/muscleCard";
-import { MusclePicker } from "@/src/components/new-workout/musclePicker";
-import { NewWorkoutForm } from "@/src/components/new-workout/forms/newWorkoutForm";
+import { AddExerciseModal } from "@/src/features/new-workout/forms/addExerciseModal";
+import { ExercisePicker } from "@/src/features/new-workout/exercisePicker";
+import { ExercisePickerCard } from "@/src/features/new-workout/exercisePIckerCard";
+import { MuscleCard } from "@/src/features/new-workout/muscleCard";
+import { MusclePicker } from "@/src/features/new-workout/musclePicker";
+import { NewWorkoutForm } from "@/src/features/new-workout/forms/newWorkoutForm";
 import { useModal } from "@/src/providers/ModalProvider";
 import { useEffect } from "react";
 import {
@@ -17,7 +17,7 @@ import {
 } from "react-native";
 import { useDrawer } from "@/src/providers/DrawerProvider";
 import { Drawer } from "@/src/components/drawer";
-import { WorkoutSampling } from "@/src/components/new-workout/workoutSampling";
+import { WorkoutSampling } from "@/src/features/new-workout/workoutSampling";
 import { Button } from "@/src/components/button";
 import { ArrowLeft, Search } from "lucide-react-native";
 import { colors } from "@/src/style";

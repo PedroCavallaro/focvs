@@ -1,20 +1,20 @@
 import { useRouter } from "expo-router";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Workout } from "@/src/api/dtos";
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { api } from "@/src/api";
-import { WorkoutExercisesList } from "@/src/components/home/workoutExercisesList";
+import { WorkoutExercisesList } from "@/src/features/home/workoutExercisesList";
 import { DayOfWeek, daysOfWeek } from "@/src/utils";
 import { useAtom } from "jotai";
 import { useModal } from "@/src/providers/ModalProvider";
 import { BaseModal } from "@/src/components/baseModal";
-import { SwitchWorkoutModal } from "@/src/components/home/switchWorkoutModal";
-import { NoWorkout } from "@/src/components/home/noWokout";
+import { SwitchWorkoutModal } from "@/src/features/home/switchWorkoutModal";
+import { NoWorkout } from "@/src/features/home/noWokout";
 import { useQuery } from "@tanstack/react-query";
 import { Storage } from "@/src/services";
 import { atomWithAsyncStorage } from "@/src/lib";
-import { STORAGE_KEYS } from "@/src/constants";
-import { WorkoutActions } from "@/src/components/home/workoutActions";
+import { STORAGE_KEYS } from "@/src/utils/constants";
+import { WorkoutActions } from "@/src/features/home/workoutActions";
 
 const workoutAtom = atomWithAsyncStorage<Workout>(
   STORAGE_KEYS.WORKOUT_OF_THE_DAY,
@@ -102,7 +102,7 @@ export default function HomePage() {
                   <Text className="font-regular text-2xl text-white">
                     {workout.name}
                   </Text>
-                  <View className="flex-row gap-4 rounded-lg bg-zinc-950 px-4 py-2">
+                  <View className="flex-row gap-4 rounded-lg px-4 py-2">
                     <WorkoutActions
                       openSwichModal={openSwichModal}
                       finishWorkout={finishWorkout}

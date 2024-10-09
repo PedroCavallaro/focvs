@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
-import { Input } from "../../input";
-import { Button } from "../../button";
+import { Input } from "../../../components/input";
+import { Button } from "../../../components/button";
 import { RECOVER_PASSWORD_STATE } from "@/src/app/auth/auth.types";
 
 export function ChangePasswordForm({

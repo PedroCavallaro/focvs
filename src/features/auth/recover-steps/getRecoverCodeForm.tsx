@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
-import { Input } from "../../input";
-import { Button } from "../../button";
+import { Input } from "../../../components/input";
+import { Button } from "../../../components/button";
 import { RECOVER_PASSWORD_STATE } from "@/src/app/auth/auth.types";
 import {
   GetRecoverPasswordCodeDTO,
@@ -9,7 +9,7 @@ import {
 import { useCallbackPlus, useForm } from "@/src/hooks";
 import { api } from "@/src/api";
 import * as SecureStorage from "expo-secure-store";
-import { STORAGE_KEYS } from "@/src/constants";
+import { STORAGE_KEYS } from "@/src/utils/constants";
 
 export function GetRecoverCode({
   handleState,

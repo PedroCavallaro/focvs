@@ -1,9 +1,8 @@
 import { X } from "lucide-react-native";
-import React, { ReactNode, useMemo, useRef } from "react";
+import { ReactNode } from "react";
 import { View, Text, TouchableOpacity, Animated } from "react-native";
 import { colors } from "../style";
 import { useDrawer } from "../providers/DrawerProvider";
-import { Button } from "./button";
 
 export function Drawer({
   title,

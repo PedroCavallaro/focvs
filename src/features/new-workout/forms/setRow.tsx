@@ -1,7 +1,7 @@
 import { colors } from "@/src/style";
 import { Undo2, X } from "lucide-react-native";
 import { View, TouchableOpacity, Text } from "react-native";
-import { Input } from "../../input";
+import { Input } from "../../../components/input";
 import { Set } from "./addExerciseModal";
 import clsx from "clsx";
 

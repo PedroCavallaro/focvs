@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity, View } from "react-native";
-import { Input } from "../input";
-import { Button } from "../button";
+import { Input } from "../../components/input";
+import { Button } from "../../components/button";
 import { AUHT_FORM_STATE } from "@/src/app/auth/auth.types";
 import { useCallback, useMemo } from "react";
 import { FieldErrors } from "react-hook-form";

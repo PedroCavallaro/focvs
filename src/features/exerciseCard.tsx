@@ -1,6 +1,6 @@
 import { View, Text, Image } from "react-native";
 import { Workout } from "../api/dtos";
-import { Input } from "./input";
+import { Input } from "../components/input";
 import { CheckBox } from "./checkbox";
 import clsx from "clsx";
 import { useCallback, useState } from "react";

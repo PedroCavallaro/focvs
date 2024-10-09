@@ -1,7 +1,7 @@
 import { Input } from "@/src/components/input";
 import { colors } from "@/src/style";
 import { Search } from "lucide-react-native";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
   ScrollView,
   Animated,
 } from "react-native";
-import { WorkoutDetailsCard } from "@/src/components/workoutDetailsCard";
+import { WorkoutDetailsCard } from "@/src/features/workoutDetailsCard";
 import { router } from "expo-router";
 import { useSearch } from "@/src/hooks/search";
 import { Footer } from "@/src/components/footer";

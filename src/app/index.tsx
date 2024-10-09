@@ -3,12 +3,12 @@ import * as LocalAuthentication from "expo-local-authentication";
 import * as SecureStorage from "expo-secure-store";
 import { router } from "expo-router";
 import { View, Text } from "react-native";
-import { AuthForm } from "../components/auth/authForm";
+import { AuthForm } from "../features/auth/authForm";
 import { AUHT_FORM_STATE } from "./auth/auth.types";
 import { UserDTO } from "../api/dtos";
 import { useAuth } from "../hooks";
 import { jwtDecode } from "jwt-decode";
-import { STORAGE_KEYS } from "../constants";
+import { STORAGE_KEYS } from "../utils/constants";
 
 export default function Index() {
   const [formState, setFormState] = useState(AUHT_FORM_STATE.LOGIN);

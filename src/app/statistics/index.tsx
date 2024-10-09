@@ -1,8 +1,7 @@
 import { Footer } from "@/src/components/footer";
 import { Header } from "@/src/components/header";
-import { WorkoutGraph } from "@/src/components/statistics/workoutGraph";
+import { WorkoutGraph } from "@/src/features/statistics/workoutGraph";
 import { useAuth, useFooter } from "@/src/hooks";
-import React from "react";
 import { Animated, ScrollView } from "react-native";
 import { View, Text } from "react-native";
 

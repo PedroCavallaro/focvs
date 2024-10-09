@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import { Button } from "../button";
+import { Button } from "../../components/button";
 import { useRouter } from "expo-router";
 
 export function NoWorkout({

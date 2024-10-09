@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { View, Text } from "react-native";
-import { Button } from "../button";
+import { Button } from "../../components/button";
 import { PickerSkeleton } from "../skeletons/pickerCardSkeleton";
 
 export function MusclePicker({

@@ -1,7 +1,7 @@
 import { SaveWorkout, SaveWorkoutDTO } from "@/src/api/dtos";
 import { DayOfWeek, daysOfWeek } from "@/src/utils";
 import { View, Text, ScrollView } from "react-native";
-import { Button } from "../button";
+import { Button } from "../../components/button";
 import { ExerciseCard } from "../exerciseCard";
 import { useCallbackPlus } from "@/src/hooks";
 import { api } from "@/src/api";

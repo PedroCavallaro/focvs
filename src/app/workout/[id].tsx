@@ -1,9 +1,8 @@
 import { api } from "@/src/api";
-import { ExerciseCard } from "@/src/components/exerciseCard";
-import { WorkoutSumary } from "@/src/components/workout/workoutSummary";
+import { ExerciseCard } from "@/src/features/exerciseCard";
+import { WorkoutSumary } from "@/src/features/workout/workoutSummary";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
-import React from "react";
 import { View } from "react-native";
 
 export default function WorkoutPage() {

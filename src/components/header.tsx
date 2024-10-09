@@ -3,7 +3,7 @@ import { TouchableOpacity, View } from "react-native";
 import { colors } from "../style/colors";
 import { useDrawer } from "../providers/DrawerProvider";
 import { Drawer } from "./drawer";
-import { NavigationDrawer } from "./navigationDrawer";
+import { NavigationDrawer } from "../features/navigationDrawer";
 
 export function Header() {
   const { openDrawer, closeDrawer } = useDrawer(() => (
@@ -15,9 +15,9 @@ export function Header() {
   return (
     <View className="mt-6 h-24 w-full flex-row items-center justify-between px-2">
       <TouchableOpacity onPress={openDrawer}>
-        <Menu size={25} color={colors.orange[500]} />
+        <Menu size={28} color={colors.orange[500]} />
       </TouchableOpacity>
-      <UserCircle size={25} color={colors.orange[500]} />
+      <UserCircle size={28} color={colors.orange[500]} />
     </View>
   );
 }
