@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import { ReactNode } from "react";
 import { Button } from "../../components/button";
-import { PickerSkeleton } from "../skeletons/pickerCardSkeleton";
+import { PickerSkeleton } from "../../components/skeletons/pickerCardSkeleton";
 
 export function ExercisePicker({
   children,

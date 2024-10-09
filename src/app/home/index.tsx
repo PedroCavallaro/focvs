@@ -6,15 +6,15 @@ import { api } from "@/src/api";
 import { WorkoutExercisesList } from "@/src/features/home/workoutExercisesList";
 import { DayOfWeek, daysOfWeek } from "@/src/utils";
 import { useAtom } from "jotai";
-import { useModal } from "@/src/providers/ModalProvider";
+import { useModal } from "@/src/providers/modalProvider";
 import { BaseModal } from "@/src/components/baseModal";
 import { SwitchWorkoutModal } from "@/src/features/home/switchWorkoutModal";
 import { NoWorkout } from "@/src/features/home/noWokout";
 import { useQuery } from "@tanstack/react-query";
 import { Storage } from "@/src/services";
 import { atomWithAsyncStorage } from "@/src/lib";
-import { STORAGE_KEYS } from "@/src/utils/constants";
 import { WorkoutActions } from "@/src/features/home/workoutActions";
+import { STORAGE_KEYS } from "@/src/utils/keys";
 
 const workoutAtom = atomWithAsyncStorage<Workout>(
   STORAGE_KEYS.WORKOUT_OF_THE_DAY,

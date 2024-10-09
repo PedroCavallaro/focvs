@@ -1,7 +1,7 @@
 import { Menu, UserCircle } from "lucide-react-native";
 import { TouchableOpacity, View } from "react-native";
 import { colors } from "../style/colors";
-import { useDrawer } from "../providers/DrawerProvider";
+import { useDrawer } from "../providers/drawerProvider";
 import { Drawer } from "./drawer";
 import { NavigationDrawer } from "../features/navigationDrawer";
 

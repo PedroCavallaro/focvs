@@ -6,7 +6,7 @@ import { ExercisePickerCard } from "@/src/features/new-workout/exercisePIckerCar
 import { MuscleCard } from "@/src/features/new-workout/muscleCard";
 import { MusclePicker } from "@/src/features/new-workout/musclePicker";
 import { NewWorkoutForm } from "@/src/features/new-workout/forms/newWorkoutForm";
-import { useModal } from "@/src/providers/ModalProvider";
+import { useModal } from "@/src/providers/modalProvider";
 import { useEffect } from "react";
 import {
   View,
@@ -15,7 +15,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { useDrawer } from "@/src/providers/DrawerProvider";
+import { useDrawer } from "@/src/providers/drawerProvider";
 import { Drawer } from "@/src/components/drawer";
 import { WorkoutSampling } from "@/src/features/new-workout/workoutSampling";
 import { Button } from "@/src/components/button";

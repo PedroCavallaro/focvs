@@ -2,7 +2,7 @@ import { X } from "lucide-react-native";
 import { ReactNode } from "react";
 import { View, Text, TouchableOpacity, Animated } from "react-native";
 import { colors } from "../style";
-import { useDrawer } from "../providers/DrawerProvider";
+import { useDrawer } from "../providers/drawerProvider";
 
 export function Drawer({
   title,
