@@ -3,8 +3,8 @@ import { Button } from "../components/button";
 import { useCallback } from "react";
 import * as SecureStore from "expo-secure-store";
 import { useRouter } from "expo-router";
-import { STORAGE_KEYS } from "../utils/constants";
 import { Storage } from "../services";
+import { STORAGE_KEYS } from "../utils/keys";
 
 export function NavigationDrawer({ close }: { close: () => void }) {
   const router = useRouter();

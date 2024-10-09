@@ -1,4 +1,4 @@
-import { STORAGE_KEYS } from "@/src/utils/constants";
+import { STORAGE_KEYS } from "@/src/utils/keys";
 import { RequestOptions } from "./http.types";
 import * as SecureStorage from "expo-secure-store";
 

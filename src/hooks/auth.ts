@@ -6,7 +6,7 @@ import { useAtom } from "jotai";
 import * as SecureStore from "expo-secure-store";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "expo-router";
-import { STORAGE_KEYS } from "../utils/constants";
+import { STORAGE_KEYS } from "../utils/keys";
 
 const userAtom = atomWithReset<UserDTO | null>(null);
 

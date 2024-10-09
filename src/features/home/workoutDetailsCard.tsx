@@ -1,6 +1,6 @@
 import { View, Image, Text } from "react-native";
-import { WorkoutDetails } from "../api/dtos";
-import { plural } from "../utils/plural";
+import { WorkoutDetails } from "../../api/dtos";
+import { plural } from "../../utils/plural";
 
 export function WorkoutDetailsCard({ workout }: { workout: WorkoutDetails }) {
   return (

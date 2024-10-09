@@ -6,7 +6,7 @@ import { UserDTO } from "@/src/api/dtos";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import * as SecureStorage from "expo-secure-store";
 import { jwtDecode } from "jwt-decode";
-import { STORAGE_KEYS } from "@/src/utils/constants";
+import { STORAGE_KEYS } from "@/src/utils/keys";
 
 export function TypeCodeForm({
   handleState,

@@ -1,7 +1,7 @@
 import { api } from "@/src/api";
 import { useQuery } from "@tanstack/react-query";
 import { ScrollView, TouchableOpacity, View } from "react-native";
-import { WorkoutDetailsCard } from "../workoutDetailsCard";
+import { WorkoutDetailsCard } from "./workoutDetailsCard";
 import { useCallback } from "react";
 import { Workout } from "@/src/api/dtos";
 

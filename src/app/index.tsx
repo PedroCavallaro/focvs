@@ -8,7 +8,7 @@ import { AUHT_FORM_STATE } from "./auth/auth.types";
 import { UserDTO } from "../api/dtos";
 import { useAuth } from "../hooks";
 import { jwtDecode } from "jwt-decode";
-import { STORAGE_KEYS } from "../utils/constants";
+import { STORAGE_KEYS } from "../utils/keys";
 
 export default function Index() {
   const [formState, setFormState] = useState(AUHT_FORM_STATE.LOGIN);

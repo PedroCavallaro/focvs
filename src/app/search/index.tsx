@@ -9,7 +9,7 @@ import {
   ScrollView,
   Animated,
 } from "react-native";
-import { WorkoutDetailsCard } from "@/src/features/workoutDetailsCard";
+import { WorkoutDetailsCard } from "@/src/features/home/workoutDetailsCard";
 import { router } from "expo-router";
 import { useSearch } from "@/src/hooks/search";
 import { Footer } from "@/src/components/footer";

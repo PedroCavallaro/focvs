@@ -9,7 +9,7 @@ import {
 import { useCallbackPlus, useForm } from "@/src/hooks";
 import { api } from "@/src/api";
 import * as SecureStorage from "expo-secure-store";
-import { STORAGE_KEYS } from "@/src/utils/constants";
+import { STORAGE_KEYS } from "@/src/utils/keys";
 
 export function GetRecoverCode({
   handleState,

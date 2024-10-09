@@ -2,7 +2,7 @@ import { api } from "@/src/api";
 import { WorkoutDetails } from "@/src/api/dtos";
 import { BaseModal } from "@/src/components/baseModal";
 import { WorkoutActionsModal } from "@/src/features/home/workoutActionsModal";
-import { WorkoutDetailsCard } from "@/src/features/workoutDetailsCard";
+import { WorkoutDetailsCard } from "@/src/features/home/workoutDetailsCard";
 import { useModal } from "@/src/providers/modalProvider";
 import { colors } from "@/src/style";
 import { useQuery } from "@tanstack/react-query";
