@@ -1,4 +1,4 @@
-import { ExerciseDto } from "@/src/api/dtos";
+import { WorkoutExercise } from "@/src/api/dtos";
 import { Modal, Text, TouchableOpacity, View } from "react-native";
 
 export function OverwriteExerciseModal({
@@ -6,8 +6,8 @@ export function OverwriteExerciseModal({
   onYes,
   close,
 }: {
-  exerciseDto: ExerciseDto;
-  onYes: (exercise: ExerciseDto) => void;
+  exerciseDto: WorkoutExercise;
+  onYes: (exercise: WorkoutExercise) => void;
   close: () => void;
 }) {
   return (

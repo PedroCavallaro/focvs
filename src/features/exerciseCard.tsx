@@ -4,34 +4,51 @@ import { Input } from "../components/input";
 import { CheckBox } from "../components/checkbox";
 import clsx from "clsx";
 import { useCallback, useState } from "react";
+import { useModal } from "../providers/modalProvider";
+import { BaseModal } from "../components/baseModal";
+import { RestTimer } from "./home/restTimer";
+
+interface IExerciseCardProps {
+  showCheckBox: boolean;
+  exercise: Workout["exercises"][0];
+  onChange?: ({
+    type,
+    setIndex,
+    value,
+    exerciseId,
+  }: {
+    type: "reps" | "weight";
+    value: string;
+    setIndex: number;
+    exerciseId: string;
+  }) => void;
+  editable?: boolean;
+}
 
 export function ExerciseCard({
   editable,
   exercise,
   onChange,
   showCheckBox = false,
-}: {
-  showCheckBox: boolean;
-  exercise: Workout["exercises"][0];
-  onChange?: ({
-    key,
-    index,
-    value,
-    exerciseId,
-  }: {
-    key: "reps" | "weight";
-    value: string;
-    index: number;
-    exerciseId: string;
-  }) => void;
-  editable?: number;
-}) {
+}: IExerciseCardProps) {
   const [completedSets, setCompletedSets] = useState<Record<number, boolean>>(
     {},
+  );
+  const [currentSet, setCurrentSet] = useState(0);
+
+  const { openModal: openTimerModal, closeModal: closeTimerModal } = useModal(
+    () => (
+      <BaseModal title="Tempo de descanso" onClose={() => closeTimerModal()}>
+        <RestTimer />
+      </BaseModal>
+    ),
+    [],
   );
 
   const checkSet = useCallback((i: number) => {
     setCompletedSets((prev) => ({ ...prev, [i]: true }));
+    setCurrentSet((prev) => prev + 1);
+    openTimerModal();
   }, []);
 
   return (
@@ -88,7 +105,7 @@ export function ExerciseCard({
               <View
                 key={i}
                 className={clsx("flex-row gap-7", {
-                  "opacity-60": isChecked,
+                  "opacity-60": isChecked || i > currentSet,
                 })}
               >
                 <View className="w-2/12">
@@ -107,16 +124,20 @@ export function ExerciseCard({
                   })}
                 >
                   <Input
-                    variant={!editable || isChecked ? "no-border" : "primary"}
+                    variant={
+                      (isChecked || !editable) && i > currentSet
+                        ? "no-border"
+                        : "primary"
+                    }
                   >
                     <Input.Field
                       value={String(set.reps)}
                       editable={!isChecked}
                       onChangeText={(v) =>
                         onChange?.({
-                          key: "reps",
+                          type: "reps",
                           value: v,
-                          index: i,
+                          setIndex: i,
                           exerciseId: exercise.exerciseId,
                         })
                       }
@@ -131,17 +152,21 @@ export function ExerciseCard({
                   })}
                 >
                   <Input
-                    variant={!editable || isChecked ? "no-border" : "primary"}
+                    variant={
+                      (isChecked || !editable) && i > currentSet
+                        ? "no-border"
+                        : "primary"
+                    }
                   >
                     <Input.Field
                       keyboardType="numeric"
                       className="flex-1 text-center text-white"
                       value={String(set.weight)}
-                      editable={!isChecked || !editable}
+                      editable={(!isChecked || editable) && i <= currentSet}
                       onChangeText={(v) =>
                         onChange?.({
-                          key: "weight",
-                          index: i,
+                          type: "weight",
+                          setIndex: i,
                           value: v,
                           exerciseId: exercise.exerciseId,
                         })
@@ -154,7 +179,7 @@ export function ExerciseCard({
                   <View className="ml-4 mt-2">
                     <CheckBox
                       onCheck={() => checkSet(i)}
-                      disabled={isChecked}
+                      disabled={isChecked || !editable}
                     />
                   </View>
                 )}

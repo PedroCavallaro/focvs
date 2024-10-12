@@ -2,8 +2,8 @@ import { PaginationDTO, PaginationQuery } from "@/src/utils/pagination";
 import {
   SaveWorkoutDTO,
   UpdateWorkoutDTO,
-  Workout,
   WorkoutDetails,
+  WorkoutResponse,
 } from "../dtos";
 import { HttpClient } from "../http";
 
@@ -60,19 +60,21 @@ export class WorkoutRepositorie {
   }
 
   async getWorkoutOfTheDay() {
-    const res = await this.api.get<Workout>("/workout/today");
+    const res = await this.api.get<WorkoutResponse>("/workout/today");
 
     return res;
   }
 
   async getWorkout(id: string) {
-    const res = await this.api.get<Workout>(`/workout/${id}`);
+    const res = await this.api.get<WorkoutResponse>(`/workout/${id}`);
 
     return res;
   }
 
   async getFullWorkoutById(id: string) {
-    const res = await this.api.get<Workout & WorkoutDetails>(`/workout/${id}`);
+    const res = await this.api.get<WorkoutResponse & WorkoutDetails>(
+      `/workout/${id}`,
+    );
 
     return res;
   }

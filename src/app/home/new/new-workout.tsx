@@ -10,7 +10,9 @@ import { useQuery } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
 import { useState, useMemo, useCallback } from "react";
 import { ChangeWorkoutInfo } from ".";
-import { Alert } from "react-native";
+import { useModal } from "@/src/providers/modalProvider";
+import { BaseModal } from "@/src/components/baseModal";
+import { OverwriteExerciseModal } from "@/src/features/new-workout/modals/overwriteWorkoutModal";
 
 export function useNewWorkout() {
   const [query, setQuery] = useState("");
@@ -54,6 +56,19 @@ export function useNewWorkout() {
     [fetchMuscles],
   );
 
+  const { closeModal, openModal } = useModal(
+    (exerciseDto: WorkoutExercise) => (
+      <BaseModal title="Exercício já adicionado">
+        <OverwriteExerciseModal
+          exerciseDto={exerciseDto}
+          close={() => closeModal()}
+          onYes={addExerciseToWorkout}
+        />
+      </BaseModal>
+    ),
+    [],
+  );
+
   const addExerciseToWorkout = useCallbackPlus(
     (exercise: WorkoutExercise) => {
       const parsed = AddExerciseSchema.parse(exercise);
@@ -63,26 +78,7 @@ export function useNewWorkout() {
       );
 
       if (isAdded) {
-        return Alert.alert(
-          "Exercício já adicionado",
-          "Deseja sobreescrever?",
-          [
-            {
-              onPress: () =>
-                setWorkout((prev) => {
-                  return { ...prev, exercises: [...prev.exercises, parsed] };
-                }),
-              text: "Sim",
-            },
-            {
-              text: "Não",
-              style: "cancel",
-            },
-          ],
-          {
-            userInterfaceStyle: "light",
-          },
-        );
+        openModal(exercise);
       }
 
       return setWorkout((prev) => {

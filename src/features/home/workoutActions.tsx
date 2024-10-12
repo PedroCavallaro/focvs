@@ -7,7 +7,7 @@ export function WorkoutActions({
   startWorkout,
   finishWorkout,
 }: {
-  started: number;
+  started: boolean;
   openSwichModal: () => void;
   startWorkout: () => void;
   finishWorkout: () => void;

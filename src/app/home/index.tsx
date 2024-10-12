@@ -1,68 +1,55 @@
-import { useRouter } from "expo-router";
+import { router, useRouter } from "expo-router";
 import { View, Text, TouchableOpacity } from "react-native";
-import { Workout } from "@/src/api/dtos";
 import { useCallback } from "react";
-import { api } from "@/src/api";
-import { WorkoutExercisesList } from "@/src/features/home/workoutExercisesList";
 import { DayOfWeek, daysOfWeek } from "@/src/utils";
-import { useAtom } from "jotai";
 import { useModal } from "@/src/providers/modalProvider";
 import { BaseModal } from "@/src/components/baseModal";
 import { SwitchWorkoutModal } from "@/src/features/home/switchWorkoutModal";
 import { NoWorkout } from "@/src/features/home/noWokout";
-import { useQuery } from "@tanstack/react-query";
-import { Storage } from "@/src/services";
-import { atomWithAsyncStorage } from "@/src/lib";
 import { WorkoutActions } from "@/src/features/home/workoutActions";
-import { STORAGE_KEYS } from "@/src/utils/keys";
-
-const workoutAtom = atomWithAsyncStorage<Workout>(
-  STORAGE_KEYS.WORKOUT_OF_THE_DAY,
-  {} as Workout,
-);
+import { useWorkout } from "@/src/providers/workoutProvider";
+import { ExerciseCard } from "@/src/features/exerciseCard";
 
 export default function HomePage() {
   const router = useRouter();
-  const [workout, setWorkout] = useAtom(workoutAtom);
-
-  const fetchWorkoutOfTheDay = useCallback(async () => {
-    const hasOnStorage = await Storage.getItem<Workout>(
-      STORAGE_KEYS.WORKOUT_OF_THE_DAY,
-    );
-
-    if (!hasOnStorage) {
-      const workout = await api.workout.getWorkoutOfTheDay();
-
-      setWorkout(workout);
-    }
-
-    return true;
-  }, [setWorkout]);
-
-  const { isLoading } = useQuery({
-    queryKey: ["workout-of-the-day"],
-    queryFn: () => fetchWorkoutOfTheDay(),
-  });
-
-  const startWorkout = useCallback(() => {
-    setWorkout((prev) => ({
-      ...prev,
-      started: 0,
-    }));
-  }, [setWorkout]);
-
-  const finishWorkout = useCallback(() => {
-    setWorkout((prev) => ({
-      ...prev,
-      started: 0,
-    }));
-  }, [setWorkout]);
+  const { isLoading, workout, finishWorkout, startWorkout, setWorkout } =
+    useWorkout();
 
   const onChange = useCallback(
-    (type: "reps" | "weight", v: string, exerciseId: string) => {
+    ({
+      type,
+      setIndex,
+      value,
+      exerciseId,
+    }: {
+      type: "reps" | "weight";
+      value: string;
+      setIndex: number;
+      exerciseId: string;
+    }) => {
+      if (!workout?.exercises) return;
+
       const exercises = workout.exercises;
 
-      const exercise = exercises.find((e) => e.exerciseId == exerciseId);
+      const parsedExercises = exercises?.map((e) => {
+        if (e.exerciseId == exerciseId) {
+          const set = e.sets[setIndex];
+
+          set[type] = Number(value);
+
+          e.sets[setIndex] = set;
+
+          const currentSet = workout.currentSets?.[e.exerciseId];
+
+          if (workout.currentSets) {
+            workout.currentSets[exerciseId] = currentSet ? currentSet + 1 : 0;
+          }
+        }
+
+        return e;
+      });
+
+      setWorkout((prev) => ({ ...prev, exercises: parsedExercises }));
     },
     [],
   );
@@ -107,15 +94,26 @@ export default function HomePage() {
                       openSwichModal={openSwichModal}
                       finishWorkout={finishWorkout}
                       startWorkout={startWorkout}
-                      started={workout.started ?? 0}
+                      started={workout?.info?.started ?? false}
                     />
                   </View>
                 </View>
               </View>
-              <WorkoutExercisesList
-                exercises={workout.exercises}
-                started={workout.started ?? 0}
-              />
+              <View>
+                <View className="flex-col gap-10">
+                  {workout.exercises?.map((e, i) => {
+                    return (
+                      <ExerciseCard
+                        showCheckBox={true}
+                        exercise={e}
+                        key={i}
+                        onChange={onChange}
+                        editable={workout?.info?.started ?? false}
+                      />
+                    );
+                  })}
+                </View>
+              </View>
             </>
           ) : (
             <NoWorkout openSwitchModal={openSwichModal} />

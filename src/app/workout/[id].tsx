@@ -26,7 +26,7 @@ export default function WorkoutPage() {
                 <ExerciseCard
                   exercise={e}
                   key={i}
-                  editable={-1}
+                  editable={false}
                   showCheckBox={false}
                 />
               );

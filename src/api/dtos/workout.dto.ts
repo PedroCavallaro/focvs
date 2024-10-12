@@ -1,9 +1,5 @@
 import { z } from "zod";
 
-export type WorkoutDto = {
-  name: string;
-};
-
 export const ExerciseSetSchema = z.object({
   set_number: z.number(),
   reps: z.number(),
@@ -48,13 +44,10 @@ export const UpdateWorkout = z.object({
 
 export type ExerciseSet = z.infer<typeof ExerciseSetSchema>;
 export type SaveWorkoutDTO = z.infer<typeof SaveWorkout>;
-export type Workout = z.infer<typeof SaveWorkout> & {
-  id: string;
-  started?: number;
-};
+export type WorkoutResponse = z.infer<typeof SaveWorkout>;
 export type UpdateWorkoutDTO = z.infer<typeof UpdateWorkout>;
 
-export type WorkoutDetails = z.infer<typeof SaveWorkout> & {
+export type WorkoutDetails = SaveWorkoutDTO & {
   id: string;
   picture_url: string;
   user: {
@@ -65,3 +58,16 @@ export type WorkoutDetails = z.infer<typeof SaveWorkout> & {
   exerciseAmount: number;
 };
 export type WorkoutExercise = z.infer<typeof AddExerciseSchema>;
+export type Workout = WorkoutResponse & {
+  id: string;
+  currentSets?: CurrentSets;
+  info?: {
+    started: boolean;
+    startedAt: number;
+    finishedAt?: number;
+  };
+};
+
+type CurrentSets = {
+  [key: string]: number;
+};
