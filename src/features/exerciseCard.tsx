@@ -6,7 +6,7 @@ import clsx from "clsx";
 import { useCallback, useState } from "react";
 import { useModal } from "../providers/modalProvider";
 import { BaseModal } from "../components/baseModal";
-import { RestTimer } from "./home/restTimer";
+import { RestTimer } from "./home/restimer/restTimer";
 
 interface IExerciseCardProps {
   showCheckBox: boolean;

@@ -1,4 +1,4 @@
-import { router, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useCallback } from "react";
 import { DayOfWeek, daysOfWeek } from "@/src/utils";
@@ -9,6 +9,8 @@ import { NoWorkout } from "@/src/features/home/noWokout";
 import { WorkoutActions } from "@/src/features/home/workoutActions";
 import { useWorkout } from "@/src/providers/workoutProvider";
 import { ExerciseCard } from "@/src/features/exerciseCard";
+import { Button } from "@/src/components/button";
+import * as notifee from "@notifee/react-native";
 
 export default function HomePage() {
   const router = useRouter();
@@ -65,6 +67,30 @@ export default function HomePage() {
     ),
     [],
   );
+  async function onDisplayNotification() {
+    // Request permissions (required for iOS)
+    await notifee.requestPermission();
+
+    // Create a channel (required for Android)
+    const channelId = await notifee.createChannel({
+      id: "default",
+      name: "Default Channel",
+    });
+
+    // Display a notification
+    await notifee.displayNotification({
+      title: "Notification Title",
+      body: "Main body content of the notification",
+      android: {
+        channelId,
+        smallIcon: "name-of-a-small-icon", // optional, defaults to 'ic_launcher'.
+        // pressAction is needed if you want the notification to open the app when pressed
+        pressAction: {
+          id: "default",
+        },
+      },
+    });
+  }
 
   return (
     <View className="flex-col gap-8">
@@ -85,20 +111,25 @@ export default function HomePage() {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                <View className="flex-row items-center gap-2">
-                  <Text className="font-regular text-2xl text-white">
-                    {workout.name}
-                  </Text>
-                  <View className="flex-row gap-4 rounded-lg px-4 py-2">
-                    <WorkoutActions
-                      openSwichModal={openSwichModal}
-                      finishWorkout={finishWorkout}
-                      startWorkout={startWorkout}
-                      started={workout?.info?.started ?? false}
-                    />
+                <View className="flex-row items-center justify-between gap-2">
+                  <View className="flex-row items-center gap-2">
+                    <Text className="font-regular text-2xl text-white">
+                      {workout.name}
+                    </Text>
+                    <View className="flex-row justify-between gap-4 rounded-lg px-4 py-2">
+                      <WorkoutActions
+                        openSwichModal={openSwichModal}
+                        finishWorkout={finishWorkout}
+                        startWorkout={startWorkout}
+                        started={workout?.info?.started ?? false}
+                      />
+                    </View>
                   </View>
                 </View>
               </View>
+              <Button onPress={() => onDisplayNotification()}>
+                <Text className="text-black">clica</Text>
+              </Button>
               <View>
                 <View className="flex-col gap-10">
                   {workout.exercises?.map((e, i) => {
