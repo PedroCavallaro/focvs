@@ -26,17 +26,11 @@ export class AuthRepository {
   }
 
   async createAccount(data: CreateAccountDTO): Promise<AuthResponse> {
-    try {
-      const response = await this.api.post<AuthResponse>("/auth/register", {
-        body: data,
-      });
+    const response = await this.api.post<AuthResponse>("/auth/register", {
+      body: data,
+    });
 
-      console.log(response);
-
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
+    return response;
   }
 
   async getRecoverPasswordToken(data: GetRecoverPasswordCodeDTO) {

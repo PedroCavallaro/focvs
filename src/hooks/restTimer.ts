@@ -1,49 +1,91 @@
 import { useAtom } from "jotai";
 import { atomWithReset } from "jotai/utils";
-import { useState, useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { STORAGE_KEYS } from "../utils/keys";
 import { Storage } from "../services";
 
-const restTimerAtom = atomWithReset(false);
+interface TimerAtom {
+  timerConfig: Array<number>;
+  isTimerRunning: boolean;
+}
+
+const restTimerAtom = atomWithReset<TimerAtom>({} as TimerAtom);
 
 export function useRestTimer() {
-  const [timer, setTimer] = useState([0, 0, 0, 0]);
-  const [isTimerRunning, setIsTimerRunning] = useAtom(restTimerAtom);
+  const [restTimer, setRestTimer] = useAtom(restTimerAtom);
+
+  function arrayToSeconds(timeArray: Array<number>) {
+    const totalMinutes = String(timeArray[0]) + String(timeArray[1]);
+    const totalSeconds = String(timeArray[2]) + String(timeArray[3]);
+
+    const minutesToSeconds = Number(totalMinutes) * 60;
+    const seconds = Number(totalSeconds);
+
+    return minutesToSeconds + seconds;
+  }
 
   const handleTimer = useCallback(() => {
-    setIsTimerRunning((prev) => !prev);
-  }, [setIsTimerRunning]);
+    setRestTimer((prev) => ({
+      ...prev,
+      isTimerRunning: !prev.isTimerRunning,
+    }));
+  }, [setRestTimer]);
 
   const getPreviousTimer = useCallback(async () => {
     const timerConfig = await Storage.getItem(STORAGE_KEYS.USER_TIMER_CONFIG);
 
-    setTimer(timerConfig as Array<number>);
-  }, [setTimer]);
+    setRestTimer((prev) => ({
+      ...prev,
+      timerConfig: timerConfig as Array<number>,
+    }));
+  }, [setRestTimer]);
 
   const handleStart = useCallback(async () => {
-    await Storage.setItem(STORAGE_KEYS.USER_TIMER_CONFIG, timer);
+    await Storage.setItem(
+      STORAGE_KEYS.USER_TIMER_CONFIG,
+      restTimer.timerConfig,
+    );
 
     handleTimer();
   }, []);
 
   const handleTimerConfig = useCallback(
     (index: number, v: number) => {
-      const newTimer = timer;
+      const newTimer = restTimer.timerConfig;
 
       newTimer[index] = v;
 
-      setTimer(newTimer);
+      setRestTimer((prev) => ({ ...prev, timerConfig: newTimer }));
     },
-    [setTimer, timer],
+    [setRestTimer, restTimer],
   );
 
+  useEffect(() => {
+    let timerId: Timer;
+
+    if (restTimer.isTimerRunning) {
+      timerId = setTimeout(
+        () => {
+          handleTimer();
+          setRestTimer((prev) => ({
+            ...prev,
+            timerConfig: [0, 0, 0, 0],
+          }));
+        },
+        arrayToSeconds(restTimer.timerConfig) * 1000,
+      );
+    }
+
+    return () => clearTimeout(timerId);
+  }, [restTimer]);
+
   return {
-    isTimerRunning,
-    timer,
+    restTimer,
     handleTimer,
-    setTimer,
+    setRestTimer,
     getPreviousTimer,
     handleStart,
+    arrayToSeconds,
     handleTimerConfig,
   };
 }

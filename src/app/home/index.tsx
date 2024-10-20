@@ -9,8 +9,7 @@ import { NoWorkout } from "@/src/features/home/noWokout";
 import { WorkoutActions } from "@/src/features/home/workoutActions";
 import { useWorkout } from "@/src/providers/workoutProvider";
 import { ExerciseCard } from "@/src/features/exerciseCard";
-import { Button } from "@/src/components/button";
-import * as notifee from "@notifee/react-native";
+// import notifee from "@notifee/react-native";
 
 export default function HomePage() {
   const router = useRouter();
@@ -67,33 +66,30 @@ export default function HomePage() {
     ),
     [],
   );
-  async function onDisplayNotification() {
-    // Request permissions (required for iOS)
-    await notifee.requestPermission();
+  // future stuff
+  // async function onDisplayNotification() {
+  //   await notifee.requestPermission();
 
-    // Create a channel (required for Android)
-    const channelId = await notifee.createChannel({
-      id: "default",
-      name: "Default Channel",
-    });
+  //   const channelId = await notifee.createChannel({
+  //     id: "default",
+  //     name: "Default Channel",
+  //   });
 
-    // Display a notification
-    await notifee.displayNotification({
-      title: "Notification Title",
-      body: "Main body content of the notification",
-      android: {
-        channelId,
-        smallIcon: "name-of-a-small-icon", // optional, defaults to 'ic_launcher'.
-        // pressAction is needed if you want the notification to open the app when pressed
-        pressAction: {
-          id: "default",
-        },
-      },
-    });
-  }
+  //   await notifee.displayNotification({
+  //     title: "Notification Title",
+  //     body: "Main body content of the notification",
+  //     android: {
+  //       channelId,
+  //       smallIcon: "name-of-a-small-icon",
+  //       pressAction: {
+  //         id: "default",
+  //       },
+  //     },
+  //   });
+  // }
 
   return (
-    <View className="flex-col gap-8">
+    <View className="h-full flex-col gap-8">
       {!isLoading && (
         <>
           {workout?.id ? (
@@ -127,9 +123,6 @@ export default function HomePage() {
                   </View>
                 </View>
               </View>
-              <Button onPress={() => onDisplayNotification()}>
-                <Text className="text-black">clica</Text>
-              </Button>
               <View>
                 <View className="flex-col gap-10">
                   {workout.exercises?.map((e, i) => {

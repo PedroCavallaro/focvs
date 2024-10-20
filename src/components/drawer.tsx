@@ -1,8 +1,15 @@
 import { X } from "lucide-react-native";
-import { ReactNode } from "react";
-import { View, Text, TouchableOpacity, Animated } from "react-native";
+import { ReactNode, useEffect, useMemo } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Animated,
+  Dimensions,
+} from "react-native";
 import { colors } from "../style";
 import { useDrawer } from "../providers/drawerProvider";
+const { width } = Dimensions.get("window");
 
 export function Drawer({
   title,
@@ -13,7 +20,29 @@ export function Drawer({
   onClose: () => void;
   children: ReactNode;
 }) {
-  const { animation } = useDrawer();
+  const { drawerAnimation, hasDrawer } = useDrawer();
+  const animation = useMemo(() => {
+    return {
+      transform: [
+        {
+          translateX: drawerAnimation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [-width, 0],
+          }),
+        },
+      ],
+    };
+  }, [drawerAnimation]);
+
+  useEffect(() => {
+    if (hasDrawer) {
+      Animated.timing(drawerAnimation, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => {});
+    }
+  }, []);
 
   return (
     <View className="absolute top-0 z-50 h-full w-full">

@@ -32,7 +32,6 @@ export function useCallbackPlus<T, U = unknown>(
 
         return val;
       } catch (error) {
-        console.log(error);
         if (error instanceof AxiosError) {
           handleAxiosErrors(error);
         }

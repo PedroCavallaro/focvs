@@ -3,7 +3,6 @@ import {
   ReactNode,
   useCallback,
   useContext,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -12,47 +11,39 @@ import { Animated } from "react-native";
 interface IDrawerContext {
   openDrawer: (drawer: ReactNode) => void;
   closeDrawer: () => void;
-  animation: {
-    transform: {
-      translateX: Animated.AnimatedInterpolation<string | number>;
-    }[];
-  };
+  drawerAnimation: Animated.Value;
+  hasDrawer: boolean;
 }
 
 const DrawerContext = createContext({} as IDrawerContext);
 
 export function DrawerProvider({ children }: { children: ReactNode }) {
-  const [currentDrawer, setCurrentDrawer] = useState<React.ReactNode>();
   const drawerAnimation = useRef(new Animated.Value(0)).current;
+  const [currentDrawer, setCurrentDrawer] = useState<React.ReactNode>();
 
   const openDrawer = (drawer: ReactNode) => {
     setCurrentDrawer(drawer);
-    Animated.timing(drawerAnimation, {
-      toValue: 1,
-      duration: 2000,
-      useNativeDriver: true,
-    }).start();
   };
 
   const closeDrawer = () => {
-    setCurrentDrawer(null);
+    Animated.timing(drawerAnimation, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      setCurrentDrawer(null);
+    });
   };
 
-  const animation = useMemo(() => {
-    return {
-      transform: [
-        {
-          translateX: drawerAnimation.interpolate({
-            inputRange: [0, 1],
-            outputRange: [1, 0],
-          }),
-        },
-      ],
-    };
-  }, [drawerAnimation]);
-
   return (
-    <DrawerContext.Provider value={{ closeDrawer, openDrawer, animation }}>
+    <DrawerContext.Provider
+      value={{
+        closeDrawer,
+        openDrawer,
+        drawerAnimation,
+        hasDrawer: currentDrawer !== null,
+      }}
+    >
       {children}
       {currentDrawer}
     </DrawerContext.Provider>
@@ -63,7 +54,8 @@ export function useDrawer<T extends unknown[]>(
   drawer?: (...args: T) => ReactNode,
   deps?: React.DependencyList,
 ) {
-  const { openDrawer, closeDrawer, animation } = useContext(DrawerContext);
+  const { openDrawer, closeDrawer, drawerAnimation, hasDrawer } =
+    useContext(DrawerContext);
 
   const overrideOpenDrawer = useCallback(
     (...args: T) => {
@@ -76,6 +68,7 @@ export function useDrawer<T extends unknown[]>(
   return {
     openDrawer: overrideOpenDrawer,
     closeDrawer,
-    animation,
+    drawerAnimation,
+    hasDrawer,
   };
 }

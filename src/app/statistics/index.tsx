@@ -9,8 +9,6 @@ export default function SearchPage() {
   const { animation, handleScroll } = useFooter();
   const { user } = useAuth();
 
-  console.log(user);
-
   return (
     <>
       <ScrollView onScroll={handleScroll}>

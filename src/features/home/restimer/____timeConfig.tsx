@@ -41,8 +41,6 @@ export default function TimeConfig() {
         bounces={false}
         onMomentumScrollEnd={(ev) => {
           const index = Math.floor(ev.nativeEvent.contentOffset.y / ITEM_SIZE);
-
-          console.log(timers[index + 1]);
         }}
         showsVerticalScrollIndicator={false}
         onScroll={Animated.event(
@@ -59,7 +57,6 @@ export default function TimeConfig() {
         decelerationRate="fast"
         keyExtractor={(item) => item.toString()}
         renderItem={({ item, index }) => {
-          console.log(index);
           const inputRange = [
             (index - 1) * ITEM_SIZE,
             index * ITEM_SIZE,

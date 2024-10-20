@@ -133,6 +133,7 @@ export function ExerciseCard({
                     <Input.Field
                       value={String(set.reps)}
                       editable={!isChecked}
+                      keyboardType="numeric"
                       onChangeText={(v) =>
                         onChange?.({
                           type: "reps",
@@ -162,7 +163,7 @@ export function ExerciseCard({
                       keyboardType="numeric"
                       className="flex-1 text-center text-white"
                       value={String(set.weight)}
-                      editable={(!isChecked || editable) && i <= currentSet}
+                      editable={(!isChecked || editable) && i == currentSet}
                       onChangeText={(v) =>
                         onChange?.({
                           type: "weight",

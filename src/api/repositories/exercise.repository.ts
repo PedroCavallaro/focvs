@@ -31,8 +31,6 @@ export class ExerciseRepositorie {
       },
     );
 
-    console.log(response);
-
     return response;
   }
 }
