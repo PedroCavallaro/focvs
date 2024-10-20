@@ -1,4 +1,4 @@
-import { ExerciseDto, MuscleDto } from "@/src/api/dtos";
+import { ExerciseDto, MuscleDto, WorkoutExercise } from "@/src/api/dtos";
 import { BaseModal } from "@/src/components/baseModal";
 import { AddExerciseModal } from "@/src/features/new-workout/forms/addExerciseModal";
 import { ExercisePicker } from "@/src/features/new-workout/exercisePicker";
@@ -40,36 +40,69 @@ export default function NewWorkout() {
     muscles,
     query,
     refetchExercises,
+    duplicatedExercise,
     refetchMuscles,
     fetchExercises,
     workout,
     setQuery,
+    changeOnWorkoutSampling,
   } = useNewWorkout();
 
   const { closeDrawer, openDrawer } = useDrawer(() => {
     return (
       <Drawer title="Novo Treino" onClose={() => closeDrawer()}>
-        <WorkoutSampling close={() => closeDrawer()} workout={workout} />
+        <WorkoutSampling
+          changeOnWorkoutSampling={changeOnWorkoutSampling}
+          close={() => closeDrawer()}
+        />
       </Drawer>
     );
-  }, [workout]);
+  }, [workout, changeOnWorkoutSampling]);
 
-  const { closeModal, openModal } = useModal(
-    (exercise: ExerciseDto) => {
-      return (
-        <BaseModal title={`${exercise.name}`} onClose={() => closeModal()}>
-          <AddExerciseModal
-            exercise={exercise}
-            onClose={() => {
-              closeModal();
+  const { closeModal: closeAddExerciseModal, openModal: openAddExerciseModal } =
+    useModal(
+      (exercise: ExerciseDto) => {
+        return (
+          <BaseModal
+            title={`${exercise.name}`}
+            onClose={() => closeAddExerciseModal()}
+          >
+            <AddExerciseModal
+              exercise={exercise}
+              onClose={() => {
+                closeAddExerciseModal();
+              }}
+              addExerciseToWorkout={(exercise) =>
+                addExerciseToWorkout({ exercise })
+              }
+            />
+          </BaseModal>
+        );
+      },
+      [addExerciseToWorkout],
+    );
+
+  const { closeModal: closeOverrideModal, openModal: openOverrideModal } =
+    useModal(
+      (exercise: WorkoutExercise) => (
+        <BaseModal
+          positionVariant="center"
+          sizeVariant="medium"
+          onClose={() => closeOverrideModal()}
+          subtitle="Deseja sobreescrever?"
+          title="Exercício já adicionado"
+        >
+          <BaseModal.BaseButton
+            onClose={() => closeOverrideModal()}
+            onOk={() => {
+              addExerciseToWorkout({ exercise, shouldOverride: true });
+              closeOverrideModal();
             }}
-            addExerciseToWorkout={addExerciseToWorkout}
           />
         </BaseModal>
-      );
-    },
-    [addExerciseToWorkout],
-  );
+      ),
+      [],
+    );
 
   useEffect(() => {
     fetchExercises();
@@ -86,6 +119,12 @@ export default function NewWorkout() {
 
     return;
   }, [query, selectedMuscle]);
+
+  useEffect(() => {
+    if (duplicatedExercise) {
+      openOverrideModal(duplicatedExercise);
+    }
+  }, [duplicatedExercise]);
 
   return (
     <View className="flex-col gap-4">
@@ -142,7 +181,10 @@ export default function NewWorkout() {
                 numColumns={2}
                 keyExtractor={(item) => String(item.id)}
                 renderItem={({ item }) => (
-                  <ExercisePickerCard openModal={openModal} exercise={item} />
+                  <ExercisePickerCard
+                    openModal={(exercise) => openAddExerciseModal(exercise)}
+                    exercise={item}
+                  />
                 )}
               />
             </ScrollView>

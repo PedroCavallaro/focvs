@@ -22,6 +22,9 @@ interface IExerciseCardProps {
     setIndex: number;
     exerciseId: string;
   }) => void;
+  shoulDecreaseOpacity?: boolean;
+  shouldEditOneByOne?: boolean;
+  shouldEditAllAtSame?: boolean;
   editable?: boolean;
 }
 
@@ -30,6 +33,9 @@ export function ExerciseCard({
   exercise,
   onChange,
   showCheckBox = false,
+  shoulDecreaseOpacity = false,
+  shouldEditOneByOne = false,
+  shouldEditAllAtSame = false,
 }: IExerciseCardProps) {
   const [completedSets, setCompletedSets] = useState<Record<number, boolean>>(
     {},
@@ -100,12 +106,20 @@ export function ExerciseCard({
           </View>
           {exercise.sets.map((set, i) => {
             const isChecked = completedSets?.[i];
+            const isInputEditble = !isChecked && editable;
+            const editingOneByOne = shouldEditOneByOne
+              ? isInputEditble && i <= currentSet
+              : true;
+            const ignoreDisableByIndex = shouldEditAllAtSame
+              ? true
+              : isInputEditble && i == currentSet;
 
             return (
               <View
                 key={i}
                 className={clsx("flex-row gap-7", {
-                  "opacity-60": isChecked || i > currentSet,
+                  "opacity-60":
+                    shoulDecreaseOpacity && (isChecked || i > currentSet),
                 })}
               >
                 <View className="w-2/12">
@@ -123,16 +137,10 @@ export function ExerciseCard({
                     "w-2/6": !showCheckBox,
                   })}
                 >
-                  <Input
-                    variant={
-                      (isChecked || !editable) && i > currentSet
-                        ? "no-border"
-                        : "primary"
-                    }
-                  >
+                  <Input variant={editingOneByOne ? "primary" : "no-border"}>
                     <Input.Field
                       value={String(set.reps)}
-                      editable={!isChecked}
+                      editable={ignoreDisableByIndex}
                       keyboardType="numeric"
                       onChangeText={(v) =>
                         onChange?.({
@@ -152,18 +160,12 @@ export function ExerciseCard({
                     "w-2/6": !showCheckBox,
                   })}
                 >
-                  <Input
-                    variant={
-                      (isChecked || !editable) && i > currentSet
-                        ? "no-border"
-                        : "primary"
-                    }
-                  >
+                  <Input variant={editingOneByOne ? "primary" : "no-border"}>
                     <Input.Field
                       keyboardType="numeric"
                       className="flex-1 text-center text-white"
                       value={String(set.weight)}
-                      editable={(!isChecked || editable) && i == currentSet}
+                      editable={ignoreDisableByIndex}
                       onChangeText={(v) =>
                         onChange?.({
                           type: "weight",

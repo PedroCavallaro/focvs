@@ -3,8 +3,8 @@ import { View } from "react-native";
 import { router, usePathname } from "expo-router";
 import { Button } from "./button";
 import { colors } from "../style";
-import { RestTimerIndicator } from "../features/home/restimer/rest-timer-indicator";
-import { useRestTimer } from "../hooks/restTimer";
+import { RestTimerIndicator } from "../features/home/restimer/restTimerIndicator";
+import { useRestTimer } from "../hooks/rest-timer";
 import { useFooter } from "../hooks";
 
 export function Footer() {

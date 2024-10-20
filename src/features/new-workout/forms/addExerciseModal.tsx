@@ -72,7 +72,7 @@ export function AddExerciseModal({
 
   return (
     <>
-      <View className="w-3/12 flex-row gap-2 pt-6">
+      <View className="w-3/12 flex-row gap-2">
         <View className="w-2/4">
           {deleteMode ? (
             <Button

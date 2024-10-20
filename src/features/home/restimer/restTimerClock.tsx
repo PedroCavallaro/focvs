@@ -1,11 +1,20 @@
 import { Button } from "@/src/components/button";
-import { useRestTimer } from "@/src/hooks/restTimer";
+import { useRestTimer } from "@/src/hooks/rest-timer";
 import { StopCircle } from "lucide-react-native";
 import { useRef } from "react";
 import { Text, View } from "react-native";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 
 export function RestTimerClock() {
+  // const { closeModal, openModal } = useModal(
+  //   () => (
+  //     <BaseModal title="Tempo de descanso finalizado">
+  //       <RestTimerEndedModal close={() => closeModal()} />
+  //     </BaseModal>
+  //   ),
+  //   [],
+  // );
+
   const { handleTimer, restTimer, arrayToSeconds, setRestTimer } =
     useRestTimer();
 

@@ -1,5 +1,7 @@
 import { api } from "@/src/api";
 import { UpdateWorkoutDTO, WorkoutDetails } from "@/src/api/dtos";
+import { BaseModal } from "@/src/components/baseModal";
+import { useModal } from "@/src/providers/modalProvider";
 import { plural } from "@/src/utils/plural";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, Share, X } from "lucide-react-native";
@@ -16,6 +18,27 @@ export function WorkoutActionsModal({
     mutationFn: (id: string) => api.workout.deleteWorkout(id),
     onSuccess: () => onSucces(),
   });
+
+  const {
+    openModal: openDeleteWarningModal,
+    closeModal: closeDeleteWarningModal,
+  } = useModal(
+    () => (
+      <BaseModal
+        positionVariant="center"
+        sizeVariant="medium"
+        title="Tem certeza que quer apagar esse treino?"
+        subtitle="Essa ação é irreversível"
+        onClose={() => closeDeleteWarningModal()}
+      >
+        <BaseModal.BaseButton
+          onClose={() => closeDeleteWarningModal()}
+          onOk={() => delteWorkout(workout.id)}
+        />
+      </BaseModal>
+    ),
+    [],
+  );
 
   const { mutate: updateWorkout } = useMutation({
     mutationFn: (data: UpdateWorkoutDTO) => api.workout.updateWorkout(data),
@@ -40,7 +63,7 @@ export function WorkoutActionsModal({
         </View>
       </View>
       <TouchableOpacity
-        onPress={() => delteWorkout(workout.id)}
+        onPress={openDeleteWarningModal}
         className="flex-row items-center gap-2 opacity-70"
       >
         <X color={"#fff"} size={20} />

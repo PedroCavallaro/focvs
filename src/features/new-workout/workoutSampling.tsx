@@ -6,14 +6,27 @@ import { ExerciseCard } from "../exerciseCard";
 import { useCallbackPlus } from "@/src/hooks";
 import { api } from "@/src/api";
 import { useRouter } from "expo-router";
+import { useNewWorkout } from "@/src/app/home/new/new-workout";
 
 export function WorkoutSampling({
-  workout,
+  changeOnWorkoutSampling,
   close,
 }: {
-  workout: SaveWorkoutDTO;
+  changeOnWorkoutSampling: ({
+    type,
+    setIndex,
+    value,
+    exerciseId,
+  }: {
+    type: "reps" | "weight";
+    value: string;
+    setIndex: number;
+    exerciseId: string;
+  }) => void;
   close: () => void;
 }) {
+  const { workout, clearWorkout } = useNewWorkout();
+
   const router = useRouter();
   const saveWorkout = useCallbackPlus(
     async (workout: SaveWorkoutDTO) => {
@@ -23,8 +36,9 @@ export function WorkoutSampling({
 
       router.replace("/home");
       close();
+      clearWorkout();
     },
-    [workout, router],
+    [workout, router, close, clearWorkout],
   );
 
   return (
@@ -52,12 +66,15 @@ export function WorkoutSampling({
       </Text>
       <ScrollView>
         <View className="w-full flex-col gap-10">
-          {workout.exercises.map((exercise) => {
+          {workout?.exercises?.map((exercise) => {
             return (
               <ExerciseCard
+                editable={true}
                 showCheckBox={false}
+                onChange={changeOnWorkoutSampling}
                 key={exercise.exerciseId}
                 exercise={exercise}
+                shouldEditAllAtSame
               />
             );
           })}

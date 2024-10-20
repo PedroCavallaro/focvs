@@ -14,20 +14,18 @@ export function useFooter() {
   const scrollY = useRef(new Animated.Value(0)).current;
   const [showFooter, setShowFooter] = useAtom(footerAtom);
 
-  const handleFooter = () => setShowFooter((prev) => !prev);
-
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       () => {
-        handleFooter();
+        setShowFooter(false);
       },
     );
 
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
-        handleFooter();
+        setShowFooter(true);
       },
     );
 
@@ -35,7 +33,7 @@ export function useFooter() {
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
     };
-  }, [handleFooter]);
+  }, []);
 
   const handleScroll = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -49,7 +47,7 @@ export function useFooter() {
         currentOffset > 0 ? setShowFooter(false) : setShowFooter(true),
       );
     },
-    [handleFooter],
+    [],
   );
 
   const animation = {

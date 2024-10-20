@@ -1,54 +1,97 @@
 import { ChevronDown } from "lucide-react-native";
-import { View, Text, TouchableOpacity } from "react-native";
-import { Dimensions } from "react-native";
-import { BarChart } from "react-native-chart-kit";
+import { View, Text, TouchableOpacity, Dimensions } from "react-native";
+import { BarChart } from "react-native-gifted-charts";
 
 export function WorkoutGraph() {
-  const data = {
-    labels: ["January", "February", "March", "April", "May", "June"],
-    datasets: [
-      {
-        data: [20, 45, 28, 80, 99, 43],
-      },
-    ],
-  };
+  // const data = {
+  //   labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+  //   datasets: [
+  //     {
+  //       data: [20, 45, 28, 80, 99, 43],
+  //     },
+  //   ],
+  // };
   const screenWidth = Dimensions.get("window").width;
 
-  const chartConfig = {
-    backgroundGradientFrom: "#1E2923",
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: "#08130D",
-    backgroundGradientToOpacity: 0.5,
-    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
-    barPercentage: 0.5,
-    useShadowColorFromDataset: false, // optional
-  };
+  // const chartConfig = {
+  //   color: (opacity = 1) => `rgba(249, 115, 22 / ${opacity})`,
+  //   barPercentage: 1,
+  //   useShadowColorFromDataset: false,
+  // };
 
   return (
-    <View className="flex-col gap-4">
+    <View className="flex-col gap-6">
       <View className="flex-row items-center gap-4">
-        <Text className="text-md flex-row text-white">
+        <Text className="flex-row text-lg text-white">
           Quantidade de treinos nos últimos
         </Text>
         <TouchableOpacity className="flex-row items-center gap-x-2 rounded-md bg-orange-500 p-1 px-2">
-          <Text>12 meses</Text>
+          <Text>6 meses</Text>
           <ChevronDown size={15} color={"#000"} />
         </TouchableOpacity>
       </View>
       <BarChart
+        width={screenWidth - 90}
+        height={200}
+        minHeight={3}
+        noOfSections={4}
+        yAxisThickness={1}
+        xAxisThickness={1}
+        isAnimated
+        animationDuration={300}
+        yAxisTextStyle={{
+          color: "white",
+        }}
+        dashGap={30}
+        hideRules
+        yAxisColor="white"
+        xAxisColor="white"
+        barBorderRadius={3}
+        xAxisLabelTextStyle={{ color: "white" }}
+        data={[
+          {
+            value: 20,
+            frontColor: "#f97316",
+            label: "Jan",
+          },
+          {
+            value: 15,
+            frontColor: "#f97316",
+            label: "Fev",
+          },
+          {
+            value: 25,
+            frontColor: "#f97316",
+            label: "Mar",
+          },
+          {
+            value: 10,
+            frontColor: "#f97316",
+            label: "Abr",
+          },
+          {
+            value: 18,
+            frontColor: "#f97316",
+            label: "Mai",
+          },
+        ]}
+        barWidth={25}
+      />
+      {/* <BarChart
         style={{
           marginVertical: 8,
-          borderRadius: 16,
         }}
-        yAxisSuffix="k"
+        yAxisSuffix=""
         data={data}
-        width={screenWidth}
+        width={screenWidth * 0.9}
         height={250}
-        yAxisLabel="$"
-        chartConfig={chartConfig}
+        yAxisLabel=""
+        chartConfig={{
+          ...chartConfig,
+          labelColor: (opacity = 1) => `rgba(255, 255, 255 / ${opacity})`,
+        }}
         verticalLabelRotation={30}
-      />
+      /> */}
     </View>
   );
 }

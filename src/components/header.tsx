@@ -13,7 +13,7 @@ export function Header() {
   ));
 
   return (
-    <View className="mt-6 h-16 w-full flex-row items-center justify-between px-2 py-4">
+    <View className="mt-6 h-20 w-full flex-row items-center justify-between px-2 py-4">
       <TouchableOpacity onPress={openDrawer}>
         <Menu size={28} color={colors.orange[500]} />
       </TouchableOpacity>

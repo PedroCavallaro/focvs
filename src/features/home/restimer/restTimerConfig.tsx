@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import { Button } from "@/src/components/button";
 import { Input } from "@/src/components/input";
 import { useEffect } from "react";
-import { useRestTimer } from "@/src/hooks/restTimer";
+import { useRestTimer } from "@/src/hooks/rest-timer";
 
 export function RestTimerConfig() {
   const { getPreviousTimer, handleTimerConfig, handleStart } = useRestTimer();

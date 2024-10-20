@@ -1,13 +1,13 @@
-import { useRestTimer } from "@/src/hooks/restTimer";
+import { useRestTimer } from "@/src/hooks/rest-timer";
 import { View } from "react-native";
-import { RestTimerConfig } from "./rest-timer-config";
-import { RestTimerClock } from "./rest-timer-clock";
+import { RestTimerConfig } from "./restTimerConfig";
+import { RestTimerClock } from "./restTimerClock";
 
 export function RestTimer() {
   const { restTimer } = useRestTimer();
 
   return (
-    <View className="mt-6 flex-col justify-center gap-10">
+    <View className="flex-col justify-center gap-10">
       {restTimer.isTimerRunning ? <RestTimerClock /> : <RestTimerConfig />}
     </View>
   );

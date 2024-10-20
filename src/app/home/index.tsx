@@ -133,6 +133,8 @@ export default function HomePage() {
                         key={i}
                         onChange={onChange}
                         editable={workout?.info?.started ?? false}
+                        shouldEditOneByOne
+                        shoulDecreaseOpacity
                       />
                     );
                   })}

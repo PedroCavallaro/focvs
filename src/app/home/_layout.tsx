@@ -2,7 +2,7 @@ import { Footer } from "@/src/components/footer";
 import { Header } from "@/src/components/header";
 import { useFooter } from "@/src/hooks";
 import { Slot } from "expo-router";
-import { Animated, KeyboardAvoidingView, ScrollView, View } from "react-native";
+import { Animated, ScrollView, View } from "react-native";
 
 export default function Layout() {
   const { animation, handleScroll } = useFooter();

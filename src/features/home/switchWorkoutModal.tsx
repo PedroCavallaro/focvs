@@ -29,7 +29,7 @@ export function SwitchWorkoutModal({
 
   return (
     <ScrollView className="max-h-[45rem] w-full flex-col gap-4">
-      <View className="mt-6 flex-col gap-6">
+      <View className="flex-col gap-6">
         {data?.map((workout) => (
           <TouchableOpacity
             key={workout.id}

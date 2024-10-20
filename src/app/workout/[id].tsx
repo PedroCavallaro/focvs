@@ -27,6 +27,8 @@ export default function WorkoutPage() {
                   exercise={e}
                   key={i}
                   editable={false}
+                  shouldEditAllAtSame={true}
+                  shouldEditOneByOne={true}
                   showCheckBox={false}
                 />
               );

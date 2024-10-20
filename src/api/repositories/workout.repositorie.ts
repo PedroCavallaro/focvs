@@ -2,6 +2,7 @@ import { PaginationDTO, PaginationQuery } from "@/src/utils/pagination";
 import {
   SaveWorkoutDTO,
   UpdateWorkoutDTO,
+  Workout,
   WorkoutDetails,
   WorkoutResponse,
 } from "../dtos";
@@ -29,18 +30,24 @@ export class WorkoutRepositorie {
   }
 
   async searchWorkouts(q: PaginationQuery = {}) {
-    try {
-      const res = await this.api.get<PaginationDTO<WorkoutDetails>>(
-        "/workout/search",
-        {
-          query: { ...q },
-        },
-      );
+    const res = await this.api.get<PaginationDTO<WorkoutDetails>>(
+      "/workout/search",
+      {
+        query: { ...q },
+      },
+    );
 
-      return res;
-    } catch (error) {
-      console.log(error);
-    }
+    return res;
+  }
+
+  async copyWorkout(id: string) {
+    const res = await this.api.post("/workout/copy", {
+      body: {
+        workoutId: id,
+      },
+    });
+
+    return res;
   }
 
   async createWorkout(data: SaveWorkoutDTO) {
@@ -66,7 +73,7 @@ export class WorkoutRepositorie {
   }
 
   async getWorkout(id: string) {
-    const res = await this.api.get<WorkoutResponse>(`/workout/${id}`);
+    const res = await this.api.get<Workout>(`/workout/${id}`);
 
     return res;
   }
