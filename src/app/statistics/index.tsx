@@ -1,5 +1,7 @@
 import { Footer } from "@/src/components/footer";
 import { Header } from "@/src/components/header";
+import { EvolutionGraph } from "@/src/features/statistics/evolutionGraph";
+import { ExerciseEvolution } from "@/src/features/statistics/exerciseEvolution";
 import { WorkoutCalendar } from "@/src/features/statistics/workoutCalendar";
 import { WorkoutGraph } from "@/src/features/statistics/workoutGraph";
 import { useAuth, useFooter } from "@/src/hooks";
@@ -24,6 +26,8 @@ export default function SearchPage() {
             </Text>
             <WorkoutGraph />
           </View>
+          <ExerciseEvolution />
+          <EvolutionGraph />
           <WorkoutCalendar />
         </View>
       </ScrollView>
