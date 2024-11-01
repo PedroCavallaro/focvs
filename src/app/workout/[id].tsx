@@ -13,10 +13,6 @@ export default function WorkoutPage() {
     queryFn: () => api.workout.getFullWorkoutById(id as string),
   });
 
-  const getCopyLink = () => {
-    return `${process.env.EXPO_PUBLIC_API_URL}/${workout?.signature}`;
-  };
-
   return (
     <View className="flex-col gap-10">
       {workout && (

@@ -47,6 +47,17 @@ export type SaveWorkoutDTO = z.infer<typeof SaveWorkout>;
 export type WorkoutResponse = z.infer<typeof SaveWorkout>;
 export type UpdateWorkoutDTO = z.infer<typeof UpdateWorkout>;
 
+export type Workout = WorkoutResponse & {
+  id: string;
+  signature: string;
+  currentSets?: CurrentSets;
+  info?: {
+    started: boolean;
+    startedAt: number;
+    finishedAt?: number;
+  };
+};
+
 export type WorkoutDetails = SaveWorkoutDTO & {
   id: string;
   picture_url: string;
@@ -59,16 +70,6 @@ export type WorkoutDetails = SaveWorkoutDTO & {
   exerciseAmount: number;
 };
 export type WorkoutExercise = z.infer<typeof AddExerciseSchema>;
-export type Workout = WorkoutResponse & {
-  id: string;
-  signature: string;
-  currentSets?: CurrentSets;
-  info?: {
-    started: boolean;
-    startedAt: number;
-    finishedAt?: number;
-  };
-};
 
 type CurrentSets = {
   [key: string]: number;
