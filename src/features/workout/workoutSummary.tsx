@@ -1,12 +1,16 @@
 import { api } from "@/src/api";
 import { Workout, WorkoutDetails } from "@/src/api/dtos";
 import { BaseModal } from "@/src/components/baseModal";
+import { Toast } from "@/src/components/toast";
 import { useAuth } from "@/src/hooks";
 import { useModal } from "@/src/providers/modalProvider";
+import { useToast } from "@/src/providers/toastProvider";
+import { Clipboard } from "@/src/services";
 import { colors } from "@/src/style";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { Copy, Share2, Trash2 } from "lucide-react-native";
+import { CircleCheck, Copy, Share2, Trash2 } from "lucide-react-native";
+import { useCallback } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 export function WorkoutSumary({
@@ -15,12 +19,28 @@ export function WorkoutSumary({
   workout: Workout & WorkoutDetails;
 }) {
   const router = useRouter();
+  const { user } = useAuth();
 
   const { mutate: delteWorkout } = useMutation({
     mutationFn: (id: string) => api.workout.deleteWorkout(id),
   });
+  const { showToast } = useToast(() => (
+    <Toast>
+      <Toast.Content
+        prefixIcon={<CircleCheck size={18} color={colors.orange[500]} />}
+        title="Link Copiado"
+      />
+    </Toast>
+  ));
 
-  const { user } = useAuth();
+  const getCopyLink = useCallback(async () => {
+    await Clipboard.copyToClipboard(
+      `${process.env.EXPO_PUBLIC_API_URL}/workout/link/${workout?.signature}`,
+    );
+
+    showToast();
+  }, [showToast]);
+
   const { openModal: openCopyWorkoutModal, closeModal: closeCopyWorkoutModal } =
     useModal(
       () => (
@@ -35,7 +55,7 @@ export function WorkoutSumary({
             okText="Copiar"
             closeText="Cancelar"
             onClose={() => closeCopyWorkoutModal()}
-            onOk={() => console.log("a")}
+            onOk={() => console.log("IMPLEMENT THIS")}
           />
         </BaseModal>
       ),
@@ -86,7 +106,10 @@ export function WorkoutSumary({
               <Copy size={20} color={colors.orange[500]} />
             </TouchableOpacity>
           )}
-          <Share2 size={20} color={colors.orange[500]} />
+          <TouchableOpacity onPress={getCopyLink}>
+            <Share2 size={20} color={colors.orange[500]} />
+          </TouchableOpacity>
+
           {user?.id === workout.userId && (
             <TouchableOpacity onPress={openDeleteWarningModal}>
               <Trash2 size={20} color={colors.orange[500]} />

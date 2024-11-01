@@ -124,7 +124,7 @@ export default function HomePage() {
                 </View>
               </View>
               <View>
-                <View className="flex-col gap-10">
+                <View className="flex-col gap-10 px-2">
                   {workout.exercises?.map((e, i) => {
                     return (
                       <ExerciseCard

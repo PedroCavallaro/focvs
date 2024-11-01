@@ -1,18 +1,38 @@
-import { useAtom } from "jotai";
-import { atomWithReset } from "jotai/utils";
-import { useCallback, useEffect } from "react";
-import { STORAGE_KEYS } from "../utils/keys";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { STORAGE_KEYS } from "../utils";
 import { Storage } from "../services";
+import { Toast } from "../components/toast";
+import { useToast } from "./toastProvider";
+import { AlarmClock } from "../features/home/restimer/alarmClock";
 
-interface TimerAtom {
+interface TimerState {
   timerConfig: Array<number>;
   isTimerRunning: boolean;
 }
 
-const restTimerAtom = atomWithReset<TimerAtom>({} as TimerAtom);
+interface IRestTimerContext {
+  handleTimer: () => void;
+  getPreviousTimer: () => void;
+  handleStart: () => void;
+  handleTimerConfig: (index: number, v: number) => void;
+  restTimer: TimerState;
+  setRestTimer: React.Dispatch<React.SetStateAction<TimerState>>;
+  arrayToSeconds: (timeArray: Array<number>) => number;
+}
 
-export function useRestTimer() {
-  const [restTimer, setRestTimer] = useAtom(restTimerAtom);
+const RestTimerContext = createContext({} as IRestTimerContext);
+
+export function RestTimerProvider({ children }: { children: ReactNode }) {
+  const [restTimer, setRestTimer] = useState({
+    timerConfig: [0, 0, 0, 0],
+  } as TimerState);
 
   function arrayToSeconds(timeArray: Array<number>) {
     const totalMinutes = String(timeArray[0]) + String(timeArray[1]);
@@ -23,6 +43,15 @@ export function useRestTimer() {
 
     return minutesToSeconds + seconds;
   }
+
+  const { showToast } = useToast(() => (
+    <Toast>
+      <Toast.Content
+        prefixIcon={<AlarmClock />}
+        title="Tempo de descanso finalizado"
+      />
+    </Toast>
+  ));
 
   const handleTimer = useCallback(() => {
     setRestTimer((prev) => ({
@@ -47,7 +76,7 @@ export function useRestTimer() {
     );
 
     handleTimer();
-  }, []);
+  }, [restTimer]);
 
   const handleTimerConfig = useCallback(
     (index: number, v: number) => {
@@ -61,6 +90,10 @@ export function useRestTimer() {
   );
 
   useEffect(() => {
+    getPreviousTimer();
+  }, [getPreviousTimer]);
+
+  useEffect(() => {
     let timerId: Timer;
 
     if (restTimer.isTimerRunning) {
@@ -71,21 +104,31 @@ export function useRestTimer() {
             ...prev,
             timerConfig: [0, 0, 0, 0],
           }));
+          showToast();
         },
+
         arrayToSeconds(restTimer.timerConfig) * 1000,
       );
     }
 
     return () => clearTimeout(timerId);
-  }, [restTimer]);
+  }, [restTimer, showToast]);
 
-  return {
-    restTimer,
-    handleTimer,
-    setRestTimer,
-    getPreviousTimer,
-    handleStart,
-    arrayToSeconds,
-    handleTimerConfig,
-  };
+  return (
+    <RestTimerContext.Provider
+      value={{
+        getPreviousTimer,
+        handleStart,
+        handleTimer,
+        handleTimerConfig,
+        setRestTimer,
+        arrayToSeconds,
+        restTimer,
+      }}
+    >
+      {children}
+    </RestTimerContext.Provider>
+  );
 }
+
+export const useRestTimer = () => useContext(RestTimerContext);

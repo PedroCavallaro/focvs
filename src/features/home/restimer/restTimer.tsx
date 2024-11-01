@@ -1,7 +1,7 @@
-import { useRestTimer } from "@/src/hooks/rest-timer";
 import { View } from "react-native";
 import { RestTimerConfig } from "./restTimerConfig";
 import { RestTimerClock } from "./restTimerClock";
+import { useRestTimer } from "@/src/providers/restTimerProvider";
 
 export function RestTimer() {
   const { restTimer } = useRestTimer();

@@ -55,11 +55,13 @@ export type WorkoutDetails = SaveWorkoutDTO & {
     name: string;
     image_url: string;
   };
+  signature: string;
   exerciseAmount: number;
 };
 export type WorkoutExercise = z.infer<typeof AddExerciseSchema>;
 export type Workout = WorkoutResponse & {
   id: string;
+  signature: string;
   currentSets?: CurrentSets;
   info?: {
     started: boolean;

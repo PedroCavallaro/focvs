@@ -2,11 +2,11 @@ import { Image, ScrollView, Text, View } from "react-native";
 
 export function ExerciseEvolution() {
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator className="">
-      <View className="flex-col gap-6">
-        <Text className="font-medium text-lg text-white">
-          Últimas evoluções de carga
-        </Text>
+    <View className="flex-col gap-6">
+      <Text className="font-medium text-lg text-white">
+        Últimas evoluções de carga
+      </Text>
+      <ScrollView horizontal showsHorizontalScrollIndicator className="">
         <View className="flex-row gap-10">
           <View className="flex-row gap-4">
             <Image
@@ -45,7 +45,7 @@ export function ExerciseEvolution() {
             </View>
           </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }

@@ -58,12 +58,14 @@ export function ExerciseCard({
   }, []);
 
   return (
-    <View className="flex-col gap-10 border-b-[0.4px] border-white">
+    <View className="flex-col gap-10 rounded-lg bg-[#0a0a0a]/80 px-2 py-3">
       <View className="flex-row gap-6">
-        <Image
-          source={{ uri: exercise.gif_url }}
-          className="h-44 w-3/6 bg-white object-cover"
-        />
+        <View className="min-h-44 w-3/6 overflow-hidden rounded-lg bg-white">
+          <Image
+            source={{ uri: exercise.gif_url }}
+            className="h-44 w-full object-cover"
+          />
+        </View>
         <View>
           <Text className="mb-5 font-medium text-lg text-white">
             {exercise.name}

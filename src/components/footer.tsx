@@ -4,8 +4,8 @@ import { router, usePathname } from "expo-router";
 import { Button } from "./button";
 import { colors } from "../style";
 import { RestTimerIndicator } from "../features/home/restimer/restTimerIndicator";
-import { useRestTimer } from "../hooks/rest-timer";
 import { useFooter } from "../hooks";
+import { useRestTimer } from "../providers/restTimerProvider";
 
 export function Footer() {
   const route = usePathname() as "/" | "/home" | "/statistics" | "/search";

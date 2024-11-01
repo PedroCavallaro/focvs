@@ -1,4 +1,6 @@
-import { View, Text, Dimensions } from "react-native";
+import { colors } from "@/src/style";
+import { CircleHelp } from "lucide-react-native";
+import { View, Text, Dimensions, TouchableOpacity } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
 
 export function EvolutionGraph() {
@@ -6,8 +8,11 @@ export function EvolutionGraph() {
 
   return (
     <View className="flex-col gap-6">
-      <View className="flex-row items-center gap-4">
+      <View className="flex-row items-center gap-3">
         <Text className="flex-row text-lg text-white">Gráfico de evolução</Text>
+        <TouchableOpacity activeOpacity={0.7}>
+          <CircleHelp size={18} color={colors.orange[500]} />
+        </TouchableOpacity>
       </View>
       <LineChart
         width={screenWidth - 90}

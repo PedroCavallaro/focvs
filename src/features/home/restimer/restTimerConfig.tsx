@@ -2,10 +2,11 @@ import { Text, View } from "react-native";
 import { Button } from "@/src/components/button";
 import { Input } from "@/src/components/input";
 import { useEffect } from "react";
-import { useRestTimer } from "@/src/hooks/rest-timer";
+import { useRestTimer } from "@/src/providers/restTimerProvider";
 
 export function RestTimerConfig() {
-  const { getPreviousTimer, handleTimerConfig, handleStart } = useRestTimer();
+  const { getPreviousTimer, handleTimerConfig, handleStart, restTimer } =
+    useRestTimer();
 
   useEffect(() => {
     getPreviousTimer();
@@ -30,7 +31,7 @@ export function RestTimerConfig() {
                     }}
                     className="mt-5 text-center text-white"
                     keyboardType="numeric"
-                    placeholder="0"
+                    placeholder={restTimer.timerConfig[i].toString()}
                     placeholderTextColor={"#FFF"}
                   ></Input.Field>
                 </Input>
