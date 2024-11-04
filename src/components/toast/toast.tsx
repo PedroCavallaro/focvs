@@ -1,38 +1,21 @@
-import { ReactNode, useEffect, useMemo, useRef } from "react";
-import { Animated, Dimensions, Text, View } from "react-native";
-import { useToast } from "../providers/toastProvider";
-const { width } = Dimensions.get("window");
+import { ReactNode, useEffect } from "react";
+import { Animated, Text, View } from "react-native";
+import { useToast } from "../../providers/toastProvider";
+import clsx from "clsx";
+import { ToastVariants, useToastAnimations } from "./toast-animations";
 
 export function Toast({
   children,
   onClick,
+  variant = "bottom-right",
 }: {
+  variant?: ToastVariants;
   children: ReactNode;
   onClick?: () => void;
 }) {
   const { setCurrentToast } = useToast();
-  const toastAnimations = useRef(new Animated.Value(0)).current;
-  const viewWidth = useRef(new Animated.Value(0)).current;
-
-  const animation = useMemo(() => {
-    return {
-      transform: [
-        {
-          translateX: toastAnimations.interpolate({
-            inputRange: [0, 1],
-            outputRange: [+width, 0],
-          }),
-        },
-      ],
-    };
-  }, [toastAnimations]);
-
-  const viewWidthAnimation = {
-    width: viewWidth.interpolate({
-      inputRange: [0, 100],
-      outputRange: ["100%", "0%"],
-    }),
-  };
+  const { toastAnimations, viewWidth, viewWidthAnimation, animation } =
+    useToastAnimations({ variant });
 
   useEffect(() => {
     Animated.timing(toastAnimations, {
@@ -63,7 +46,12 @@ export function Toast({
   }, []);
 
   return (
-    <View className="absolute bottom-24 right-0 min-w-64 rounded-2xl">
+    <View
+      className={clsx("absolute min-w-64 overflow-hidden rounded-2xl", {
+        "bottom-24 right-0": variant === "bottom-right",
+        "right-0 top-24": variant === "top-right",
+      })}
+    >
       <Animated.View
         className="h-16 flex-col justify-between gap-2 rounded-lg bg-black"
         style={animation}

@@ -60,7 +60,7 @@ export default function Workouts() {
         </TouchableOpacity>
         <View></View>
       </View>
-      <View className="flex flex-col gap-4">
+      <View className="flex flex-col gap-6">
         {workouts?.map((workout) => {
           return (
             <TouchableOpacity

@@ -40,16 +40,6 @@ export class WorkoutRepositorie {
     return res;
   }
 
-  async copyWorkout(id: string) {
-    const res = await this.api.post("/workout/copy", {
-      body: {
-        workoutId: id,
-      },
-    });
-
-    return res;
-  }
-
   async createWorkout(data: SaveWorkoutDTO) {
     const res = await this.api.post("/workout", {
       body: data,
@@ -74,6 +64,23 @@ export class WorkoutRepositorie {
 
   async getWorkout(id: string) {
     const res = await this.api.get<Workout>(`/workout/${id}`);
+
+    return res;
+  }
+
+  async getWorkoutByLink(link: string) {
+    const res = await this.api.get<
+      WorkoutDetails & { isFromSameUser: boolean }
+    >(`${link}`);
+
+    return res;
+  }
+
+  async copyWorkoutToAccount(link: string, signature: string) {
+    console.log(link);
+    const res = await this.api.post<WorkoutDetails>(`${link}`, {
+      body: { signature },
+    });
 
     return res;
   }

@@ -1,7 +1,7 @@
 import { api } from "@/src/api";
 import { Workout, WorkoutDetails } from "@/src/api/dtos";
 import { BaseModal } from "@/src/components/baseModal";
-import { Toast } from "@/src/components/toast";
+import { Toast } from "@/src/components/toast/toast";
 import { useAuth } from "@/src/hooks";
 import { useModal } from "@/src/providers/modalProvider";
 import { useToast } from "@/src/providers/toastProvider";
@@ -34,9 +34,7 @@ export function WorkoutSumary({
   ));
 
   const getCopyLink = useCallback(async () => {
-    await Clipboard.copyToClipboard(
-      `${process.env.EXPO_PUBLIC_API_URL}/workout/link/${workout?.signature}`,
-    );
+    await Clipboard.copyToClipboard(`/workout/link/${workout?.signature}`);
 
     showToast();
   }, [showToast]);
@@ -51,7 +49,7 @@ export function WorkoutSumary({
           subtitle="As séries terão que ser editadas depois"
           onClose={() => closeCopyWorkoutModal()}
         >
-          <BaseModal.BaseButton
+          <BaseModal.BaseButtons
             okText="Copiar"
             closeText="Cancelar"
             onClose={() => closeCopyWorkoutModal()}
@@ -74,7 +72,7 @@ export function WorkoutSumary({
         subtitle="Essa ação é irreversível"
         onClose={() => closeDeleteWarningModal()}
       >
-        <BaseModal.BaseButton
+        <BaseModal.BaseButtons
           onClose={() => closeDeleteWarningModal()}
           onOk={() => {
             delteWorkout(workout.id);
@@ -101,7 +99,7 @@ export function WorkoutSumary({
           </Text>
         </View>
         <View className="flex-row gap-4">
-          {user?.id !== workout.userId && (
+          {user?.id !== workout.user.id && (
             <TouchableOpacity onPress={openCopyWorkoutModal}>
               <Copy size={20} color={colors.orange[500]} />
             </TouchableOpacity>
@@ -110,7 +108,7 @@ export function WorkoutSumary({
             <Share2 size={20} color={colors.orange[500]} />
           </TouchableOpacity>
 
-          {user?.id === workout.userId && (
+          {user?.id === workout.user.id && (
             <TouchableOpacity onPress={openDeleteWarningModal}>
               <Trash2 size={20} color={colors.orange[500]} />
             </TouchableOpacity>

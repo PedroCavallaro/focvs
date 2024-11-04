@@ -16,13 +16,13 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useDrawer } from "@/src/providers/drawerProvider";
-import { Drawer } from "@/src/components/drawer";
 import { WorkoutSampling } from "@/src/features/new-workout/workoutSampling";
 import { Button } from "@/src/components/button";
 import { ArrowLeft, Search } from "lucide-react-native";
 import { colors } from "@/src/style";
 import { Input } from "@/src/components/input";
 import { useNewWorkout } from "./new-workout";
+import { Drawer } from "@/src/components/drawer";
 
 export type ChangeWorkoutInfo =
   | { key: "day"; value: number }
@@ -92,7 +92,7 @@ export default function NewWorkout() {
           subtitle="Deseja sobreescrever?"
           title="Exercício já adicionado"
         >
-          <BaseModal.BaseButton
+          <BaseModal.BaseButtons
             onClose={() => closeOverrideModal()}
             onOk={() => {
               addExerciseToWorkout({ exercise, shouldOverride: true });

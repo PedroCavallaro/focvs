@@ -61,8 +61,8 @@ export type Workout = WorkoutResponse & {
 export type WorkoutDetails = SaveWorkoutDTO & {
   id: string;
   picture_url: string;
-  userId: string;
   user: {
+    id: string;
     name: string;
     image_url: string;
   };

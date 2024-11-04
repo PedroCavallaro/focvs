@@ -1,10 +1,15 @@
 import { api } from "@/src/api";
 import { UpdateWorkoutDTO, WorkoutDetails } from "@/src/api/dtos";
 import { BaseModal } from "@/src/components/baseModal";
+import { Toast } from "@/src/components/toast/toast";
 import { useModal } from "@/src/providers/modalProvider";
+import { useToast } from "@/src/providers/toastProvider";
+import { Clipboard } from "@/src/services";
+import { colors } from "@/src/style";
 import { plural } from "@/src/utils/plural";
 import { useMutation } from "@tanstack/react-query";
-import { Eye, EyeOff, Share, X } from "lucide-react-native";
+import { CircleCheck, Eye, EyeOff, Share, X } from "lucide-react-native";
+import { useCallback } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 export function WorkoutActionsModal({
@@ -16,6 +21,11 @@ export function WorkoutActionsModal({
 }) {
   const { mutate: delteWorkout } = useMutation({
     mutationFn: (id: string) => api.workout.deleteWorkout(id),
+    onSuccess: () => onSucces(),
+  });
+
+  const { mutate: updateWorkout } = useMutation({
+    mutationFn: (data: UpdateWorkoutDTO) => api.workout.updateWorkout(data),
     onSuccess: () => onSucces(),
   });
 
@@ -31,7 +41,7 @@ export function WorkoutActionsModal({
         subtitle="Essa ação é irreversível"
         onClose={() => closeDeleteWarningModal()}
       >
-        <BaseModal.BaseButton
+        <BaseModal.BaseButtons
           onClose={() => closeDeleteWarningModal()}
           onOk={() => delteWorkout(workout.id)}
         />
@@ -40,10 +50,20 @@ export function WorkoutActionsModal({
     [],
   );
 
-  const { mutate: updateWorkout } = useMutation({
-    mutationFn: (data: UpdateWorkoutDTO) => api.workout.updateWorkout(data),
-    onSuccess: () => onSucces(),
-  });
+  const { showToast } = useToast(() => (
+    <Toast variant="top-right">
+      <Toast.Content
+        prefixIcon={<CircleCheck size={18} color={colors.orange[500]} />}
+        title="Link Copiado"
+      />
+    </Toast>
+  ));
+
+  const getCopyLink = useCallback(async () => {
+    await Clipboard.copyToClipboard(`/workout/link/${workout?.signature}`);
+
+    showToast();
+  }, [showToast]);
 
   return (
     <View className="flex-col gap-6">
@@ -87,10 +107,13 @@ export function WorkoutActionsModal({
           Mudar visibilidade para {workout.public ? "privado" : "publíco"}
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity className="flex-row items-center gap-2 opacity-70">
+      <TouchableOpacity
+        onPress={getCopyLink}
+        className="flex-row items-center gap-2 opacity-70"
+      >
         <Share color={"#fff"} size={20} />
         <Text className="font-regular text-lg text-white">
-          Compatilhar treino
+          Compartilhar treino
         </Text>
       </TouchableOpacity>
     </View>

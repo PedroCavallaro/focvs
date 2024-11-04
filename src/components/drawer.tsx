@@ -1,4 +1,7 @@
-import { X } from "lucide-react-native";
+import { useDrawer } from "@/src/providers/drawerProvider";
+import { colors } from "@/src/style";
+import clsx from "clsx";
+import { ChevronRight, X } from "lucide-react-native";
 import { ReactNode, useEffect, useMemo } from "react";
 import {
   View,
@@ -7,9 +10,16 @@ import {
   Animated,
   Dimensions,
 } from "react-native";
-import { colors } from "../style";
-import { useDrawer } from "../providers/drawerProvider";
 const { width } = Dimensions.get("window");
+
+export interface DrawerItemProps {
+  prefixIcon: ReactNode;
+  title: string;
+  disabled?: boolean;
+  onPress: () => void;
+}
+
+export type DrawerItemVariants = "primary" | "no-border";
 
 export function Drawer({
   title,
@@ -60,3 +70,35 @@ export function Drawer({
     </View>
   );
 }
+
+const Item = ({
+  prefixIcon,
+  title,
+  onPress,
+  hasRightIcon = true,
+  containerVariant = "primary",
+  disabled,
+}: DrawerItemProps & {
+  hasRightIcon?: boolean;
+  containerVariant?: DrawerItemVariants;
+}) => {
+  return (
+    <TouchableOpacity
+      disabled={disabled}
+      activeOpacity={0.8}
+      onPress={onPress}
+      className={clsx("h-24 w-full flex-row items-center justify-between", {
+        "border-b-[0.2px] border-white/70": containerVariant === "primary",
+        "opacity-45": disabled,
+      })}
+    >
+      <View className="flex-row items-center gap-4">
+        {prefixIcon}
+        <Text className="font-regular text-lg text-white">{title}</Text>
+      </View>
+      {hasRightIcon && <ChevronRight size={20} color={colors.zincBlur[200]} />}
+    </TouchableOpacity>
+  );
+};
+
+Drawer.Item = Item;

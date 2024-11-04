@@ -41,7 +41,7 @@ export default function SearchPage() {
                       setQuery((prev) => ({ ...prev, q: v }))
                     }
                   />
-                  <Search color={colors.orange[500]} />
+                  <Search size={16} color={colors.orange[500]} />
                 </View>
               </Input>
             </View>

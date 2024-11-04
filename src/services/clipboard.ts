@@ -10,6 +10,10 @@ export class Clipboard {
   }
 
   static async fetchCopiedText() {
-    return await ExpoClipboard.getStringAsync();
+    try {
+      return await ExpoClipboard.getStringAsync();
+    } catch (_) {
+      return "";
+    }
   }
 }

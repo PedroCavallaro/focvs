@@ -8,7 +8,7 @@ import {
 } from "react";
 import { STORAGE_KEYS } from "../utils";
 import { Storage } from "../services";
-import { Toast } from "../components/toast";
+import { Toast } from "../components/toast/toast";
 import { useToast } from "./toastProvider";
 import { AlarmClock } from "../features/home/restimer/alarmClock";
 

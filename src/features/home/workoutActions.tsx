@@ -31,7 +31,7 @@ export function WorkoutActions({
         title="Tem certeza que deseja finalizar o treino?"
         onClose={() => closeFinishWorkoutModal()}
       >
-        <BaseModal.BaseButton
+        <BaseModal.BaseButtons
           onClose={() => closeFinishWorkoutModal()}
           onOk={() => {
             finishWorkout();
