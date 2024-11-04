@@ -62,7 +62,7 @@ export function BaseModal({
               <View className="flex-col gap-6">
                 {showTitleAndClose && (
                   <>
-                    <View className="g flex-co">
+                    <View className="flex-col">
                       <View className="flex-row items-center justify-between pt-5">
                         <Text className="font-medium text-xl text-white">
                           {title}
