@@ -31,6 +31,7 @@ export function useAuth() {
   const createAccount = useCallbackPlus(async (data: CreateAccountDTO) => {
     const { token } = await api.auth.createAccount(data);
 
+    console.log(token);
     await SecureStore.setItemAsync(STORAGE_KEYS.AUTH_TOKEN, token);
 
     const parsed = jwtDecode<UserDTO>(token);

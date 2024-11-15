@@ -35,8 +35,8 @@ export function CheckBox({
         className={clsx(
           "mt-1 flex h-10 w-10 items-center justify-center rounded-md",
           {
-            "bg-zinc-900": !checked,
-            "bg-zinc-950": checked,
+            "bg-zinc-800": !checked,
+            "bg-zinc-900": checked,
           },
         )}
       >

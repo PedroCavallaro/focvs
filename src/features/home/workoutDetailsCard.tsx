@@ -1,8 +1,9 @@
-import { View, Image, Text } from "react-native";
+import { View, Text } from "react-native";
 import { WorkoutDetails } from "../../api/dtos";
 import { plural } from "../../utils/plural";
 import { Dumbbell, User } from "lucide-react-native";
 import { colors } from "@/src/style";
+import { Image } from "expo-image";
 
 export function WorkoutDetailsCard({
   workout,
@@ -13,10 +14,14 @@ export function WorkoutDetailsCard({
 }) {
   return (
     <View className="flex-row gap-3">
-      <View className="h-32 w-32 overflow-hidden rounded-lg bg-white">
+      <View className="h-32 w-32 overflow-hidden rounded-lg">
         <Image
+          style={{
+            height: 128,
+            width: 128,
+            objectFit: "cover",
+          }}
           source={{ uri: workout.picture_url }}
-          className="h-32 w-32 object-cover"
         />
       </View>
       <View className="flex-col gap-4">

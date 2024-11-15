@@ -8,3 +8,8 @@ export enum RECOVER_PASSWORD_STATE {
   "TYPE_CODE",
   "CHANGE_PASSWORD",
 }
+
+export default {
+  AUHT_FORM_STATE,
+  RECOVER_PASSWORD_STATE,
+};

@@ -11,7 +11,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { CircleCheck, Copy, Share2, Trash2 } from "lucide-react-native";
 import { useCallback } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import { Image } from "expo-image";
 
 export function WorkoutSumary({
   workout,
@@ -87,10 +88,16 @@ export function WorkoutSumary({
 
   return (
     <View className="flex-row gap-4">
-      <Image
-        source={{ uri: workout.picture_url }}
-        className="h-48 w-52 bg-white"
-      />
+      <View className="h-48 w-52 overflow-hidden rounded-lg">
+        <Image
+          style={{
+            height: 192,
+            width: 208,
+            backgroundColor: "#FFFF",
+          }}
+          source={{ uri: workout.picture_url }}
+        />
+      </View>
       <View className="flex-col gap-8">
         <View className="flex-col gap-4">
           <Text className="font-medium text-white">{workout.name}</Text>

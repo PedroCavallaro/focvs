@@ -15,6 +15,8 @@ interface IDrawerContext {
   hasDrawer: boolean;
 }
 
+export const DRAWER_ANIMATION_TIMING = 450;
+
 const DrawerContext = createContext({} as IDrawerContext);
 
 export function DrawerProvider({ children }: { children: ReactNode }) {
@@ -28,7 +30,7 @@ export function DrawerProvider({ children }: { children: ReactNode }) {
   const closeDrawer = () => {
     Animated.timing(drawerAnimation, {
       toValue: 0,
-      duration: 300,
+      duration: DRAWER_ANIMATION_TIMING,
       useNativeDriver: true,
     }).start(() => {
       setCurrentDrawer(null);

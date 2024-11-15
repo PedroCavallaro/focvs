@@ -1,5 +1,6 @@
 import { ExerciseDto } from "@/src/api/dtos";
-import { TouchableOpacity, View, Text, Image } from "react-native";
+import { TouchableOpacity, View, Text } from "react-native";
+import { Image } from "expo-image";
 
 export function ExercisePickerCard({
   exercise,

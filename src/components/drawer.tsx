@@ -1,4 +1,7 @@
-import { useDrawer } from "@/src/providers/drawerProvider";
+import {
+  DRAWER_ANIMATION_TIMING,
+  useDrawer,
+} from "@/src/providers/drawerProvider";
 import { colors } from "@/src/style";
 import clsx from "clsx";
 import { ChevronRight, X } from "lucide-react-native";
@@ -48,7 +51,7 @@ export function Drawer({
     if (hasDrawer) {
       Animated.timing(drawerAnimation, {
         toValue: 1,
-        duration: 300,
+        duration: DRAWER_ANIMATION_TIMING,
         useNativeDriver: true,
       }).start(() => {});
     }

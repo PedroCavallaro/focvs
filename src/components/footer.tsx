@@ -17,7 +17,7 @@ export function Footer() {
       {showFooter && (
         <View className="w-full">
           {restTimer?.isTimerRunning && (
-            <View className="mb-2 w-full flex-row justify-end bg-transparent">
+            <View className="mb-2 w-full flex-row justify-end">
               <RestTimerIndicator />
             </View>
           )}

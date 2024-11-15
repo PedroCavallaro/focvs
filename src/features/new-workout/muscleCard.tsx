@@ -1,6 +1,7 @@
 import { MuscleDto } from "@/src/api/dtos";
 import { plural } from "@/src/utils/plural";
-import { Text, TouchableOpacity, Image, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import { Image } from "expo-image";
 
 export function MuscleCard({
   muscle,
@@ -21,8 +22,13 @@ export function MuscleCard({
         </Text>
       </View>
       <Image
+        style={{
+          height: 160,
+          width: "91.666667%",
+          backgroundColor: "#FFFF",
+          objectFit: "cover",
+        }}
         source={{ uri: muscle.picture_url }}
-        className="h-40 w-11/12 bg-white object-cover"
       />
     </TouchableOpacity>
   );

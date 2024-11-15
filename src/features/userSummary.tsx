@@ -1,5 +1,6 @@
-import { Image, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { useAuth } from "../hooks";
+import { Image } from "expo-image";
 
 export function UserSummary() {
   const { user } = useAuth();
@@ -10,7 +11,10 @@ export function UserSummary() {
         <Image
           // eslint-disable-next-line @typescript-eslint/no-require-imports
           source={require("../../assets/images/user-icon.png")}
-          className="h-24 w-24"
+          style={{
+            width: 96,
+            height: 96,
+          }}
         />
       </View>
       <View className="flex-col items-center justify-center gap-2">

@@ -1,4 +1,5 @@
-import { Image, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
+import { Image } from "expo-image";
 
 export function ExerciseEvolution() {
   return (
@@ -22,10 +23,14 @@ export function ExerciseEvolution() {
           </View>
           <View className="flex-row gap-4">
             <Image
+              style={{
+                height: 80,
+                width: 80,
+                backgroundColor: "#FFF",
+              }}
               source={{
                 uri: "https://gymvisual.com/img/p/5/6/8/3/5683.gif",
               }}
-              className="h-20 w-20 bg-white"
             />
             <View className="flex-col gap-4">
               <Text className="text-white">Barra</Text>
@@ -34,10 +39,14 @@ export function ExerciseEvolution() {
           </View>
           <View className="flex-row gap-4">
             <Image
+              style={{
+                height: 80,
+                width: 80,
+                backgroundColor: "#FFF",
+              }}
               source={{
                 uri: "https://gymvisual.com/img/p/5/6/8/3/5683.gif",
               }}
-              className="h-20 w-20 bg-white"
             />
             <View className="flex-col gap-4">
               <Text className="text-white">Barra</Text>

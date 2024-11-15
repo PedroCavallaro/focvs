@@ -171,3 +171,5 @@ export function useNewWorkout() {
     handleSelectMuscle,
   };
 }
+
+export default { useNewWorkout };

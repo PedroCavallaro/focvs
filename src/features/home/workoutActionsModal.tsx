@@ -10,7 +10,8 @@ import { plural } from "@/src/utils/plural";
 import { useMutation } from "@tanstack/react-query";
 import { CircleCheck, Eye, EyeOff, Share, X } from "lucide-react-native";
 import { useCallback } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import { Image } from "expo-image";
 
 export function WorkoutActionsModal({
   workout,
@@ -67,11 +68,17 @@ export function WorkoutActionsModal({
 
   return (
     <View className="flex-col gap-6">
-      <View className="flex-row gap-3">
-        <Image
-          source={{ uri: workout.picture_url }}
-          className="h-20 w-20 bg-white"
-        />
+      <View className="h-20 flex-row gap-3">
+        <View className="h-20 w-20 overflow-hidden rounded-lg">
+          <Image
+            style={{
+              width: 80,
+              height: 80,
+              backgroundColor: "#FFFF",
+            }}
+            source={{ uri: workout.picture_url }}
+          />
+        </View>
         <View className="flex-col gap-1">
           <Text className="font-regular text-lg text-white">
             {workout.name}
