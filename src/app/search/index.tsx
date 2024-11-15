@@ -60,9 +60,8 @@ export default function SearchPage() {
           </View>
         </View>
       </ScrollView>
-      <Animated.View style={animation}>
-        <Footer />
-      </Animated.View>
+
+      <Footer />
     </>
   );
 }

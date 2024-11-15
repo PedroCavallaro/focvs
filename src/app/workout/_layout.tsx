@@ -2,10 +2,10 @@ import { Footer } from "@/src/components/footer";
 import { Header } from "@/src/components/header";
 import { useFooter } from "@/src/hooks";
 import { Slot } from "expo-router";
-import { Animated, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
 
 export default function Layout() {
-  const { animation, handleScroll } = useFooter();
+  const { handleScroll } = useFooter();
 
   return (
     <View className="flex-1">
@@ -15,9 +15,12 @@ export default function Layout() {
           <Slot />
         </View>
       </ScrollView>
-      <Animated.View style={animation}>
-        <Footer />
-      </Animated.View>
+
+      <Footer />
     </View>
   );
 }
+
+// <Animated.View style={animation}>
+//   <Footer />
+// </Animated.View>;

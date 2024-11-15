@@ -52,7 +52,7 @@ export default function RootLayout() {
     const clipText = await Clipboard.fetchCopiedText();
 
     if (
-      !clipText.includes("/workout/link") ||
+      !clipText?.includes("/workout/link") ||
       clipText === clipBoardInfo?.lastClipText
     ) {
       return await Clipboard.copyToClipboard("");
@@ -100,11 +100,7 @@ export default function RootLayout() {
 
   return (
     <Providers>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor={"#000"}
-        translucent
-      />
+      <StatusBar barStyle="light-content" backgroundColor={"#000"} />
       <View className="flex-1 bg-black">
         <Slot />
         {route !== "/" && clipBoardInfo.showCopyWorkoutModal && (

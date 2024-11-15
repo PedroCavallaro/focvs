@@ -54,7 +54,6 @@ export function WorkoutSampling({
   const router = useRouter();
   const saveWorkout = useCallbackPlus(
     async (workout: SaveWorkoutDTO | UpdateWorkoutDTO) => {
-      console.log(workout);
       await save(workout, updating);
 
       router.replace("/home");

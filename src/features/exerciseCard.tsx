@@ -58,12 +58,10 @@ export function ExerciseCard({
     openTimerModal();
   }, []);
 
+  // bg-[#0d0d0d]
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      className="w-full flex-col gap-4 rounded-2xl"
-    >
-      <View className="flex-col gap-10 bg-[#0d0d0d] p-4">
+    <TouchableOpacity activeOpacity={0.8} className="w-full flex-col gap-4">
+      <View className="flex-col gap-10 rounded-2xl bg-[#0f0f0f] p-4">
         <View className="flex-row gap-6">
           <View className="min-h-40 w-3/6 overflow-hidden rounded-xl bg-white">
             <Image

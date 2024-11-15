@@ -7,7 +7,7 @@ import { colors } from "@/src/style";
 import { ChangeWorkoutInfo } from "@/src/app/__workout-configuration__/workoutConfigurationTemplate";
 import { SaveWorkoutDTO } from "@/src/api/dtos";
 
-export function NewWorkoutForm({
+export function WorkoutInfoForm({
   changeValue,
   initialValues,
 }: {

@@ -29,7 +29,7 @@ export function RestTimerConfig() {
 
                       handleTimerConfig(i, Number(value));
                     }}
-                    className="mt-5 text-center text-white"
+                    className="mt-4 h-full w-full items-center justify-center text-center font-regular text-lg text-zinc-200"
                     keyboardType="numeric"
                     placeholder={restTimer.timerConfig[i].toString()}
                     placeholderTextColor={"#FFF"}

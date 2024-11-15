@@ -32,9 +32,7 @@ export default function SearchPage() {
         </View>
       </ScrollView>
 
-      <Animated.View style={animation}>
-        <Footer />
-      </Animated.View>
+      <Footer />
     </>
   );
 }

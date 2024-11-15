@@ -5,12 +5,11 @@ import {
   WorkoutExercise,
 } from "@/src/api/dtos";
 import { BaseModal } from "@/src/components/baseModal";
-import { AddExerciseModal } from "@/src/features/new-workout/forms/addExerciseModal";
-import { ExercisePicker } from "@/src/features/new-workout/exercisePicker";
-import { ExercisePickerCard } from "@/src/features/new-workout/exercisePIckerCard";
-import { MuscleCard } from "@/src/features/new-workout/muscleCard";
-import { MusclePicker } from "@/src/features/new-workout/musclePicker";
-import { NewWorkoutForm } from "@/src/features/new-workout/forms/newWorkoutForm";
+import { AddExerciseModal } from "@/src/features/workout-configuration/forms/addExerciseModal";
+import { ExercisePicker } from "@/src/features/workout-configuration/exercisePicker";
+import { ExercisePickerCard } from "@/src/features/workout-configuration/exercisePIckerCard";
+import { MuscleCard } from "@/src/features/workout-configuration/muscleCard";
+import { MusclePicker } from "@/src/features/workout-configuration/musclePicker";
 import { useModal } from "@/src/providers/modalProvider";
 import { useCallback, useEffect } from "react";
 import {
@@ -21,7 +20,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useDrawer } from "@/src/providers/drawerProvider";
-import { WorkoutSampling } from "@/src/features/new-workout/workoutSampling";
+import { WorkoutSampling } from "@/src/features/workout-configuration/workoutSampling";
 import { Button } from "@/src/components/button";
 import { ArrowLeft, Search } from "lucide-react-native";
 import { colors } from "@/src/style";
@@ -29,6 +28,7 @@ import { Input } from "@/src/components/input";
 import { Drawer } from "@/src/components/drawer";
 import { useWorkouConfiguration } from "./workout-configuration";
 import { plural } from "@/src/utils";
+import { WorkoutInfoForm } from "@/src/features/workout-configuration/forms/workoutInfoForm";
 
 export type ChangeWorkoutInfo =
   | { key: "day"; value: number }
@@ -172,7 +172,7 @@ export function WorkoutConfigurationTemplate({
         <Text className="font-light text-lg text-white">
           {updating ? "Atualizar treino" : "Novo Treino"}
         </Text>
-        <NewWorkoutForm
+        <WorkoutInfoForm
           initialValues={{ name: workout?.name, day: workout?.day }}
           changeValue={changeWorkoutInfo}
         />
