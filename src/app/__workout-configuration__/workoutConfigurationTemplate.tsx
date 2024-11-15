@@ -1,4 +1,9 @@
-import { ExerciseDto, MuscleDto, WorkoutExercise } from "@/src/api/dtos";
+import {
+  ExerciseDto,
+  MuscleDto,
+  WorkoutDetails,
+  WorkoutExercise,
+} from "@/src/api/dtos";
 import { BaseModal } from "@/src/components/baseModal";
 import { AddExerciseModal } from "@/src/features/new-workout/forms/addExerciseModal";
 import { ExercisePicker } from "@/src/features/new-workout/exercisePicker";
@@ -7,7 +12,7 @@ import { MuscleCard } from "@/src/features/new-workout/muscleCard";
 import { MusclePicker } from "@/src/features/new-workout/musclePicker";
 import { NewWorkoutForm } from "@/src/features/new-workout/forms/newWorkoutForm";
 import { useModal } from "@/src/providers/modalProvider";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import {
   View,
   Text,
@@ -21,14 +26,30 @@ import { Button } from "@/src/components/button";
 import { ArrowLeft, Search } from "lucide-react-native";
 import { colors } from "@/src/style";
 import { Input } from "@/src/components/input";
-import { useNewWorkout } from "./new-workout";
 import { Drawer } from "@/src/components/drawer";
+import { useWorkouConfiguration } from "./workout-configuration";
+import { plural } from "@/src/utils";
 
 export type ChangeWorkoutInfo =
   | { key: "day"; value: number }
   | { key: "name"; value: string };
 
-export default function NewWorkout() {
+type NewWorkoutProps = {
+  updating: false;
+  workout?: undefined;
+};
+
+type UpdateWorkoutProps = {
+  updating: true;
+  workout?: WorkoutDetails;
+};
+
+type WorkoutConfiguration = NewWorkoutProps | UpdateWorkoutProps;
+
+export function WorkoutConfigurationTemplate({
+  workout: workoutToUpdate,
+  updating = false,
+}: WorkoutConfiguration) {
   const {
     addExerciseToWorkout,
     changeWorkoutInfo,
@@ -46,12 +67,17 @@ export default function NewWorkout() {
     workout,
     setQuery,
     changeOnWorkoutSampling,
-  } = useNewWorkout();
+  } = useWorkouConfiguration(workoutToUpdate);
 
   const { closeDrawer, openDrawer } = useDrawer(() => {
     return (
-      <Drawer title="Novo Treino" onClose={() => closeDrawer()}>
+      <Drawer
+        title={updating ? "Atualizar treino" : "Novo Treino"}
+        onClose={() => closeDrawer()}
+      >
         <WorkoutSampling
+          updating={updating}
+          workout={workout}
           changeOnWorkoutSampling={changeOnWorkoutSampling}
           close={() => closeDrawer()}
         />
@@ -126,11 +152,30 @@ export default function NewWorkout() {
     }
   }, [duplicatedExercise]);
 
+  const getExerciseToConfigure = useCallback((exercise: ExerciseDto) => {
+    if (!workoutToUpdate?.id) return exercise;
+
+    const exerciseToUpdate = workoutToUpdate?.exercises.find(
+      (e) => e.id === exercise.id,
+    );
+
+    if (!exerciseToUpdate?.id) {
+      return exercise;
+    }
+
+    return exerciseToUpdate as ExerciseDto;
+  }, []);
+
   return (
     <View className="flex-col gap-4">
       <View className="flex-col gap-8">
-        <Text className="font-light text-lg text-white">Novo treino</Text>
-        <NewWorkoutForm changeValue={changeWorkoutInfo} />
+        <Text className="font-light text-lg text-white">
+          {updating ? "Atualizar treino" : "Novo Treino"}
+        </Text>
+        <NewWorkoutForm
+          initialValues={{ name: workout?.name, day: workout?.day }}
+          changeValue={changeWorkoutInfo}
+        />
         <View className="flex-row items-center justify-between gap-2">
           <View className="w-3/6">
             <View>
@@ -156,7 +201,9 @@ export default function NewWorkout() {
             className="h-10 w-11/12 justify-center rounded-lg bg-orange-500 p-2"
           >
             <Text className="text-md ml-16 font-medium text-black">
-              Ver treino
+              {updating
+                ? `${workout?.exercises && workout.exercises.length} ${plural("exercício", workout?.exercises.length)}`
+                : "Ver treino"}
             </Text>
           </Button>
         </View>
@@ -182,7 +229,9 @@ export default function NewWorkout() {
                 keyExtractor={(item) => String(item.id)}
                 renderItem={({ item }) => (
                   <ExercisePickerCard
-                    openModal={(exercise) => openAddExerciseModal(exercise)}
+                    openModal={(exercise) =>
+                      openAddExerciseModal(getExerciseToConfigure(exercise))
+                    }
                     exercise={item}
                   />
                 )}
@@ -191,7 +240,7 @@ export default function NewWorkout() {
           </ScrollView>
         </ExercisePicker>
       ) : (
-        <MusclePicker openDrawer={openDrawer} loading={muscleLoading}>
+        <MusclePicker loading={muscleLoading}>
           <ScrollView horizontal className="flex-row flex-wrap gap-8">
             <FlatList
               data={muscles}
@@ -210,3 +259,6 @@ export default function NewWorkout() {
     </View>
   );
 }
+export default {
+  WorkoutConfigurationTemplate,
+};

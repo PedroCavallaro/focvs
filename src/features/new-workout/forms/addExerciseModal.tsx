@@ -10,6 +10,21 @@ export type Set = ExerciseSet & {
   onDelete?: boolean;
 };
 
+function getInitialState(exercise: ExerciseDto): Set[] {
+  if (exercise.sets?.length) {
+    return exercise.sets.map((e) => ({ ...e, onDelete: false }));
+  }
+
+  return [
+    {
+      set_number: 1,
+      onDelete: false,
+      reps: 1,
+      weight: 1,
+    },
+  ];
+}
+
 export function AddExerciseModal({
   exercise,
   addExerciseToWorkout,
@@ -20,14 +35,8 @@ export function AddExerciseModal({
   onClose?: () => void;
 }) {
   const [deleteMode, setDeleteMode] = useState(false);
-  const [sets, setSets] = useState<Set[]>([
-    {
-      set_number: 1,
-      onDelete: false,
-      reps: 1,
-      weight: 1,
-    },
-  ]);
+  const [sets, setSets] = useState<Set[]>(() => getInitialState(exercise));
+  const [deletedSets, setDeletedSets] = useState<string[]>([]);
 
   const handleDeleteMode = useCallback(() => {
     setDeleteMode((prev) => !prev);
@@ -38,9 +47,11 @@ export function AddExerciseModal({
       if (key !== "onDelete") {
         const newSets = [...sets];
 
-        newSets[i][key] = val;
+        if (key === "reps" || key === "weight") {
+          newSets[i][key] = val;
 
-        setSets(newSets);
+          setSets(newSets);
+        }
       }
     },
     [setSets, sets],
@@ -49,6 +60,10 @@ export function AddExerciseModal({
   const handleDelete = useCallback(
     (i: number) => {
       const newSets = [...sets];
+
+      if (sets[i]?.id) {
+        setDeletedSets((prev) => [...prev, sets[i].id as string]);
+      }
 
       newSets[i].onDelete = !sets[i]?.onDelete;
 
@@ -130,16 +145,18 @@ export function AddExerciseModal({
         <Button
           onPress={() => {
             addExerciseToWorkout({
-              exerciseId: exercise.id,
+              id: exercise.id,
               gif_url: exercise.gif_url,
               name: exercise.name,
               sets: sets.map((s) => {
                 return {
+                  id: s?.id,
                   reps: s.reps,
                   set_number: s.set_number,
                   weight: s.weight,
                 } as ExerciseSet;
               }),
+              deletedSets,
             });
 
             onClose?.();

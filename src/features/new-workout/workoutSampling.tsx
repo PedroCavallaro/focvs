@@ -1,4 +1,9 @@
-import { SaveWorkout, SaveWorkoutDTO } from "@/src/api/dtos";
+import {
+  SaveWorkout,
+  SaveWorkoutDTO,
+  UpdateWorkout,
+  UpdateWorkoutDTO,
+} from "@/src/api/dtos";
 import { DayOfWeek, daysOfWeek } from "@/src/utils";
 import { View, Text, ScrollView } from "react-native";
 import { Button } from "../../components/button";
@@ -6,12 +11,31 @@ import { ExerciseCard } from "../exerciseCard";
 import { useCallbackPlus } from "@/src/hooks";
 import { api } from "@/src/api";
 import { useRouter } from "expo-router";
-import { useNewWorkout } from "@/src/app/home/new/new-workout";
+import { useWorkouConfiguration } from "@/src/app/__workout-configuration__/workout-configuration";
+
+async function save(
+  workout: SaveWorkoutDTO | UpdateWorkoutDTO,
+  updating: boolean,
+) {
+  if (updating) {
+    const parsedUpdateWorkout = UpdateWorkout.parse(workout);
+
+    return await api.workout.updateWorkout(parsedUpdateWorkout);
+  }
+
+  const parsedWorkout = SaveWorkout.parse(workout);
+
+  return await api.workout.createWorkout(parsedWorkout);
+}
 
 export function WorkoutSampling({
+  updating,
+  workout,
   changeOnWorkoutSampling,
   close,
 }: {
+  updating: boolean;
+  workout: SaveWorkoutDTO;
   changeOnWorkoutSampling: ({
     type,
     setIndex,
@@ -25,16 +49,16 @@ export function WorkoutSampling({
   }) => void;
   close: () => void;
 }) {
-  const { workout, clearWorkout } = useNewWorkout();
+  const { clearWorkout } = useWorkouConfiguration();
 
   const router = useRouter();
   const saveWorkout = useCallbackPlus(
-    async (workout: SaveWorkoutDTO) => {
-      const parsedWorkout = SaveWorkout.parse(workout);
-
-      await api.workout.createWorkout(parsedWorkout);
+    async (workout: SaveWorkoutDTO | UpdateWorkoutDTO) => {
+      console.log(workout);
+      await save(workout, updating);
 
       router.replace("/home");
+
       close();
       clearWorkout();
     },
@@ -73,7 +97,7 @@ export function WorkoutSampling({
                 editable={true}
                 showCheckBox={false}
                 onChange={changeOnWorkoutSampling}
-                key={exercise.exerciseId}
+                key={exercise.id}
                 exercise={exercise}
                 shouldEditAllAtSame
               />

@@ -158,7 +158,7 @@ export function ExerciseCard({
                             type: "reps",
                             value: v,
                             setIndex: i,
-                            exerciseId: exercise.exerciseId,
+                            exerciseId: exercise.id,
                           })
                         }
                         className="text-center font-regular text-white"
@@ -182,7 +182,7 @@ export function ExerciseCard({
                             type: "weight",
                             setIndex: i,
                             value: v,
-                            exerciseId: exercise.exerciseId,
+                            exerciseId: exercise.id,
                           })
                         }
                       />

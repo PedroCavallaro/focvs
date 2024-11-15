@@ -1,14 +1,11 @@
 import { ReactNode } from "react";
-import { View, Text } from "react-native";
-import { Button } from "../../components/button";
+import { View } from "react-native";
 import { PickerSkeleton } from "../../components/skeletons/pickerCardSkeleton";
 
 export function MusclePicker({
   children,
   loading,
-  openDrawer,
 }: {
-  openDrawer: () => void;
   children: ReactNode;
   loading: boolean;
 }) {

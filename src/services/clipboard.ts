@@ -12,8 +12,8 @@ export class Clipboard {
   static async fetchCopiedText() {
     try {
       return await ExpoClipboard.getStringAsync();
-    } catch (_) {
-      return "";
+    } catch (error) {
+      console.log(error);
     }
   }
 }

@@ -1,17 +1,32 @@
 import { View, Text } from "react-native";
 import { Input } from "../../../components/input";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
-import { daysOfWeek } from "@/src/utils";
+import { DayOfWeek, daysOfWeek } from "@/src/utils";
 import { colors } from "@/src/style";
-import { ChangeWorkoutInfo } from "@/src/app/home/new";
+import { ChangeWorkoutInfo } from "@/src/app/__workout-configuration__/workoutConfigurationTemplate";
+import { SaveWorkoutDTO } from "@/src/api/dtos";
 
 export function NewWorkoutForm({
   changeValue,
+  initialValues,
 }: {
+  initialValues?: Pick<SaveWorkoutDTO, "name" | "day">;
   changeValue: ({ key, value }: ChangeWorkoutInfo) => void;
 }) {
-  const [day, setDay] = useState(-1);
+  const [day, setDay] = useState(initialValues?.day ?? -1);
+
+  const weekDays = useMemo(() => {
+    if (day !== -1) {
+      const updatedDays = { ...daysOfWeek };
+
+      delete updatedDays[day as DayOfWeek];
+
+      return updatedDays;
+    }
+
+    return daysOfWeek;
+  }, [day, daysOfWeek]);
 
   return (
     <View className="flex-row items-center justify-between gap-2">
@@ -21,6 +36,7 @@ export function NewWorkoutForm({
         </Text>
         <Input>
           <Input.Field
+            value={initialValues?.name}
             onChangeText={(value) => changeValue({ key: "name", value })}
             placeholder="Nome do treino"
           />
@@ -48,15 +64,30 @@ export function NewWorkoutForm({
               changeValue({ key: "day", value: Number(value) });
             }}
           >
-            <Picker.Item
-              style={{
-                backgroundColor: "#000",
-                color: "#fff",
-              }}
-              label={"Selecionar dia"}
-              value={-1}
-            />
-            {Object.entries(daysOfWeek).map(([key, val], i) => {
+            {day !== -1 ? (
+              <Picker.Item
+                style={{
+                  backgroundColor: "#000",
+                  color: "#fff",
+                }}
+                label={daysOfWeek[day as DayOfWeek]}
+                value={day}
+              />
+            ) : (
+              <Picker.Item
+                style={{
+                  backgroundColor: "#000",
+                  color: "#fff",
+                }}
+                label={"Selecionar dia"}
+                value={-1}
+              />
+            )}
+            {Object.entries(weekDays).map(([key, val], i) => {
+              if (day === Number(key)) {
+                return <></>;
+              }
+
               return (
                 <Picker.Item
                   key={i}

@@ -4,7 +4,6 @@ import {
   UpdateWorkoutDTO,
   Workout,
   WorkoutDetails,
-  WorkoutResponse,
 } from "../dtos";
 import { HttpClient } from "../http";
 
@@ -48,7 +47,7 @@ export class WorkoutRepositorie {
     return res;
   }
 
-  async updateWorkout(data: UpdateWorkoutDTO) {
+  async updateWorkout(data: UpdateWorkoutDTO | SaveWorkoutDTO) {
     const res = await this.api.patch("/workout", {
       body: data,
     });
@@ -57,7 +56,7 @@ export class WorkoutRepositorie {
   }
 
   async getWorkoutOfTheDay() {
-    const res = await this.api.get<WorkoutResponse>("/workout/today");
+    const res = await this.api.get<WorkoutDetails>("/workout/today");
 
     return res;
   }
@@ -86,7 +85,7 @@ export class WorkoutRepositorie {
   }
 
   async getFullWorkoutById(id: string) {
-    const res = await this.api.get<WorkoutResponse & WorkoutDetails>(
+    const res = await this.api.get<WorkoutDetails & WorkoutDetails>(
       `/workout/${id}`,
     );
 

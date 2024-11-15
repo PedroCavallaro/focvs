@@ -20,6 +20,12 @@ export function ExercisePickerCard({
         </Text>
       </View>
       <Image
+        style={{
+          height: 160,
+          width: "91.666667%",
+          backgroundColor: "#FFFF",
+          objectFit: "cover",
+        }}
         source={{ uri: exercise.gif_url }}
         className="h-40 w-11/12 bg-white object-cover"
       />

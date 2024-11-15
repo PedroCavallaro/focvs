@@ -14,12 +14,11 @@ export default function WorkoutPage() {
   });
 
   return (
-    <View className="flex-col gap-10">
+    <View className="flex-col gap-8">
       {workout && (
         <>
           <WorkoutSumary workout={workout} />
 
-          <View className="h-[0.7px] bg-white opacity-40" />
           <View className="flex-col gap-8">
             {workout.exercises?.map((e, i) => {
               return (

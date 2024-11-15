@@ -1,18 +1,21 @@
 import { z } from "zod";
 
 export const ExerciseSetSchema = z.object({
+  id: z.string().optional(),
   set_number: z.number(),
   reps: z.number(),
   weight: z.number(),
 });
 
 export const AddExerciseSchema = z.object({
-  exerciseId: z.string(),
+  id: z.string(),
   name: z.string().optional(),
   gif_url: z.string().optional(),
   sets: z.array(ExerciseSetSchema, {
     invalid_type_error: "Exercícios devem ser um array",
   }),
+  // remove this later
+  deletedSets: z.array(z.string()).optional(),
 });
 
 export const ParseWorkoutInfo = z.object({
@@ -27,6 +30,7 @@ export const SaveWorkout = z.object({
   exercises: z.array(AddExerciseSchema, {
     invalid_type_error: "Exercícios devem ser um array",
   }),
+  deletedSets: z.array(z.string()).optional(),
 });
 
 export const UpdateWorkout = z.object({
@@ -40,12 +44,13 @@ export const UpdateWorkout = z.object({
       invalid_type_error: "Exercícios devem ser um array",
     })
     .optional(),
+  deletedSets: z.array(z.string()).optional(),
 });
 
 export type ExerciseSet = z.infer<typeof ExerciseSetSchema>;
 export type SaveWorkoutDTO = z.infer<typeof SaveWorkout>;
-export type WorkoutResponse = z.infer<typeof SaveWorkout>;
 export type UpdateWorkoutDTO = z.infer<typeof UpdateWorkout>;
+type WorkoutResponse = z.infer<typeof SaveWorkout>;
 
 export type Workout = WorkoutResponse & {
   id: string;
@@ -58,7 +63,7 @@ export type Workout = WorkoutResponse & {
   };
 };
 
-export type WorkoutDetails = SaveWorkoutDTO & {
+export type WorkoutDetails = WorkoutResponse & {
   id: string;
   picture_url: string;
   user: {

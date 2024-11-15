@@ -1,3 +1,5 @@
+import { ExerciseSet } from "./workout.dto";
+
 export interface MuscleDto {
   id: string;
   name: string;
@@ -9,5 +11,6 @@ export interface ExerciseDto {
   id: string;
   name: string;
   description?: string;
-  gif_url: string;
+  gif_url?: string;
+  sets?: Array<ExerciseSet>;
 }

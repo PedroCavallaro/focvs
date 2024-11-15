@@ -14,7 +14,7 @@ export function NoWorkout({
       <Text className="text-center font-regular text-lg text-white">
         Parece que não há nenhum treino para hoje
       </Text>
-      <Button onPress={() => router.push("/home/new")}>
+      <Button onPress={() => router.push("/new-workout")}>
         <Button.Title>Criar Treino</Button.Title>
       </Button>
       <Text className="text-center font-regular text-lg text-white">Ou</Text>

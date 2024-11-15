@@ -33,14 +33,14 @@ export default function HomePage() {
       const exercises = workout.exercises;
 
       const parsedExercises = exercises?.map((e) => {
-        if (e.exerciseId == exerciseId) {
+        if (e.id == exerciseId) {
           const set = e.sets[setIndex];
 
           set[type] = Number(value);
 
           e.sets[setIndex] = set;
 
-          const currentSet = workout.currentSets?.[e.exerciseId];
+          const currentSet = workout.currentSets?.[e.id];
 
           if (workout.currentSets) {
             workout.currentSets[exerciseId] = currentSet ? currentSet + 1 : 0;

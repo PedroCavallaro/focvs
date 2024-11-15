@@ -4,28 +4,45 @@ import {
   SaveWorkoutDTO,
   AddExerciseSchema,
   WorkoutExercise,
+  WorkoutDetails,
 } from "@/src/api/dtos";
 import { useCallbackPlus } from "@/src/hooks";
 import { useQuery } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
 import { useState, useMemo, useCallback } from "react";
-import { ChangeWorkoutInfo } from ".";
 import { atomWithReset } from "jotai/utils";
 import { useAtom } from "jotai";
+import { ChangeWorkoutInfo } from "./workoutConfigurationTemplate";
 
 const base = {
   name: "",
   day: -1,
   public: true,
   exercises: [],
+  deletedSets: [],
 };
-const newWorkoutAtom = atomWithReset<SaveWorkoutDTO>(base);
 
-export function useNewWorkout() {
-  const [workout, setWorkout] = useAtom(newWorkoutAtom);
+function getAtom(workoutToUpdate?: WorkoutDetails) {
+  if (workoutToUpdate?.id) {
+    return atomWithReset<SaveWorkoutDTO>({
+      ...workoutToUpdate,
+      deletedSets: [],
+    });
+  }
+
+  return atomWithReset<SaveWorkoutDTO>(base);
+}
+
+export function useWorkouConfiguration(workoutToUpdate?: WorkoutDetails) {
+  const atom = useMemo(() => getAtom(workoutToUpdate), [workoutToUpdate]);
+
+  const [workout, setWorkout] = useAtom(atom);
+
   const [duplicatedExercise, setDuplicatedExercise] =
     useState<WorkoutExercise | null>(null);
+
   const [query, setQuery] = useState("");
+
   const {
     isLoading: muscleLoading,
     data: muscles,
@@ -70,7 +87,7 @@ export function useNewWorkout() {
       const exercises = workout.exercises;
 
       const parsedExercises = exercises?.map((e) => {
-        if (e.exerciseId == exerciseId) {
+        if (e.id == exerciseId) {
           const set = e.sets[setIndex];
 
           set[type] = Number(value);
@@ -106,9 +123,7 @@ export function useNewWorkout() {
     }) => {
       const parsed = AddExerciseSchema.parse(exercise);
 
-      const isAdded = workout.exercises.find(
-        (e) => e.exerciseId === exercise.exerciseId,
-      );
+      const isAdded = workout.exercises.find((e) => e.id === exercise.id);
 
       if (isAdded && !shouldOverride) {
         return setDuplicatedExercise(exercise);
@@ -118,11 +133,15 @@ export function useNewWorkout() {
         return setWorkout((prev) => ({
           ...prev,
           exercises: [...prev.exercises, parsed],
+          deletedSets: [
+            ...(prev.deletedSets ?? []),
+            ...(parsed.deletedSets ?? []),
+          ],
         }));
       }
 
       const newExercises = workout.exercises.map((e) => {
-        if (e.exerciseId === exercise.exerciseId) {
+        if (e.id === exercise.id) {
           return parsed;
         }
 
@@ -132,6 +151,10 @@ export function useNewWorkout() {
       return setWorkout((prev) => ({
         ...prev,
         exercises: [...newExercises],
+        deletedSets: [
+          ...(prev.deletedSets ?? []),
+          ...(parsed.deletedSets ?? []),
+        ],
       }));
     },
     [setWorkout, workout],
@@ -172,4 +195,4 @@ export function useNewWorkout() {
   };
 }
 
-export default { useNewWorkout };
+export default { useWorkouConfiguration };
