@@ -107,12 +107,12 @@ export default function HomePage() {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                <View className="flex-row items-center justify-between gap-2">
-                  <View className="flex-row items-center gap-2">
+                <View className="flex-row items-center justify-between">
+                  <View className="flex-row items-center">
                     <Text className="font-regular text-2xl text-white">
                       {workout.name}
                     </Text>
-                    <View className="flex-row justify-between gap-4 rounded-lg px-4 py-2">
+                    <View className="flex-row justify-between gap-4 rounded-lg px-2 py-2">
                       <WorkoutActions
                         openSwichModal={openSwichModal}
                         finishWorkout={finishWorkout}
@@ -131,6 +131,7 @@ export default function HomePage() {
                         showCheckBox={true}
                         exercise={e}
                         key={i}
+                        hasActions={workout?.info?.started ?? false}
                         onChange={onChange}
                         editable={workout?.info?.started ?? false}
                         shouldEditOneByOne

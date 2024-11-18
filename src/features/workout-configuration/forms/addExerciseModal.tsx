@@ -25,6 +25,13 @@ function getInitialState(exercise: ExerciseDto): Set[] {
   ];
 }
 
+function orderSets(sets: Set[]) {
+  return sets.map((e, i) => ({
+    ...e,
+    set_number: i + 1,
+  }));
+}
+
 export function AddExerciseModal({
   exercise,
   addExerciseToWorkout,
@@ -75,7 +82,9 @@ export function AddExerciseModal({
   const deleteSets = useCallback(() => {
     const newSets = sets.filter((s) => !s.onDelete);
 
-    setSets(newSets);
+    const reorderedSets = orderSets(newSets);
+
+    setSets(reorderedSets);
   }, [setSets, sets]);
 
   const addNewSet = useCallback(() => {

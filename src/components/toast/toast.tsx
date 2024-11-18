@@ -47,7 +47,7 @@ export function Toast({
 
   return (
     <View
-      className={clsx("absolute min-w-64 overflow-hidden rounded-2xl", {
+      className={clsx("absolute min-w-64 overflow-hidden rounded-xl", {
         "bottom-24 right-0": variant === "bottom-right",
         "right-0 top-24": variant === "top-right",
       })}

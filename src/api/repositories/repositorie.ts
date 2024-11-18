@@ -1,12 +1,14 @@
 import { HttpClient } from "../http";
-import { AuthRepository } from "./auth.repositorie";
+import { AuthRepository } from "./auth.repository";
 import { ExerciseRepositorie } from "./exercise.repository";
-import { WorkoutRepositorie } from "./workout.repositorie";
+import { StatisticsRepository } from "./statistics.repository";
+import { WorkoutRepository } from "./workout.repository";
 
 export interface Api {
   auth: AuthRepository;
-  workout: WorkoutRepositorie;
+  workout: WorkoutRepository;
   exercise: ExerciseRepositorie;
+  statistics: StatisticsRepository
 }
 
 export interface Repositorie {

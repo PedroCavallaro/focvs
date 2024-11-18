@@ -14,9 +14,10 @@ export class HttpFactory implements HttpClientFactory {
 
   createAxiosClient(): Api {
     let api = {};
-    const client = new AxiosClient(this.baseUrl);
 
     for (const repo of this.repos) {
+      const client = new AxiosClient(this.baseUrl);
+
       api = { ...api, ...repo.build(client) };
     }
 

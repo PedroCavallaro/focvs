@@ -31,6 +31,7 @@ export default function Workouts() {
         onClose={() => closeModal()}
       >
         <WorkoutActionsModal
+          close={() => closeModal()}
           onSucces={() => {
             refreshWorkouts();
             closeModal();

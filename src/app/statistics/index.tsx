@@ -1,3 +1,4 @@
+import { api } from "@/src/api";
 import { Footer } from "@/src/components/footer";
 import { Header } from "@/src/components/header";
 import { EvolutionGraph } from "@/src/features/statistics/evolutionGraph";
@@ -5,12 +6,18 @@ import { ExerciseEvolution } from "@/src/features/statistics/exerciseEvolution";
 import { WorkoutCalendar } from "@/src/features/statistics/workoutCalendar";
 import { WorkoutGraph } from "@/src/features/statistics/workoutGraph";
 import { useAuth, useFooter } from "@/src/hooks";
+import { useQuery } from "@tanstack/react-query";
 import { Animated, ScrollView } from "react-native";
 import { View, Text } from "react-native";
 
-export default function SearchPage() {
+export default function Statistics() {
   const { animation, handleScroll } = useFooter();
   const { user } = useAuth();
+
+  const { data: statistics, isLoading } = useQuery({
+    queryKey: ["user-statistics"],
+    queryFn: () => api.statistics.getAllPerformedWorkouts(),
+  });
 
   return (
     <>

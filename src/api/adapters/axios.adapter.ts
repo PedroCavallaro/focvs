@@ -24,6 +24,7 @@ export class AxiosClient extends HttpClient {
       method,
     };
 
+    console.log(request);
     const response = await axios.request<T>(request);
 
     return response.data;

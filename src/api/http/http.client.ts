@@ -4,10 +4,10 @@ import * as SecureStorage from "expo-secure-store";
 
 export abstract class HttpClient {
   protected readonly skipAuthTokenUrls: string[];
-  private readonly baseUrl: string;
+  private _baseUrl: string;
 
   constructor(baseUrl: string) {
-    this.baseUrl = baseUrl;
+    this._baseUrl = baseUrl;
     this.skipAuthTokenUrls = ["auth"];
   }
 
@@ -45,7 +45,7 @@ export abstract class HttpClient {
 
     const pathName = endpoint[0] !== "/" ? `/${endpoint}` : endpoint;
 
-    return this.baseUrl + pathName + query;
+    return this._baseUrl + pathName + query;
   }
 
   get<T>(url: string, options: RequestOptions = {}): Promise<T> {
@@ -66,5 +66,9 @@ export abstract class HttpClient {
 
   patch<T>(url: string, options: RequestOptions = {}): Promise<T> {
     return this.doRequest("PATCH", url, options);
+  }
+
+  setBaseUrl(val: string) {
+    this._baseUrl = val;
   }
 }

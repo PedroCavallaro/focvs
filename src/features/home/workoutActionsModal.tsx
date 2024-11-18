@@ -8,18 +8,30 @@ import { Clipboard } from "@/src/services";
 import { colors } from "@/src/style";
 import { plural } from "@/src/utils/plural";
 import { useMutation } from "@tanstack/react-query";
-import { CircleCheck, Eye, EyeOff, Share, X } from "lucide-react-native";
+import {
+  CircleCheck,
+  Eye,
+  EyeOff,
+  Pencil,
+  Share,
+  X,
+} from "lucide-react-native";
 import { useCallback } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 
 export function WorkoutActionsModal({
   workout,
   onSucces,
+  close,
 }: {
   workout: WorkoutDetails;
   onSucces: () => void;
+  close: () => void;
 }) {
+  const router = useRouter();
+
   const { mutate: delteWorkout } = useMutation({
     mutationFn: (id: string) => api.workout.deleteWorkout(id),
     onSuccess: () => onSucces(),
@@ -50,6 +62,11 @@ export function WorkoutActionsModal({
     ),
     [],
   );
+
+  const goToUpdate = useCallback(() => {
+    router.push(`/update-workout/${workout.id}`);
+    close();
+  }, []);
 
   const { showToast } = useToast(() => (
     <Toast variant="top-right">
@@ -89,6 +106,15 @@ export function WorkoutActionsModal({
           </Text>
         </View>
       </View>
+      <TouchableOpacity
+        onPress={goToUpdate}
+        className="flex-row items-center gap-2 opacity-70"
+      >
+        <Pencil color={"#fff"} size={20} />
+        <Text className="font-regular text-lg text-white">
+          Atualizar treino
+        </Text>
+      </TouchableOpacity>
       <TouchableOpacity
         onPress={openDeleteWarningModal}
         className="flex-row items-center gap-2 opacity-70"

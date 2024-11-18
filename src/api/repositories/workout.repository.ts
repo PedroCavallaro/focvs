@@ -7,7 +7,7 @@ import {
 } from "../dtos";
 import { HttpClient } from "../http";
 
-export class WorkoutRepositorie {
+export class WorkoutRepository {
   protected readonly api: HttpClient;
 
   constructor(api: HttpClient) {
@@ -15,17 +15,13 @@ export class WorkoutRepositorie {
   }
 
   static build(api: HttpClient) {
-    return { workout: new WorkoutRepositorie(api) };
+    return { workout: new WorkoutRepository(api) };
   }
 
   async getWorkouts() {
-    try {
-      const res = await this.api.get<WorkoutDetails[]>("/workout");
+    const res = await this.api.get<WorkoutDetails[]>("/workout");
 
-      return res;
-    } catch (error) {
-      console.log(error);
-    }
+    return res;
   }
 
   async searchWorkouts(q: PaginationQuery = {}) {
