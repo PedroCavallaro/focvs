@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { View, Text, TouchableOpacity } from "react-native";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { DayOfWeek, daysOfWeek } from "@/src/utils";
 import { useModal } from "@/src/providers/modalProvider";
 import { BaseModal } from "@/src/components/baseModal";
@@ -13,8 +13,14 @@ import { ExerciseCard } from "@/src/features/exerciseCard";
 
 export default function HomePage() {
   const router = useRouter();
-  const { isLoading, workout, finishWorkout, startWorkout, setWorkout } =
-    useWorkout();
+  const {
+    isLoading,
+    workout,
+    finishWorkout,
+    fetchWorkout,
+    startWorkout,
+    setWorkout,
+  } = useWorkout();
 
   const onChange = useCallback(
     ({
@@ -88,6 +94,36 @@ export default function HomePage() {
   //   });
   // }
 
+  const checkSet = useCallback(
+    (exerciseId: string, setId: string) => {
+      const exercises = workout.exercises.map((exercise) => {
+        if (exercise.id !== exerciseId) return exercise;
+
+        const sets = exercise.sets.map((e) => {
+          if (e.id === setId) {
+            return { ...e, done: true };
+          }
+
+          return e;
+        });
+
+        exercise.sets = sets;
+
+        return exercise;
+      });
+
+      setWorkout((prev) => ({
+        ...prev,
+        exercises,
+      }));
+    },
+    [workout],
+  );
+
+  useEffect(() => {
+    fetchWorkout();
+  }, [fetchWorkout]);
+
   return (
     <View className="h-full flex-col gap-8">
       {!isLoading && (
@@ -128,6 +164,7 @@ export default function HomePage() {
                   {workout.exercises?.map((e, i) => {
                     return (
                       <ExerciseCard
+                        checkSets={checkSet}
                         showCheckBox={true}
                         exercise={e}
                         key={i}

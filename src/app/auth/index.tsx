@@ -3,7 +3,9 @@ import { useCallback, useState } from "react";
 import { RECOVER_PASSWORD_STATE } from "./auth.types";
 
 export default function RecoverPassword() {
-  const [formState, setFormState] = useState(RECOVER_PASSWORD_STATE.GET_CODE);
+  const [formState, setFormState] = useState(
+    RECOVER_PASSWORD_STATE.CHANGE_PASSWORD,
+  );
 
   const handleState = useCallback(
     (state: RECOVER_PASSWORD_STATE) => {

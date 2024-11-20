@@ -2,7 +2,6 @@ import { Text, View } from "react-native";
 import { useCallback, useMemo } from "react";
 import * as SecureStore from "expo-secure-store";
 import { useRouter } from "expo-router";
-import { Storage } from "../services";
 import { STORAGE_KEYS } from "../utils/keys";
 import { Drawer, DrawerItemProps } from "../components/drawer";
 import {
@@ -45,9 +44,13 @@ export function NavigationDrawer({ close }: { close: () => void }) {
   );
 
   const exit = useCallback(async () => {
+    console.log(
+      await SecureStore.getItemAsync(STORAGE_KEYS.WORKOUT_OF_THE_DAY),
+    );
+
     await Promise.all([
       SecureStore.deleteItemAsync(STORAGE_KEYS.AUTH_TOKEN),
-      Storage.removeItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY),
+      SecureStore.deleteItemAsync(STORAGE_KEYS.WORKOUT_OF_THE_DAY),
     ]);
 
     router.replace("/");

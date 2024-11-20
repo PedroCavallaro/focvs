@@ -1,4 +1,4 @@
-import { Api } from "../repositories/repositorie";
+import { Api } from "../repositories/repository";
 
 export interface RequestOptions {
   headers?: Record<string, string>;

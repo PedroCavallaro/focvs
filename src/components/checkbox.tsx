@@ -8,12 +8,14 @@ export function CheckBox({
   onCheck,
   onUnCheck,
   disabled,
+  alreadyChecked = false,
 }: {
   onCheck?: () => void;
   onUnCheck?: () => void;
   disabled?: boolean;
+  alreadyChecked?: boolean;
 }) {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(alreadyChecked);
 
   const handleChecked = useCallback(() => {
     if (!checked) {

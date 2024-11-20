@@ -1,6 +1,6 @@
 import { HttpClientFactory } from ".";
 import { AxiosClient } from "../adapters";
-import { Api, Repositorie } from "../repositories/repositorie";
+import { Api, Repositorie } from "../repositories/repository";
 
 export class HttpFactory implements HttpClientFactory {
   private readonly baseUrl: string;

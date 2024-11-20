@@ -6,12 +6,11 @@ import {
   WorkoutDetails,
 } from "../dtos";
 import { HttpClient } from "../http";
+import { Repository } from "./repository";
 
-export class WorkoutRepository {
-  protected readonly api: HttpClient;
-
+export class WorkoutRepository extends Repository {
   constructor(api: HttpClient) {
-    this.api = api;
+    super(api);
   }
 
   static build(api: HttpClient) {

@@ -4,6 +4,7 @@ export const ExerciseSetSchema = z.object({
   id: z.string().optional(),
   set_number: z.number(),
   reps: z.number(),
+  done: z.boolean().optional(),
   weight: z.number(),
 });
 
@@ -58,7 +59,7 @@ export type Workout = WorkoutResponse & {
   currentSets?: CurrentSets;
   info?: {
     started: boolean;
-    startedAt: number;
+    startedAt?: number;
     finishedAt?: number;
   };
 };

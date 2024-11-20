@@ -13,6 +13,7 @@ import { ExerciseCardActions } from "./exerciseCardActions";
 interface IExerciseCardProps {
   showCheckBox: boolean;
   exercise: Workout["exercises"][0];
+  checkSets: (exerciseId: string, setId: string) => void;
   onChange?: ({
     type,
     setIndex,
@@ -35,15 +36,13 @@ export function ExerciseCard({
   editable,
   exercise,
   onChange,
+  checkSets,
   showCheckBox = false,
   shoulDecreaseOpacity = false,
   shouldEditOneByOne = false,
   shouldEditAllAtSame = false,
   hasActions = false,
 }: IExerciseCardProps) {
-  const [completedSets, setCompletedSets] = useState<Record<number, boolean>>(
-    {},
-  );
   const [currentSet, setCurrentSet] = useState(0);
   const [showActions, setShowActions] = useState(false);
 
@@ -62,8 +61,7 @@ export function ExerciseCard({
     setShowActions((prev) => !prev);
   }, [hasActions]);
 
-  const checkSet = useCallback((i: number) => {
-    setCompletedSets((prev) => ({ ...prev, [i]: true }));
+  const jumpToNextSet = useCallback(() => {
     setCurrentSet((prev) => prev + 1);
     openTimerModal();
   }, []);
@@ -128,7 +126,7 @@ export function ExerciseCard({
                 )}
               </View>
               {exercise.sets.map((set, i) => {
-                const isChecked = completedSets?.[i];
+                const isChecked = set?.done ?? false;
                 const isInputEditble = !isChecked && editable;
                 const editingOneByOne = shouldEditOneByOne
                   ? isInputEditble && i <= currentSet
@@ -208,7 +206,11 @@ export function ExerciseCard({
                     {showCheckBox && (
                       <View className="ml-4 mt-2">
                         <CheckBox
-                          onCheck={() => checkSet(i)}
+                          alreadyChecked={set?.done}
+                          onCheck={() => {
+                            checkSets(exercise.id, set.id ?? "");
+                            jumpToNextSet();
+                          }}
                           disabled={isChecked || !editable}
                         />
                       </View>

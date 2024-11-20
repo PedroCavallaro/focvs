@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { Workout } from "../api/dtos";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../api";
 import { STORAGE_KEYS } from "../utils/keys";
 import { Storage } from "../services";
@@ -18,6 +18,7 @@ interface IWorkoutContext {
   startWorkout: () => void;
   finishWorkout: () => void;
   setWorkout: (workout: Workout | ((prev: Workout) => Workout)) => void;
+  fetchWorkout: () => void;
 }
 
 const WorkoutContext = createContext({} as IWorkoutContext);
@@ -27,9 +28,17 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
     currentSets: {},
   } as Workout);
 
-  const { isLoading } = useQuery({
+  const { isLoading, refetch } = useQuery({
     queryKey: ["workout-of-the-day"],
+    enabled: false,
     queryFn: () => fetchWorkoutOfTheDay(),
+  });
+
+  const { mutate: savePerformedWorkout } = useMutation({
+    mutationFn: (workout: Workout) =>
+      api.statistics.savePerformedWorkout(workout),
+    mutationKey: ["save-performed-workout"],
+    onError: (err) => console.log(err),
   });
 
   const fetchWorkoutOfTheDay = useCallback(async () => {
@@ -45,6 +54,8 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
 
     if (!hasOnStorage?.id) {
       const workout = await api.workout.getWorkoutOfTheDay();
+
+      await Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, workout);
 
       setWorkout(workout as Workout);
 
@@ -69,18 +80,24 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
   }, [setWorkout]);
 
   const saveWorkoutOnStorage = useCallback(async () => {
+    console.log(await Storage.getItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY));
+
     await Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, workout);
   }, [workout]);
 
   const finishWorkout = useCallback(() => {
+    const info = {
+      ...workout.info,
+      started: false,
+      finishedAt: new Date().getTime(),
+    };
+
     setWorkout((prev) => ({
       ...prev,
-      info: {
-        started: false,
-        startedAt: new Date().getTime(),
-        finishedAt: new Date().getTime(),
-      },
+      info,
     }));
+
+    savePerformedWorkout({ ...workout, info });
   }, [setWorkout]);
 
   useEffect(() => {
@@ -92,6 +109,7 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
       value={{
         workout,
         isLoading,
+        fetchWorkout: refetch,
         startWorkout,
         finishWorkout,
         setWorkout,
