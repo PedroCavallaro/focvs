@@ -1,23 +1,20 @@
+import { WorkoutHoursResponse } from "@/src/api/dtos/statistics.dto";
 import { ChevronDown } from "lucide-react-native";
+import { useMemo } from "react";
 import { View, Text, TouchableOpacity, Dimensions } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
 
-export function WorkoutGraph() {
-  // const data = {
-  //   labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-  //   datasets: [
-  //     {
-  //       data: [20, 45, 28, 80, 99, 43],
-  //     },
-  //   ],
-  // };
-  const screenWidth = Dimensions.get("window").width;
+export function WorkoutGraph({ data }: { data?: WorkoutHoursResponse[] }) {
+  const barData = useMemo(
+    () =>
+      data?.map((e) => ({
+        ...e,
+        frontColor: "#f97316",
+      })),
+    [data],
+  );
 
-  // const chartConfig = {
-  //   color: (opacity = 1) => `rgba(249, 115, 22 / ${opacity})`,
-  //   barPercentage: 1,
-  //   useShadowColorFromDataset: false,
-  // };
+  const screenWidth = Dimensions.get("window").width;
 
   return (
     <View className="flex-col gap-6">
@@ -48,50 +45,9 @@ export function WorkoutGraph() {
         xAxisColor="white"
         barBorderRadius={3}
         xAxisLabelTextStyle={{ color: "white" }}
-        data={[
-          {
-            value: 20,
-            frontColor: "#f97316",
-            label: "Jan",
-          },
-          {
-            value: 15,
-            frontColor: "#f97316",
-            label: "Fev",
-          },
-          {
-            value: 25,
-            frontColor: "#f97316",
-            label: "Mar",
-          },
-          {
-            value: 10,
-            frontColor: "#f97316",
-            label: "Abr",
-          },
-          {
-            value: 18,
-            frontColor: "#f97316",
-            label: "Mai",
-          },
-        ]}
+        data={barData}
         barWidth={25}
       />
-      {/* <BarChart
-        style={{
-          marginVertical: 8,
-        }}
-        yAxisSuffix=""
-        data={data}
-        width={screenWidth * 0.9}
-        height={250}
-        yAxisLabel=""
-        chartConfig={{
-          ...chartConfig,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255 / ${opacity})`,
-        }}
-        verticalLabelRotation={30}
-      /> */}
     </View>
   );
 }

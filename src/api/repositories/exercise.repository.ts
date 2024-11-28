@@ -1,12 +1,11 @@
 import { PaginationDTO } from "@/src/utils/pagination";
 import { ExerciseDto, MuscleDto } from "../dtos";
 import { HttpClient } from "../http";
+import { Repository } from "./repository";
 
-export class ExerciseRepositorie {
-  protected readonly api: HttpClient;
-
+export class ExerciseRepositorie extends Repository {
   constructor(api: HttpClient) {
-    this.api = api;
+    super(api);
   }
 
   static build(api: HttpClient) {

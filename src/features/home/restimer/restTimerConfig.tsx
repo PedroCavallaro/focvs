@@ -5,8 +5,7 @@ import { useEffect } from "react";
 import { useRestTimer } from "@/src/providers/restTimerProvider";
 
 export function RestTimerConfig() {
-  const { getPreviousTimer, handleTimerConfig, handleStart, restTimer } =
-    useRestTimer();
+  const { getPreviousTimer, handleTimerConfig, handleStart } = useRestTimer();
 
   useEffect(() => {
     getPreviousTimer();
@@ -31,7 +30,7 @@ export function RestTimerConfig() {
                     }}
                     className="mt-4 h-full w-full items-center justify-center text-center font-regular text-lg text-zinc-200"
                     keyboardType="numeric"
-                    placeholder={restTimer.timerConfig[i].toString()}
+                    placeholder={"0"}
                     placeholderTextColor={"#FFF"}
                   ></Input.Field>
                 </Input>

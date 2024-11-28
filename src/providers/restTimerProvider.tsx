@@ -30,9 +30,12 @@ interface IRestTimerContext {
 const RestTimerContext = createContext({} as IRestTimerContext);
 
 export function RestTimerProvider({ children }: { children: ReactNode }) {
-  const [restTimer, setRestTimer] = useState({
-    timerConfig: [0, 0, 0, 0],
-  } as TimerState);
+  const [restTimer, setRestTimer] = useState(
+    () =>
+      ({
+        timerConfig: [0, 0, 0, 0],
+      }) as TimerState,
+  );
 
   function arrayToSeconds(timeArray: Array<number>) {
     const totalMinutes = String(timeArray[0]) + String(timeArray[1]);
@@ -80,7 +83,7 @@ export function RestTimerProvider({ children }: { children: ReactNode }) {
 
   const handleTimerConfig = useCallback(
     (index: number, v: number) => {
-      const newTimer = restTimer.timerConfig;
+      const newTimer = restTimer?.timerConfig ?? [0, 0, 0, 0];
 
       newTimer[index] = v;
 

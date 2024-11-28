@@ -8,9 +8,20 @@ export interface Api {
   auth: AuthRepository;
   workout: WorkoutRepository;
   exercise: ExerciseRepositorie;
-  statistics: StatisticsRepository
+  statistics: StatisticsRepository;
 }
 
-export interface Repositorie {
-  build(api: HttpClient): Partial<Api>;
+export abstract class Repository {
+  protected readonly api: HttpClient;
+
+  constructor(api: HttpClient) {
+    this.api = api;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  static build(api: HttpClient): Partial<Api> {
+    throw new Error("METHOD NOT IMPLEMENTED");
+  }
+
+  handleErrors() {}
 }

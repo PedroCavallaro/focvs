@@ -8,12 +8,17 @@ export function CheckBox({
   onCheck,
   onUnCheck,
   disabled,
+  alreadyChecked,
 }: {
   onCheck?: () => void;
   onUnCheck?: () => void;
   disabled?: boolean;
+  alreadyChecked?: boolean;
 }) {
-  const [checked, setChecked] = useState(false);
+  // console.log("id", id);
+  // console.log("alreadyChecked", alreadyChecked);
+
+  const [checked, setChecked] = useState(() => alreadyChecked);
 
   const handleChecked = useCallback(() => {
     if (!checked) {
@@ -26,6 +31,8 @@ export function CheckBox({
 
     return setChecked(false);
   }, [checked]);
+
+  // console.log("isChecked", checked);
 
   return (
     <View className="w-[6%] flex-row items-center justify-center">

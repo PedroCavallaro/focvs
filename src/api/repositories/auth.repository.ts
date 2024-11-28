@@ -5,12 +5,11 @@ import {
   LoginDTO,
 } from "../dtos";
 import { HttpClient } from "../http";
+import { Repository } from "./repository";
 
-export class AuthRepository {
-  protected readonly api: HttpClient;
-
+export class AuthRepository extends Repository {
   constructor(api: HttpClient) {
-    this.api = api;
+    super(api);
   }
 
   static build(api: HttpClient) {

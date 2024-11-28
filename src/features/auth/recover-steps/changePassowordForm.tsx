@@ -11,15 +11,20 @@ export function ChangePasswordForm({
   return (
     <>
       <Text className="px-1 text-center font-regular text-lg leading-relaxed text-white">
-        Digite o código que foi enviado para o email e****@g***.com
+        Escolha sua nova senha
       </Text>
       <View>
         <Input>
-          <Input.Field placeholder="Email" />
+          <Input.Field placeholder="Nova senha" secureTextEntry />
+        </Input>
+      </View>
+      <View>
+        <Input>
+          <Input.Field placeholder="Confirme a senha" secureTextEntry />
         </Input>
       </View>
       <Button>
-        <Button.Title>Enviar</Button.Title>
+        <Button.Title>Salvar</Button.Title>
       </Button>
     </>
   );

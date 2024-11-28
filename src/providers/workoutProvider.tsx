@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { Workout } from "../api/dtos";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../api";
 import { STORAGE_KEYS } from "../utils/keys";
 import { Storage } from "../services";
@@ -18,6 +18,7 @@ interface IWorkoutContext {
   startWorkout: () => void;
   finishWorkout: () => void;
   setWorkout: (workout: Workout | ((prev: Workout) => Workout)) => void;
+  fetchWorkout: () => void;
 }
 
 const WorkoutContext = createContext({} as IWorkoutContext);
@@ -27,33 +28,46 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
     currentSets: {},
   } as Workout);
 
-  const { isLoading } = useQuery({
-    queryKey: ["workout-of-the-day"],
-    queryFn: () => fetchWorkoutOfTheDay(),
+  const [loading, setLoading] = useState(false);
+
+  const { mutate: savePerformedWorkout } = useMutation({
+    mutationFn: (workout: Workout) =>
+      api.statistics.savePerformedWorkout(workout),
+    mutationKey: ["save-performed-workout"],
+    onError: (err) => console.log(err),
   });
 
   const fetchWorkoutOfTheDay = useCallback(async () => {
-    if (workout?.info?.started) {
-      setWorkout(workout);
+    try {
+      setLoading(true);
+      if (workout?.info?.started) {
+        setWorkout(workout);
 
-      return workout;
+        return workout;
+      }
+
+      const hasOnStorage = await Storage.getItem<Workout>(
+        STORAGE_KEYS.WORKOUT_OF_THE_DAY,
+      );
+
+      if (!hasOnStorage?.id) {
+        const workout = await api.workout.getWorkoutOfTheDay();
+
+        setWorkout(workout as Workout);
+
+        await Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, workout);
+
+        return workout;
+      }
+
+      setWorkout(hasOnStorage);
+
+      return hasOnStorage;
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
-
-    const hasOnStorage = await Storage.getItem<Workout>(
-      STORAGE_KEYS.WORKOUT_OF_THE_DAY,
-    );
-
-    if (!hasOnStorage?.id) {
-      const workout = await api.workout.getWorkoutOfTheDay();
-
-      setWorkout(workout as Workout);
-
-      return workout;
-    }
-
-    setWorkout(hasOnStorage);
-
-    return hasOnStorage;
   }, [setWorkout, workout]);
 
   const startWorkout = useCallback(() => {
@@ -69,18 +83,29 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
   }, [setWorkout]);
 
   const saveWorkoutOnStorage = useCallback(async () => {
+    console.log("a");
     await Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, workout);
   }, [workout]);
 
-  const finishWorkout = useCallback(() => {
-    setWorkout((prev) => ({
-      ...prev,
-      info: {
-        started: false,
-        startedAt: new Date().getTime(),
-        finishedAt: new Date().getTime(),
-      },
+  const finishWorkout = useCallback(async () => {
+    const workoutInfo = await Storage.getItem<Workout>(
+      STORAGE_KEYS.WORKOUT_OF_THE_DAY,
+    );
+
+    if (!workoutInfo) return;
+
+    const info = {
+      ...workoutInfo.info,
+      started: false,
+      finishedAt: new Date().getTime(),
+    };
+
+    setWorkout(() => ({
+      ...workoutInfo,
+      info,
     }));
+
+    savePerformedWorkout({ ...workoutInfo, info });
   }, [setWorkout]);
 
   useEffect(() => {
@@ -91,7 +116,8 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
     <WorkoutContext.Provider
       value={{
         workout,
-        isLoading,
+        isLoading: loading,
+        fetchWorkout: fetchWorkoutOfTheDay,
         startWorkout,
         finishWorkout,
         setWorkout,
