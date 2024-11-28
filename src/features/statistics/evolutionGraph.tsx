@@ -1,10 +1,22 @@
+import { Evolution } from "@/src/api/dtos/statistics.dto";
 import { colors } from "@/src/style";
 import { CircleHelp } from "lucide-react-native";
+import { useMemo } from "react";
 import { View, Text, Dimensions, TouchableOpacity } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
 
-export function EvolutionGraph() {
+export function EvolutionGraph({ data }: { data: Evolution[] }) {
   const screenWidth = Dimensions.get("window").width;
+
+  const parsedData = useMemo(
+    () =>
+      data?.map((e) => ({
+        ...e,
+        value: parseFloat(e.volume),
+      })),
+
+    [data],
+  );
 
   return (
     <View className="flex-col gap-6">
@@ -33,28 +45,7 @@ export function EvolutionGraph() {
         xAxisColor="white"
         dataPointsColor="#FFF"
         xAxisLabelTextStyle={{ color: "white" }}
-        data={[
-          {
-            value: 1,
-            label: "Jan",
-          },
-          {
-            value: 5,
-            label: "Fev",
-          },
-          {
-            value: 10,
-            label: "Mar",
-          },
-          {
-            value: 10,
-            label: "Abr",
-          },
-          {
-            value: 12,
-            label: "Mai",
-          },
-        ]}
+        data={parsedData}
       />
     </View>
   );

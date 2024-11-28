@@ -58,7 +58,7 @@ export default function HomePage() {
 
       setWorkout((prev) => ({ ...prev, exercises: parsedExercises }));
     },
-    [],
+    [setWorkout, workout],
   );
 
   const { openModal: openSwichModal, closeModal: closeSwitchModal } = useModal(
@@ -117,12 +117,12 @@ export default function HomePage() {
         exercises,
       }));
     },
-    [workout],
+    [workout, setWorkout],
   );
 
   useEffect(() => {
     fetchWorkout();
-  }, [fetchWorkout]);
+  }, []);
 
   return (
     <View className="h-full flex-col gap-8">

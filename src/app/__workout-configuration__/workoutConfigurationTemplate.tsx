@@ -26,9 +26,10 @@ import { ArrowLeft, Search } from "lucide-react-native";
 import { colors } from "@/src/style";
 import { Input } from "@/src/components/input";
 import { Drawer } from "@/src/components/drawer";
-import { useWorkouConfiguration } from "./workout-configuration";
+// import { useWorkouConfiguration } from "./workout-configuration";
 import { plural } from "@/src/utils";
 import { WorkoutInfoForm } from "@/src/features/workout-configuration/forms/workoutInfoForm";
+import { useWorkoutConfiguration } from "./provider";
 
 export type ChangeWorkoutInfo =
   | { key: "day"; value: number }
@@ -65,9 +66,10 @@ export function WorkoutConfigurationTemplate({
     refetchMuscles,
     fetchExercises,
     workout,
+    clearWorkout,
     setQuery,
     changeOnWorkoutSampling,
-  } = useWorkouConfiguration(workoutToUpdate);
+  } = useWorkoutConfiguration();
 
   const { closeDrawer, openDrawer } = useDrawer(() => {
     return (
@@ -76,6 +78,7 @@ export function WorkoutConfigurationTemplate({
         onClose={() => closeDrawer()}
       >
         <WorkoutSampling
+          clearWorkout={clearWorkout}
           updating={updating}
           workout={workout}
           changeOnWorkoutSampling={changeOnWorkoutSampling}
@@ -83,7 +86,7 @@ export function WorkoutConfigurationTemplate({
         />
       </Drawer>
     );
-  }, [workout, changeOnWorkoutSampling]);
+  }, [workout, updating, clearWorkout, changeOnWorkoutSampling]);
 
   const { closeModal: closeAddExerciseModal, openModal: openAddExerciseModal } =
     useModal(
@@ -197,7 +200,7 @@ export function WorkoutConfigurationTemplate({
             </View>
           </View>
           <Button
-            onPress={openDrawer}
+            onPress={() => openDrawer()}
             className="h-10 w-11/12 justify-center rounded-lg bg-orange-500 p-2"
           >
             <Text className="text-md ml-16 font-medium text-black">
@@ -216,11 +219,7 @@ export function WorkoutConfigurationTemplate({
         />
       </Input>
       {selectedMuscle?.id ? (
-        <ExercisePicker
-          loading={exerciseLoading}
-          muscleName={selectedMuscle.name}
-          openDrawer={openDrawer}
-        >
+        <ExercisePicker loading={exerciseLoading}>
           <ScrollView>
             <ScrollView horizontal className="flex-row flex-wrap gap-8">
               <FlatList

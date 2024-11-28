@@ -13,7 +13,7 @@ import { ExerciseCardActions } from "./exerciseCardActions";
 interface IExerciseCardProps {
   showCheckBox: boolean;
   exercise: Workout["exercises"][0];
-  checkSets: (exerciseId: string, setId: string) => void;
+  checkSets?: (exerciseId: string, setId: string) => void;
   onChange?: ({
     type,
     setIndex,
@@ -206,9 +206,9 @@ export function ExerciseCard({
                     {showCheckBox && (
                       <View className="ml-4 mt-2">
                         <CheckBox
-                          alreadyChecked={set?.done}
+                          alreadyChecked={set?.done ?? false}
                           onCheck={() => {
-                            checkSets(exercise.id, set.id ?? "");
+                            checkSets?.(exercise.id, set.id ?? "");
                             jumpToNextSet();
                           }}
                           disabled={isChecked || !editable}

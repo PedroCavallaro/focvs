@@ -11,7 +11,6 @@ import { ExerciseCard } from "../exerciseCard";
 import { useCallbackPlus } from "@/src/hooks";
 import { api } from "@/src/api";
 import { useRouter } from "expo-router";
-import { useWorkouConfiguration } from "@/src/app/__workout-configuration__/workout-configuration";
 
 async function save(
   workout: SaveWorkoutDTO | UpdateWorkoutDTO,
@@ -29,13 +28,15 @@ async function save(
 }
 
 export function WorkoutSampling({
-  updating,
   workout,
+  updating,
   changeOnWorkoutSampling,
+  clearWorkout,
   close,
 }: {
   updating: boolean;
   workout: SaveWorkoutDTO;
+  clearWorkout: () => void;
   changeOnWorkoutSampling: ({
     type,
     setIndex,
@@ -49,8 +50,6 @@ export function WorkoutSampling({
   }) => void;
   close: () => void;
 }) {
-  const { clearWorkout } = useWorkouConfiguration();
-
   const router = useRouter();
   const saveWorkout = useCallbackPlus(
     async (workout: SaveWorkoutDTO | UpdateWorkoutDTO) => {
@@ -61,7 +60,7 @@ export function WorkoutSampling({
       close();
       clearWorkout();
     },
-    [workout, router, close, clearWorkout],
+    [workout, updating, router, close, clearWorkout],
   );
 
   return (

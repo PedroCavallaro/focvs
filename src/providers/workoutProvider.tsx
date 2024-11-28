@@ -28,11 +28,7 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
     currentSets: {},
   } as Workout);
 
-  const { isLoading, refetch } = useQuery({
-    queryKey: ["workout-of-the-day"],
-    enabled: false,
-    queryFn: () => fetchWorkoutOfTheDay(),
-  });
+  const [loading, setLoading] = useState(false);
 
   const { mutate: savePerformedWorkout } = useMutation({
     mutationFn: (workout: Workout) =>
@@ -42,29 +38,36 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
   });
 
   const fetchWorkoutOfTheDay = useCallback(async () => {
-    if (workout?.info?.started) {
-      setWorkout(workout);
+    try {
+      setLoading(true);
+      if (workout?.info?.started) {
+        setWorkout(workout);
 
-      return workout;
+        return workout;
+      }
+
+      const hasOnStorage = await Storage.getItem<Workout>(
+        STORAGE_KEYS.WORKOUT_OF_THE_DAY,
+      );
+
+      if (!hasOnStorage?.id) {
+        const workout = await api.workout.getWorkoutOfTheDay();
+
+        setWorkout(workout as Workout);
+
+        await Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, workout);
+
+        return workout;
+      }
+
+      setWorkout(hasOnStorage);
+
+      return hasOnStorage;
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
-
-    const hasOnStorage = await Storage.getItem<Workout>(
-      STORAGE_KEYS.WORKOUT_OF_THE_DAY,
-    );
-
-    if (!hasOnStorage?.id) {
-      const workout = await api.workout.getWorkoutOfTheDay();
-
-      await Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, workout);
-
-      setWorkout(workout as Workout);
-
-      return workout;
-    }
-
-    setWorkout(hasOnStorage);
-
-    return hasOnStorage;
   }, [setWorkout, workout]);
 
   const startWorkout = useCallback(() => {
@@ -80,24 +83,29 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
   }, [setWorkout]);
 
   const saveWorkoutOnStorage = useCallback(async () => {
-    console.log(await Storage.getItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY));
-
+    console.log("a");
     await Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, workout);
   }, [workout]);
 
-  const finishWorkout = useCallback(() => {
+  const finishWorkout = useCallback(async () => {
+    const workoutInfo = await Storage.getItem<Workout>(
+      STORAGE_KEYS.WORKOUT_OF_THE_DAY,
+    );
+
+    if (!workoutInfo) return;
+
     const info = {
-      ...workout.info,
+      ...workoutInfo.info,
       started: false,
       finishedAt: new Date().getTime(),
     };
 
-    setWorkout((prev) => ({
-      ...prev,
+    setWorkout(() => ({
+      ...workoutInfo,
       info,
     }));
 
-    savePerformedWorkout({ ...workout, info });
+    savePerformedWorkout({ ...workoutInfo, info });
   }, [setWorkout]);
 
   useEffect(() => {
@@ -108,8 +116,8 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
     <WorkoutContext.Provider
       value={{
         workout,
-        isLoading,
-        fetchWorkout: refetch,
+        isLoading: loading,
+        fetchWorkout: fetchWorkoutOfTheDay,
         startWorkout,
         finishWorkout,
         setWorkout,

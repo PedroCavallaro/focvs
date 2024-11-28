@@ -1,27 +1,27 @@
 import { api } from "@/src/api";
+import { Evolution, ExerciseImprovement } from "@/src/api/dtos/statistics.dto";
 import { Footer } from "@/src/components/footer";
 import { Header } from "@/src/components/header";
 import { EvolutionGraph } from "@/src/features/statistics/evolutionGraph";
 import { ExerciseEvolution } from "@/src/features/statistics/exerciseEvolution";
 import { WorkoutCalendar } from "@/src/features/statistics/workoutCalendar";
 import { WorkoutGraph } from "@/src/features/statistics/workoutGraph";
-import { useAuth, useFooter } from "@/src/hooks";
+import { useAuth } from "@/src/hooks";
 import { useQuery } from "@tanstack/react-query";
-import { Animated, ScrollView } from "react-native";
+import { ScrollView } from "react-native";
 import { View, Text } from "react-native";
 
 export default function Statistics() {
-  const { animation, handleScroll } = useFooter();
   const { user } = useAuth();
 
-  const { data: statistics, isLoading } = useQuery({
+  const { data: statistics } = useQuery({
     queryKey: ["user-statistics"],
-    queryFn: () => api.statistics.getAllPerformedWorkouts(),
+    queryFn: () => api.statistics.getAllStatics(),
   });
 
   return (
     <>
-      <ScrollView onScroll={handleScroll}>
+      <ScrollView>
         <Header />
         <View className="flex-col gap-10 px-2">
           <View className="flex-col gap-6">
@@ -31,11 +31,13 @@ export default function Statistics() {
                 {user?.name}
               </Text>
             </Text>
-            <WorkoutGraph />
+            <WorkoutGraph data={statistics?.hours} />
           </View>
-          <ExerciseEvolution />
-          <EvolutionGraph />
-          <WorkoutCalendar />
+          <ExerciseEvolution
+            data={statistics?.exerciseImprovements as ExerciseImprovement[]}
+          />
+          <EvolutionGraph data={statistics?.evolution as Evolution[]} />
+          <WorkoutCalendar data={statistics?.dates as string[]} />
         </View>
       </ScrollView>
 

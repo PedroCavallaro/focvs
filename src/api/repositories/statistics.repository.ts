@@ -1,6 +1,12 @@
 import { Workout } from "../dtos";
 import { HttpClient } from "../http";
 import { Repository } from "./repository";
+import {
+  Evolution,
+  ExerciseImprovement,
+  StatisticsResponse,
+  WorkoutHoursResponse,
+} from "../dtos/statistics.dto";
 
 export class StatisticsRepository extends Repository {
   constructor(api: HttpClient) {
@@ -13,22 +19,54 @@ export class StatisticsRepository extends Repository {
     return { statistics: new StatisticsRepository(api) };
   }
 
-  async getAllPerformedWorkouts() {
-    try {
-      const res = await this.api.get("/statistics/workouts");
+  async getAllStatics(): Promise<StatisticsResponse> {
+    const statistics = await Promise.all([
+      this.getAllPerformedWorkouts(),
+      this.getHours(),
+      this.getImprovements(),
+      this.getEvolution(),
+    ]);
 
-      console.log(res);
+    return {
+      dates: statistics[0],
+      hours: statistics[1],
+      exerciseImprovements: statistics[2],
+      evolution: statistics[3],
+    };
+  }
 
-      return res;
-    } catch (error) {
-      console.log(error);
+  async getImprovements(): Promise<ExerciseImprovement[]> {
+    const res = await this.api.get<ExerciseImprovement[]>(
+      "/statistics/last-improvements",
+    );
 
-      return [];
-    }
+    return res;
+  }
+
+  async getEvolution(): Promise<Evolution[]> {
+    const res = await this.api.get<Evolution[]>("/statistics/evolution");
+
+    return res;
+  }
+
+  async getAllPerformedWorkouts(): Promise<string[]> {
+    const res = await this.api.get<string[]>("/statistics/workouts");
+
+    return res;
+  }
+
+  async getHours(): Promise<WorkoutHoursResponse[]> {
+    const res = await this.api.get<WorkoutHoursResponse[]>(
+      "/statistics/workouts-between-days",
+      {
+        query: { days: 30 * 6 },
+      },
+    );
+
+    return res;
   }
 
   async savePerformedWorkout(workout: Workout) {
-    console.log(workout.exercises);
     const res = await this.api.post("/performed/workouts", {
       body: workout,
     });

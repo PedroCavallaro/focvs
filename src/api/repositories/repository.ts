@@ -22,4 +22,6 @@ export abstract class Repository {
   static build(api: HttpClient): Partial<Api> {
     throw new Error("METHOD NOT IMPLEMENTED");
   }
+
+  handleErrors() {}
 }
