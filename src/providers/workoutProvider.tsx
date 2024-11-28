@@ -83,7 +83,6 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
   }, [setWorkout]);
 
   const saveWorkoutOnStorage = useCallback(async () => {
-    console.log("a");
     await Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, workout);
   }, [workout]);
 

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { Check } from "lucide-react-native";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { colors } from "../style";
 
@@ -15,10 +15,11 @@ export function CheckBox({
   disabled?: boolean;
   alreadyChecked?: boolean;
 }) {
-  // console.log("id", id);
-  // console.log("alreadyChecked", alreadyChecked);
+  const [checked, setChecked] = useState(alreadyChecked);
 
-  const [checked, setChecked] = useState(() => alreadyChecked);
+  useEffect(() => {
+    setChecked(alreadyChecked);
+  }, [alreadyChecked]);
 
   const handleChecked = useCallback(() => {
     if (!checked) {
