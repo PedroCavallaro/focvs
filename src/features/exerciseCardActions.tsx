@@ -3,17 +3,17 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import { Animated, View } from "react-native";
 import { colors } from "../style";
 import { Button } from "../components/button";
+import { useExerciseCard } from "./exerciseCard";
+import { useWorkout } from "../providers/workoutProvider";
 
-export function ExerciseCardActions({
-  handleActions,
-}: {
-  handleActions: () => void;
-}) {
+export function ExerciseCardActions() {
+  const { handleActions, visible, exercise } = useExerciseCard();
+  const { addSetOnExercise } = useWorkout();
+  const [isVisible, setIsVisible] = useState(visible);
+
   const translateY1 = useRef(new Animated.Value(-100)).current;
   const translateY2 = useRef(new Animated.Value(-100)).current;
   const translateY3 = useRef(new Animated.Value(-100)).current;
-
-  const [isVisible, setIsVisible] = useState(true);
 
   const animateButtons = useCallback((direction: "in" | "out") => {
     const toValue = direction === "in" ? 0 : -100;
@@ -71,7 +71,11 @@ export function ExerciseCardActions({
             width: "32%",
           }}
         >
-          <Button variant="tertiary" sizeVariant="medium">
+          <Button
+            onPress={() => addSetOnExercise(exercise.id)}
+            variant="tertiary"
+            sizeVariant="medium"
+          >
             <Plus color={colors.orange[500]} size={18} />
           </Button>
         </Animated.View>

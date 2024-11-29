@@ -1,15 +1,22 @@
 import { Text, View } from "react-native";
 import { Button } from "@/src/components/button";
 import { Input } from "@/src/components/input";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRestTimer } from "@/src/providers/restTimerProvider";
 
 export function RestTimerConfig() {
-  const { getPreviousTimer, handleTimerConfig, handleStart } = useRestTimer();
+  const { restTimer, getPreviousTimer, handleTimerConfig, handleStart } =
+    useRestTimer();
+
+  const [timer, setTimer] = useState(restTimer);
 
   useEffect(() => {
     getPreviousTimer();
   }, []);
+
+  useEffect(() => {
+    setTimer(restTimer);
+  }, [setTimer]);
 
   return (
     <View className="mt-6 flex-col justify-center gap-10">
@@ -30,7 +37,8 @@ export function RestTimerConfig() {
                     }}
                     className="mt-4 h-full w-full items-center justify-center text-center font-regular text-lg text-zinc-200"
                     keyboardType="numeric"
-                    placeholder={"0"}
+                    maxLength={1}
+                    placeholder={String(timer?.timerConfig?.[i] ?? 0)}
                     placeholderTextColor={"#FFF"}
                   ></Input.Field>
                 </Input>

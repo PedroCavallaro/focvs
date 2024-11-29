@@ -25,6 +25,7 @@ interface IRestTimerContext {
   restTimer: TimerState;
   setRestTimer: React.Dispatch<React.SetStateAction<TimerState>>;
   arrayToSeconds: (timeArray: Array<number>) => number;
+  currentTimer: number;
 }
 
 const RestTimerContext = createContext({} as IRestTimerContext);
@@ -79,8 +80,9 @@ export function RestTimerProvider({ children }: { children: ReactNode }) {
       restTimer.timerConfig,
     );
 
+    setCurrentTimer(arrayToSeconds(restTimer.timerConfig));
     handleTimer();
-  }, [restTimer]);
+  }, [restTimer, setCurrentTimer]);
 
   const handleTimerConfig = useCallback(
     (index: number, v: number) => {
@@ -119,15 +121,22 @@ export function RestTimerProvider({ children }: { children: ReactNode }) {
   }, [restTimer, showToast]);
 
   useEffect(() => {
-    const interval = setInterval(
-      () => {
-        console.log("oi");
-      },
-      arrayToSeconds(restTimer.timerConfig) * 1000,
-    );
+    if (currentTimer <= 0) return;
+
+    const interval = setInterval(() => {
+      if (currentTimer - 1 > 0) {
+        return setCurrentTimer((prev) => prev - 1);
+      }
+
+      clearInterval(interval);
+    }, 1000);
+
+    if (!restTimer.isTimerRunning) {
+      clearInterval(interval);
+    }
 
     return () => clearInterval(interval);
-  }, [restTimer]);
+  }, [currentTimer, restTimer.isTimerRunning]);
 
   return (
     <RestTimerContext.Provider
@@ -139,6 +148,7 @@ export function RestTimerProvider({ children }: { children: ReactNode }) {
         setRestTimer,
         arrayToSeconds,
         restTimer,
+        currentTimer,
       }}
     >
       {children}

@@ -10,6 +10,7 @@ import { WorkoutActions } from "@/src/features/home/workoutActions";
 import { useWorkout } from "@/src/providers/workoutProvider";
 import { ExerciseCard } from "@/src/features/exerciseCard";
 import { Storage } from "@/src/services";
+import { ExerciseCardActions } from "@/src/features/exerciseCardActions";
 // import notifee from "@notifee/react-native";
 
 export default function HomePage() {
@@ -87,12 +88,13 @@ export default function HomePage() {
                         showCheckBox={true}
                         exercise={e}
                         key={i}
-                        hasActions={workout?.info?.started ?? false}
                         onChange={onChange}
                         editable={workout?.info?.started ?? false}
                         shouldEditOneByOne
                         shoulDecreaseOpacity
-                      />
+                      >
+                        <ExerciseCardActions />
+                      </ExerciseCard>
                     );
                   })}
                 </View>

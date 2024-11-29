@@ -1,41 +1,28 @@
 import { Button } from "@/src/components/button";
 import { useRestTimer } from "@/src/providers/restTimerProvider";
 import { StopCircle } from "lucide-react-native";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { Text, View } from "react-native";
-import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 
 export function RestTimerClock() {
-  const { handleTimer, restTimer, arrayToSeconds, setRestTimer } =
+  const { handleTimer, restTimer, currentTimer, arrayToSeconds, setRestTimer } =
     useRestTimer();
 
   const timeRef = useRef(arrayToSeconds(restTimer.timerConfig));
 
+  const time = useMemo(() => {
+    const minutes = Math.floor(currentTimer / 60);
+
+    timeRef.current = currentTimer;
+
+    return currentTimer >= 60
+      ? `${String(minutes).padStart(2, "0")} : ${String(currentTimer % 60).padStart(2, "0")}`
+      : `${String(currentTimer % 60).padStart(2, "0")}`;
+  }, [currentTimer]);
+
   return (
     <View className="flex-col items-center justify-center gap-10 py-4">
-      <CountdownCircleTimer
-        isPlaying
-        onComplete={() =>
-          setRestTimer((prev) => ({
-            ...prev,
-            isTimerRunning: false,
-          }))
-        }
-        duration={timeRef.current}
-        colors={"#F97316"}
-      >
-        {({ remainingTime }) => {
-          const minutes = Math.floor(remainingTime / 60);
-
-          timeRef.current = remainingTime;
-          const text =
-            remainingTime > 60
-              ? `${String(minutes).padStart(2, "0")} : ${String(remainingTime % 60).padStart(2, "0")}`
-              : `${String(remainingTime % 60).padStart(2, "0")}`;
-
-          return <Text className="text-lg text-white">{text}</Text>;
-        }}
-      </CountdownCircleTimer>
+      <Text className="text-2xl text-white">{time}</Text>
       <View className="flex-row gap-4">
         <View className="h-14 w-28 overflow-hidden rounded-2xl">
           <Button

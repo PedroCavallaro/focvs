@@ -10,6 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "../api";
 import { STORAGE_KEYS } from "../utils/keys";
 import { Storage } from "../services";
+import * as Crypto from "expo-crypto";
 
 interface IWorkoutContext {
   workout: Workout;
@@ -19,6 +20,7 @@ interface IWorkoutContext {
   setWorkout: (workout: Workout | ((prev: Workout) => Workout)) => void;
   fetchWorkout: () => void;
   checkSet: (exerciseId: string, setId: string) => void;
+  addSetOnExercise: (exerciseId: string) => void;
   onChange?: ({
     type,
     setIndex,
@@ -138,6 +140,32 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
     });
   }, [setWorkout]);
 
+  const addSetOnExercise = useCallback(
+    (exerciseId: string) => {
+      setWorkout((prev) => {
+        const exercises = prev.exercises.map((exercise) => {
+          if (exercise.id !== exerciseId) return exercise;
+
+          exercise.sets = [
+            ...exercise.sets,
+            {
+              reps: 1,
+              weight: 1,
+              done: false,
+              id: Crypto.randomUUID(),
+              set_number: exercise.sets.length + 1,
+            },
+          ];
+
+          return exercise;
+        });
+
+        return { ...prev, exercises };
+      });
+    },
+    [workout, setWorkout],
+  );
+
   const checkSet = useCallback(
     (exerciseId: string, setId: string) => {
       setWorkout((prev) => {
@@ -231,6 +259,7 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
         finishWorkout,
         setWorkout,
         onChange,
+        addSetOnExercise,
         checkSet,
       }}
     >

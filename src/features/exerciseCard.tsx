@@ -3,12 +3,17 @@ import { Workout } from "../api/dtos";
 import { Input } from "../components/input";
 import { CheckBox } from "../components/checkbox";
 import clsx from "clsx";
-import { useCallback, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useState,
+} from "react";
 import { useModal } from "../providers/modalProvider";
 import { BaseModal } from "../components/baseModal";
 import { RestTimer } from "./home/restimer/restTimer";
 import { Image } from "expo-image";
-import { ExerciseCardActions } from "./exerciseCardActions";
 import { useWorkout } from "../providers/workoutProvider";
 
 interface IExerciseCardProps {
@@ -30,9 +35,30 @@ interface IExerciseCardProps {
   shouldEditOneByOne?: boolean;
   shouldEditAllAtSame?: boolean;
   editable?: boolean;
-  hasActions?: boolean;
+  children?: ReactNode;
   workout?: Workout;
 }
+
+interface IExerciseCardContext {
+  handleActions: () => void;
+  visible: boolean;
+  exercise: Workout["exercises"][0];
+}
+
+const ExerciseCardContext = createContext({} as IExerciseCardContext);
+
+const ExerciseCardProvider = ({
+  handleActions,
+  visible,
+  children,
+  exercise,
+}: IExerciseCardContext & { children: ReactNode }) => {
+  return (
+    <ExerciseCardContext.Provider value={{ handleActions, visible, exercise }}>
+      {children}
+    </ExerciseCardContext.Provider>
+  );
+};
 
 export function ExerciseCard({
   editable,
@@ -43,7 +69,7 @@ export function ExerciseCard({
   shoulDecreaseOpacity = false,
   shouldEditOneByOne = false,
   shouldEditAllAtSame = false,
-  hasActions = false,
+  children,
 }: IExerciseCardProps) {
   const [showActions, setShowActions] = useState(false);
 
@@ -57,10 +83,8 @@ export function ExerciseCard({
   );
 
   const handleActions = useCallback(() => {
-    if (!hasActions) return;
-
     setShowActions((prev) => !prev);
-  }, [hasActions]);
+  }, [children]);
 
   const { workout } = useWorkout();
 
@@ -223,8 +247,16 @@ export function ExerciseCard({
       </TouchableOpacity>
 
       <View className="mt-2">
-        {showActions && <ExerciseCardActions handleActions={handleActions} />}
+        <ExerciseCardProvider
+          visible={showActions}
+          exercise={exercise}
+          handleActions={handleActions}
+        >
+          {showActions && children}
+        </ExerciseCardProvider>
       </View>
     </View>
   );
 }
+
+export const useExerciseCard = () => useContext(ExerciseCardContext);
