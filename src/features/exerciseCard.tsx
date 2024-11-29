@@ -9,6 +9,8 @@ import { BaseModal } from "../components/baseModal";
 import { RestTimer } from "./home/restimer/restTimer";
 import { Image } from "expo-image";
 import { ExerciseCardActions } from "./exerciseCardActions";
+import { useWorkout } from "../providers/workoutProvider";
+import { set } from "zod";
 
 interface IExerciseCardProps {
   showCheckBox: boolean;
@@ -44,7 +46,6 @@ export function ExerciseCard({
   shouldEditAllAtSame = false,
   hasActions = false,
 }: IExerciseCardProps) {
-  const [currentSet, setCurrentSet] = useState(0);
   const [showActions, setShowActions] = useState(false);
 
   const { openModal: openTimerModal, closeModal: closeTimerModal } = useModal(
@@ -62,10 +63,7 @@ export function ExerciseCard({
     setShowActions((prev) => !prev);
   }, [hasActions]);
 
-  const jumpToNextSet = useCallback(() => {
-    setCurrentSet((prev) => prev + 1);
-    openTimerModal();
-  }, []);
+  const { workout } = useWorkout();
 
   return (
     <View>
@@ -127,10 +125,11 @@ export function ExerciseCard({
                 )}
               </View>
               {exercise.sets.map((set, i) => {
-                const isChecked = set?.done ?? false;
+                const currentSet = workout?.currentSets?.[exercise.id] ?? 0;
+                const isChecked = set?.done;
                 const isInputEditble = !isChecked && editable;
                 const editingOneByOne = shouldEditOneByOne
-                  ? isInputEditble && i <= currentSet
+                  ? isInputEditble && i == currentSet
                   : true;
                 const ignoreDisableByIndex = shouldEditAllAtSame
                   ? true
@@ -141,7 +140,7 @@ export function ExerciseCard({
                     key={i}
                     className={clsx("flex-row gap-7", {
                       "opacity-60":
-                        shoulDecreaseOpacity && (isChecked || i > currentSet),
+                        shoulDecreaseOpacity && (isChecked || i !== currentSet),
                     })}
                   >
                     <View className="w-2/12">
@@ -207,10 +206,10 @@ export function ExerciseCard({
                     {showCheckBox && (
                       <View className="ml-4 mt-2">
                         <CheckBox
-                          alreadyChecked={set?.done ?? false}
+                          alreadyChecked={set?.done}
                           onCheck={() => {
                             checkSets?.(exercise.id, set.id ?? "");
-                            jumpToNextSet();
+                            openTimerModal();
                           }}
                           disabled={isChecked || !editable}
                         />

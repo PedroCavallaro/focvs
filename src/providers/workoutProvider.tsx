@@ -66,7 +66,7 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
         console.log("não tem no storage");
         const workout = await api.workout.getWorkoutOfTheDay();
 
-        setWorkout(workout as Workout);
+        setWorkout({ ...workout, currentSets: {} });
 
         await Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, workout);
 
@@ -144,14 +144,12 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
         const exercises = prev.exercises.map((exercise) => {
           if (exercise.id !== exerciseId) return exercise;
 
-          if (exercise.id !== exerciseId) return exercise;
-
           const sets = exercise.sets.map((e) => {
             if (e.id === setId) {
               return { ...e, done: true };
             }
 
-            return { ...e, done: false };
+            return e;
           });
 
           exercise.sets = sets;
@@ -159,13 +157,23 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
           return exercise;
         });
 
+        const currentSet = prev.currentSets?.[exerciseId] ?? 0;
+
         Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, {
           ...prev,
+          currentSets: {
+            ...prev.currentSets,
+            [exerciseId]: currentSet + 1,
+          },
           exercises,
         });
 
         return {
           ...prev,
+          currentSets: {
+            ...prev.currentSets,
+            [exerciseId]: currentSet + 1,
+          },
           exercises,
         };
       });
@@ -196,12 +204,6 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
           set[type] = Number(value);
 
           e.sets[setIndex] = set;
-
-          const currentSet = workout.currentSets?.[e.id];
-
-          if (workout.currentSets) {
-            workout.currentSets[exerciseId] = currentSet ? currentSet + 1 : 0;
-          }
         }
 
         return e;

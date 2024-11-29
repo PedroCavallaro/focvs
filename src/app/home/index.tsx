@@ -41,6 +41,8 @@ export default function HomePage() {
     fetchWorkout();
   }, []);
 
+  // Storage.removeItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY);
+
   return (
     <View className="h-full flex-col gap-8">
       {!isLoading && (
