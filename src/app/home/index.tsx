@@ -1,16 +1,15 @@
 import { useRouter } from "expo-router";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useEffect } from "react";
-import { DayOfWeek, daysOfWeek, STORAGE_KEYS } from "@/src/utils";
+import { DayOfWeek, daysOfWeek } from "@/src/utils";
 import { useModal } from "@/src/providers/modalProvider";
 import { BaseModal } from "@/src/components/baseModal";
 import { SwitchWorkoutModal } from "@/src/features/home/switchWorkoutModal";
 import { NoWorkout } from "@/src/features/home/noWokout";
 import { WorkoutActions } from "@/src/features/home/workoutActions";
 import { useWorkout } from "@/src/providers/workoutProvider";
-import { ExerciseCard } from "@/src/features/exerciseCard";
-import { Storage } from "@/src/services";
-import { ExerciseCardActions } from "@/src/features/exerciseCardActions";
+import { ExerciseCard } from "@/src/features/exerciseCard/exerciseCard";
+import { MidWorkoutActions } from "@/src/features/exerciseCard/actions/midWorkoutActions";
 // import notifee from "@notifee/react-native";
 
 export default function HomePage() {
@@ -93,7 +92,7 @@ export default function HomePage() {
                         shouldEditOneByOne
                         shoulDecreaseOpacity
                       >
-                        <ExerciseCardActions />
+                        {workout?.info?.started && <MidWorkoutActions />}
                       </ExerciseCard>
                     );
                   })}

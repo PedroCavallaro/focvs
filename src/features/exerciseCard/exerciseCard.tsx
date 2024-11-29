@@ -1,20 +1,15 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import { Workout } from "../api/dtos";
-import { Input } from "../components/input";
-import { CheckBox } from "../components/checkbox";
+import { Workout } from "../../api/dtos";
+import { Input } from "../../components/input";
+import { CheckBox } from "../../components/checkbox";
 import clsx from "clsx";
-import {
-  createContext,
-  ReactNode,
-  useCallback,
-  useContext,
-  useState,
-} from "react";
-import { useModal } from "../providers/modalProvider";
-import { BaseModal } from "../components/baseModal";
-import { RestTimer } from "./home/restimer/restTimer";
+import { ReactNode, useCallback, useState } from "react";
+import { useModal } from "../../providers/modalProvider";
+import { BaseModal } from "../../components/baseModal";
+import { RestTimer } from "../home/restimer/restTimer";
 import { Image } from "expo-image";
-import { useWorkout } from "../providers/workoutProvider";
+import { useWorkout } from "../../providers/workoutProvider";
+import { ExerciseCardProvider } from "./exerciseCard.provider";
 
 interface IExerciseCardProps {
   showCheckBox: boolean;
@@ -38,27 +33,6 @@ interface IExerciseCardProps {
   children?: ReactNode;
   workout?: Workout;
 }
-
-interface IExerciseCardContext {
-  handleActions: () => void;
-  visible: boolean;
-  exercise: Workout["exercises"][0];
-}
-
-const ExerciseCardContext = createContext({} as IExerciseCardContext);
-
-const ExerciseCardProvider = ({
-  handleActions,
-  visible,
-  children,
-  exercise,
-}: IExerciseCardContext & { children: ReactNode }) => {
-  return (
-    <ExerciseCardContext.Provider value={{ handleActions, visible, exercise }}>
-      {children}
-    </ExerciseCardContext.Provider>
-  );
-};
 
 export function ExerciseCard({
   editable,
@@ -258,5 +232,3 @@ export function ExerciseCard({
     </View>
   );
 }
-
-export const useExerciseCard = () => useContext(ExerciseCardContext);

@@ -1,53 +1,17 @@
+import { useWorkout } from "@/src/providers/workoutProvider";
+import { colors } from "@/src/style";
 import { ArrowDownUpIcon, Plus, ChevronUp } from "lucide-react-native";
-import { useRef, useState, useCallback, useEffect } from "react";
 import { Animated, View } from "react-native";
-import { colors } from "../style";
-import { Button } from "../components/button";
-import { useExerciseCard } from "./exerciseCard";
-import { useWorkout } from "../providers/workoutProvider";
+import { Button } from "@/src/components/button";
+import { useExerciseCard } from "../exerciseCard.provider";
+import { useExerciseCardAnimation } from "../hooks/animation";
 
-export function ExerciseCardActions() {
-  const { handleActions, visible, exercise } = useExerciseCard();
+export function MidWorkoutActions() {
+  const { exercise } = useExerciseCard();
   const { addSetOnExercise } = useWorkout();
-  const [isVisible, setIsVisible] = useState(visible);
 
-  const translateY1 = useRef(new Animated.Value(-100)).current;
-  const translateY2 = useRef(new Animated.Value(-100)).current;
-  const translateY3 = useRef(new Animated.Value(-100)).current;
-
-  const animateButtons = useCallback((direction: "in" | "out") => {
-    const toValue = direction === "in" ? 0 : -100;
-    Animated.stagger(100, [
-      Animated.timing(translateY1, {
-        toValue,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-      Animated.timing(translateY2, {
-        toValue,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-      Animated.timing(translateY3, {
-        toValue,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, []);
-
-  useEffect(() => {
-    animateButtons("in");
-  }, []);
-
-  const toggleAnimation = () => {
-    animateButtons(isVisible ? "out" : "in");
-    setIsVisible(!isVisible);
-
-    if (isVisible) {
-      setTimeout(() => handleActions(), 300);
-    }
-  };
+  const { toggleAnimation, translateY1, translateY2, translateY3 } =
+    useExerciseCardAnimation();
 
   return (
     <View className="flex items-center justify-center">

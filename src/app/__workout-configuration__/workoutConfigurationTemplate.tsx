@@ -69,7 +69,6 @@ export function WorkoutConfigurationTemplate({
     clearWorkout,
     setQuery,
     setWorkout,
-    changeOnWorkoutSampling,
   } = useWorkoutConfiguration(workoutToUpdate);
 
   const { closeDrawer, openDrawer } = useDrawer(() => {
@@ -83,12 +82,11 @@ export function WorkoutConfigurationTemplate({
           clearWorkout={clearWorkout}
           updating={updating}
           workout={workout}
-          changeOnWorkoutSampling={changeOnWorkoutSampling}
           close={() => closeDrawer()}
         />
       </Drawer>
     );
-  }, [workout, updating, clearWorkout, changeOnWorkoutSampling]);
+  }, [workout, updating, clearWorkout]);
 
   const { closeModal: closeAddExerciseModal, openModal: openAddExerciseModal } =
     useModal(

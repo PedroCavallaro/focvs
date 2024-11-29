@@ -7,11 +7,13 @@ import {
 import { DayOfWeek, daysOfWeek } from "@/src/utils";
 import { View, Text, ScrollView } from "react-native";
 import { Button } from "../../components/button";
-import { ExerciseCard } from "../exerciseCard";
+import { ExerciseCard } from "../exerciseCard/exerciseCard";
 import { useCallbackPlus } from "@/src/hooks";
 import { api } from "@/src/api";
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
+import { WorkoutConfigurationActions } from "../exerciseCard/actions/workoutConfigurationActions";
+import * as Crypto from "expo-crypto";
 
 async function save(
   workout: SaveWorkoutDTO | UpdateWorkoutDTO,
@@ -31,7 +33,6 @@ async function save(
 export function WorkoutSampling({
   workout,
   updating,
-  changeOnWorkoutSampling,
   clearWorkout,
   setWorkout,
   close,
@@ -40,17 +41,6 @@ export function WorkoutSampling({
   setWorkout: (workout: SaveWorkoutDTO) => void;
   workout: SaveWorkoutDTO;
   clearWorkout: () => void;
-  changeOnWorkoutSampling: ({
-    type,
-    setIndex,
-    value,
-    exerciseId,
-  }: {
-    type: "reps" | "weight";
-    value: string;
-    setIndex: number;
-    exerciseId: string;
-  }) => void;
   close: () => void;
 }) {
   const [refreshedWorkout, setRefreshedWorkout] = useState(workout);
@@ -90,10 +80,6 @@ export function WorkoutSampling({
     [refreshedWorkout, setRefreshedWorkout],
   );
 
-  useEffect(() => {
-    setWorkout(refreshedWorkout);
-  }, [refreshedWorkout]);
-
   const router = useRouter();
   const saveWorkout = useCallbackPlus(
     async (workout: SaveWorkoutDTO | UpdateWorkoutDTO) => {
@@ -106,6 +92,76 @@ export function WorkoutSampling({
     },
     [workout, updating, router, close, clearWorkout],
   );
+
+  const addSetOnExercise = useCallback(
+    (exerciseId: string) => {
+      setRefreshedWorkout((prev) => {
+        const exercises = prev.exercises.map((exercise) => {
+          if (exercise.id !== exerciseId) return exercise;
+
+          exercise.sets = [
+            ...exercise.sets,
+            {
+              reps: 1,
+              weight: 1,
+              done: false,
+              id: Crypto.randomUUID(),
+              set_number: exercise.sets.length + 1,
+            },
+          ];
+
+          return exercise;
+        });
+
+        return { ...prev, exercises };
+      });
+    },
+    [setRefreshedWorkout],
+  );
+
+  const popSet = useCallback(
+    (exerciseId: string) => {
+      setRefreshedWorkout((prev) => {
+        const exercises = prev.exercises.map((exercise) => {
+          if (exercise.id !== exerciseId) return exercise;
+
+          if (exercise.sets.length <= 1) return exercise;
+
+          exercise.sets = exercise.sets.slice(0, exercise.sets.length - 1);
+
+          return exercise;
+        });
+
+        return {
+          ...prev,
+          exercises,
+        };
+      });
+    },
+    [setRefreshedWorkout],
+  );
+
+  const removeExerciseFromWorkout = useCallback(
+    (exerciseId: string) => {
+      setRefreshedWorkout((prev) => {
+        if (prev.exercises.length === 1) return prev;
+
+        const exercises = prev.exercises.filter(
+          (exercise) => exercise.id !== exerciseId,
+        );
+
+        return {
+          ...prev,
+          exercises,
+        };
+      });
+    },
+    [setRefreshedWorkout],
+  );
+
+  useEffect(() => {
+    setWorkout(refreshedWorkout);
+  }, [refreshedWorkout]);
 
   return (
     <ScrollView>
@@ -136,14 +192,19 @@ export function WorkoutSampling({
           {refreshedWorkout?.exercises?.map((exercise) => {
             return (
               <ExerciseCard
-                hasActions
                 editable={true}
                 showCheckBox={false}
                 onChange={changeOnWorkoutSamplinga}
                 key={exercise.id}
                 exercise={exercise}
                 shouldEditAllAtSame
-              />
+              >
+                <WorkoutConfigurationActions
+                  popSet={popSet}
+                  removeExerciseFromWorkout={removeExerciseFromWorkout}
+                  addSetOnExercise={addSetOnExercise}
+                />
+              </ExerciseCard>
             );
           })}
         </View>

@@ -1,5 +1,5 @@
 import { api } from "@/src/api";
-import { ExerciseCard } from "@/src/features/exerciseCard";
+import { ExerciseCard } from "@/src/features/exerciseCard/exerciseCard";
 import { WorkoutSumary } from "@/src/features/workout/workoutSummary";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
