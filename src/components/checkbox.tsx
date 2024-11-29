@@ -33,8 +33,6 @@ export function CheckBox({
     return setChecked(false);
   }, [checked]);
 
-  // console.log("isChecked", checked);
-
   return (
     <View className="w-[6%] flex-row items-center justify-center">
       <TouchableOpacity

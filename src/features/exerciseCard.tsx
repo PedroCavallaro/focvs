@@ -30,6 +30,7 @@ interface IExerciseCardProps {
   shouldEditAllAtSame?: boolean;
   editable?: boolean;
   hasActions?: boolean;
+  workout?: Workout;
 }
 
 export function ExerciseCard({
@@ -126,8 +127,6 @@ export function ExerciseCard({
                 )}
               </View>
               {exercise.sets.map((set, i) => {
-                console.log(exercise.name);
-                console.log(set.done);
                 const isChecked = set?.done ?? false;
                 const isInputEditble = !isChecked && editable;
                 const editingOneByOne = shouldEditOneByOne
