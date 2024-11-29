@@ -51,6 +51,7 @@ export default function RootLayout() {
   const checkForWorkoutLinkOnClipboard = async () => {
     const clipText = await Clipboard.fetchCopiedText();
 
+    console.log(clipText);
     if (
       !clipText?.includes("/workout/link") ||
       clipText === clipBoardInfo?.lastClipText

@@ -30,6 +30,7 @@ interface IExerciseCardProps {
   shouldEditAllAtSame?: boolean;
   editable?: boolean;
   hasActions?: boolean;
+  workout?: Workout;
 }
 
 export function ExerciseCard({

@@ -196,4 +196,5 @@ export function useWorkouConfiguration1(workoutToUpdate?: WorkoutDetails) {
   };
 }
 
+export default { a: "" };
 // export default { useWorkouConfiguration };

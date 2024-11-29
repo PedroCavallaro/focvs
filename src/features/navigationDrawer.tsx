@@ -16,9 +16,12 @@ import {
 import { colors } from "../style";
 import { ScrollView } from "react-native";
 import { UserSummary } from "./userSummary";
+import { useWorkout } from "../providers/workoutProvider";
+import { Workout } from "../api/dtos";
 
 export function NavigationDrawer({ close }: { close: () => void }) {
   const router = useRouter();
+  const { setWorkout } = useWorkout();
 
   const routes = useMemo(
     () =>
@@ -45,9 +48,7 @@ export function NavigationDrawer({ close }: { close: () => void }) {
   );
 
   const exit = useCallback(async () => {
-    console.log(
-      await SecureStore.getItemAsync(STORAGE_KEYS.WORKOUT_OF_THE_DAY),
-    );
+    setWorkout({ currentSets: {} } as Workout);
 
     await Promise.all([
       SecureStore.deleteItemAsync(STORAGE_KEYS.AUTH_TOKEN),

@@ -4,6 +4,8 @@ import { ScrollView, TouchableOpacity, View } from "react-native";
 import { WorkoutDetailsCard } from "./workoutDetailsCard";
 import { useCallback } from "react";
 import { Workout } from "@/src/api/dtos";
+import { STORAGE_KEYS } from "@/src/utils";
+import { Storage } from "@/src/services";
 
 export function SwitchWorkoutModal({
   setWorkout,
@@ -20,6 +22,8 @@ export function SwitchWorkoutModal({
   const changeWorkout = useCallback(
     async (id: string) => {
       const res = await api.workout.getWorkout(id);
+
+      await Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, res);
 
       setWorkout(res);
       close();

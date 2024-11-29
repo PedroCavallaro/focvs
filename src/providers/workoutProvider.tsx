@@ -3,11 +3,10 @@ import {
   ReactNode,
   useCallback,
   useContext,
-  useEffect,
   useState,
 } from "react";
 import { Workout } from "../api/dtos";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { api } from "../api";
 import { STORAGE_KEYS } from "../utils/keys";
 import { Storage } from "../services";
@@ -19,6 +18,18 @@ interface IWorkoutContext {
   finishWorkout: () => void;
   setWorkout: (workout: Workout | ((prev: Workout) => Workout)) => void;
   fetchWorkout: () => void;
+  checkSet: (exerciseId: string, setId: string) => void;
+  onChange?: ({
+    type,
+    setIndex,
+    value,
+    exerciseId,
+  }: {
+    type: "reps" | "weight";
+    value: string;
+    setIndex: number;
+    exerciseId: string;
+  }) => void;
 }
 
 const WorkoutContext = createContext({} as IWorkoutContext);
@@ -39,18 +50,20 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
 
   const fetchWorkoutOfTheDay = useCallback(async () => {
     try {
-      setLoading(true);
       if (workout?.info?.started) {
+        console.log("ja iniciado");
         setWorkout(workout);
 
         return workout;
       }
 
+      setLoading(true);
       const hasOnStorage = await Storage.getItem<Workout>(
         STORAGE_KEYS.WORKOUT_OF_THE_DAY,
       );
 
       if (!hasOnStorage?.id) {
+        console.log("não tem no storage");
         const workout = await api.workout.getWorkoutOfTheDay();
 
         setWorkout(workout as Workout);
@@ -60,6 +73,7 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
         return workout;
       }
 
+      console.log("tem no storage");
       setWorkout(hasOnStorage);
 
       return hasOnStorage;
@@ -70,7 +84,7 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
     }
   }, [setWorkout, workout]);
 
-  const startWorkout = useCallback(() => {
+  const startWorkout = useCallback(async () => {
     setWorkout((prev) => {
       return {
         ...prev,
@@ -80,12 +94,15 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
         },
       };
     });
-  }, [setWorkout]);
 
-  const saveWorkoutOnStorage = useCallback(async () => {
-    console.log("a");
-    await Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, workout);
-  }, [workout]);
+    await Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, {
+      ...workout,
+      info: {
+        started: true,
+        startedAt: new Date().getTime(),
+      },
+    });
+  }, [workout, setWorkout]);
 
   const finishWorkout = useCallback(async () => {
     const workoutInfo = await Storage.getItem<Workout>(
@@ -100,17 +117,107 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
       finishedAt: new Date().getTime(),
     };
 
-    setWorkout(() => ({
-      ...workoutInfo,
-      info,
-    }));
-
     savePerformedWorkout({ ...workoutInfo, info });
+
+    setWorkout((prev) => {
+      Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, {
+        ...prev,
+        info: {
+          ...info,
+          startedAt: undefined,
+        },
+      });
+
+      return {
+        ...prev,
+        info: {
+          ...info,
+          startedAt: undefined,
+        },
+      };
+    });
   }, [setWorkout]);
 
-  useEffect(() => {
-    saveWorkoutOnStorage();
-  }, [workout]);
+  const checkSet = useCallback(
+    (exerciseId: string, setId: string) => {
+      setWorkout((prev) => {
+        const exercises = prev.exercises.map((exercise) => {
+          if (exercise.id !== exerciseId) return exercise;
+
+          if (exercise.id !== exerciseId) return exercise;
+
+          const sets = exercise.sets.map((e) => {
+            if (e.id === setId) {
+              return { ...e, done: true };
+            }
+
+            return { ...e, done: false };
+          });
+
+          exercise.sets = sets;
+
+          return exercise;
+        });
+
+        Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, {
+          ...prev,
+          exercises,
+        });
+
+        return {
+          ...prev,
+          exercises,
+        };
+      });
+    },
+    [workout, setWorkout],
+  );
+
+  const onChange = useCallback(
+    ({
+      type,
+      setIndex,
+      value,
+      exerciseId,
+    }: {
+      type: "reps" | "weight";
+      value: string;
+      setIndex: number;
+      exerciseId: string;
+    }) => {
+      if (!workout?.exercises) return;
+
+      const exercises = workout.exercises;
+
+      const parsedExercises = exercises?.map((e) => {
+        if (e.id == exerciseId) {
+          const set = e.sets[setIndex];
+
+          set[type] = Number(value);
+
+          e.sets[setIndex] = set;
+
+          const currentSet = workout.currentSets?.[e.id];
+
+          if (workout.currentSets) {
+            workout.currentSets[exerciseId] = currentSet ? currentSet + 1 : 0;
+          }
+        }
+
+        return e;
+      });
+
+      setWorkout((prev) => {
+        Storage.setItem(STORAGE_KEYS.WORKOUT_OF_THE_DAY, {
+          ...prev,
+          exercises,
+        });
+
+        return { ...prev, exercises: parsedExercises };
+      });
+    },
+    [setWorkout, workout],
+  );
 
   return (
     <WorkoutContext.Provider
@@ -121,6 +228,8 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
         startWorkout,
         finishWorkout,
         setWorkout,
+        onChange,
+        checkSet,
       }}
     >
       {children}
