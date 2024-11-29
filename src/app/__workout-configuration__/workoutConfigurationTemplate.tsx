@@ -29,7 +29,7 @@ import { Drawer } from "@/src/components/drawer";
 // import { useWorkouConfiguration } from "./workout-configuration";
 import { plural } from "@/src/utils";
 import { WorkoutInfoForm } from "@/src/features/workout-configuration/forms/workoutInfoForm";
-import { useWorkoutConfiguration } from "./provider";
+import { useWorkoutConfiguration } from "./workout-configuration";
 
 export type ChangeWorkoutInfo =
   | { key: "day"; value: number }
@@ -68,8 +68,9 @@ export function WorkoutConfigurationTemplate({
     workout,
     clearWorkout,
     setQuery,
+    setWorkout,
     changeOnWorkoutSampling,
-  } = useWorkoutConfiguration();
+  } = useWorkoutConfiguration(workoutToUpdate);
 
   const { closeDrawer, openDrawer } = useDrawer(() => {
     return (
@@ -78,6 +79,7 @@ export function WorkoutConfigurationTemplate({
         onClose={() => closeDrawer()}
       >
         <WorkoutSampling
+          setWorkout={setWorkout}
           clearWorkout={clearWorkout}
           updating={updating}
           workout={workout}

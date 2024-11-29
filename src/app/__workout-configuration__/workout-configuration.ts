@@ -33,7 +33,7 @@ function getAtom(workoutToUpdate?: WorkoutDetails) {
   return atomWithReset<SaveWorkoutDTO>(base);
 }
 
-export function useWorkouConfiguration1(workoutToUpdate?: WorkoutDetails) {
+export function useWorkoutConfiguration(workoutToUpdate?: WorkoutDetails) {
   const atom = useMemo(() => getAtom(workoutToUpdate), [workoutToUpdate]);
 
   const [workout, setWorkout] = useAtom(atom);
@@ -189,6 +189,7 @@ export function useWorkouConfiguration1(workoutToUpdate?: WorkoutDetails) {
     changeOnWorkoutSampling,
     fetchExercises,
     clearWorkout,
+    setWorkout,
     setQuery,
     addExerciseToWorkout,
     changeWorkoutInfo,
@@ -196,5 +197,4 @@ export function useWorkouConfiguration1(workoutToUpdate?: WorkoutDetails) {
   };
 }
 
-export default { a: "" };
-// export default { useWorkouConfiguration };
+export default { useWorkoutConfiguration };

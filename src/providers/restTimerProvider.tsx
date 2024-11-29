@@ -36,6 +36,7 @@ export function RestTimerProvider({ children }: { children: ReactNode }) {
         timerConfig: [0, 0, 0, 0],
       }) as TimerState,
   );
+  const [currentTimer, setCurrentTimer] = useState(0);
 
   function arrayToSeconds(timeArray: Array<number>) {
     const totalMinutes = String(timeArray[0]) + String(timeArray[1]);
@@ -116,6 +117,17 @@ export function RestTimerProvider({ children }: { children: ReactNode }) {
 
     return () => clearTimeout(timerId);
   }, [restTimer, showToast]);
+
+  useEffect(() => {
+    const interval = setInterval(
+      () => {
+        console.log("oi");
+      },
+      arrayToSeconds(restTimer.timerConfig) * 1000,
+    );
+
+    return () => clearInterval(interval);
+  }, [restTimer]);
 
   return (
     <RestTimerContext.Provider

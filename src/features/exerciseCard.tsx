@@ -10,7 +10,6 @@ import { RestTimer } from "./home/restimer/restTimer";
 import { Image } from "expo-image";
 import { ExerciseCardActions } from "./exerciseCardActions";
 import { useWorkout } from "../providers/workoutProvider";
-import { set } from "zod";
 
 interface IExerciseCardProps {
   showCheckBox: boolean;
