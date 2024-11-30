@@ -22,7 +22,7 @@ export function RecoverPasswordForm({
       case RECOVER_PASSWORD_STATE.TYPE_CODE:
         return <TypeCodeForm handleState={handleState} />;
       case RECOVER_PASSWORD_STATE.CHANGE_PASSWORD:
-        return <ChangePasswordForm handleState={handleState} />;
+        return <ChangePasswordForm />;
     }
   }, [handleState, state]);
 

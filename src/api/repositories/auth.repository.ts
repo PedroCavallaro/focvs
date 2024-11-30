@@ -1,3 +1,4 @@
+import * as SecureStore from "expo-secure-store";
 import {
   AuthResponse,
   CreateAccountDTO,
@@ -6,6 +7,7 @@ import {
 } from "../dtos";
 import { HttpClient } from "../http";
 import { Repository } from "./repository";
+import { STORAGE_KEYS } from "@/src/utils";
 
 export class AuthRepository extends Repository {
   constructor(api: HttpClient) {
@@ -36,6 +38,39 @@ export class AuthRepository extends Repository {
     const response = await this.api.post<AuthResponse>("/auth/recover-token", {
       body: data,
     });
+
+    return response;
+  }
+
+  async sendCode(code: string) {
+    const token = await SecureStore.getItemAsync(
+      STORAGE_KEYS.RECOVER_PASSWORD_TOKEN,
+    );
+
+    const response = await this.api.post<AuthResponse>("/auth/validate", {
+      body: { code: Number(code) },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response;
+  }
+
+  async changePassword(password: string) {
+    const token = await SecureStore.getItemAsync(
+      STORAGE_KEYS.RECOVER_PASSWORD_TOKEN,
+    );
+
+    const response = await this.api.post<AuthResponse>(
+      "/auth/change-password",
+      {
+        body: { password },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
 
     return response;
   }

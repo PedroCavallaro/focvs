@@ -7,6 +7,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import * as SecureStorage from "expo-secure-store";
 import { jwtDecode } from "jwt-decode";
 import { STORAGE_KEYS } from "@/src/utils/keys";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/src/api";
 
 export function TypeCodeForm({
   handleState,
@@ -14,6 +16,17 @@ export function TypeCodeForm({
   handleState: (state: RECOVER_PASSWORD_STATE) => void;
 }) {
   const [user, setUser] = useState<UserDTO>({} as UserDTO);
+  const [code, setCode] = useState(["", "", "", ""]);
+
+  const { mutate: send } = useMutation({
+    mutationFn: () => sendCode(),
+  });
+
+  const sendCode = useCallback(async () => {
+    await api.auth.sendCode(code.join(""));
+
+    handleState(RECOVER_PASSWORD_STATE.CHANGE_PASSWORD);
+  }, [code, handleState]);
 
   const getToken = useCallback(async () => {
     const res = await SecureStorage.getItemAsync(
@@ -29,6 +42,17 @@ export function TypeCodeForm({
   useEffect(() => {
     getToken();
   }, [getToken]);
+
+  const handleCode = useCallback(
+    (i: number, v: string) => {
+      const newArray = [...code];
+
+      newArray[i] = v;
+
+      setCode(newArray);
+    },
+    [code, setCode],
+  );
 
   const emailString = useMemo(() => {
     const splitedEmail = user?.email?.split("@");
@@ -66,6 +90,9 @@ export function TypeCodeForm({
         <View className="w-1/5">
           <Input>
             <Input.Field
+              onChangeText={(v) => {
+                handleCode(0, v);
+              }}
               maxLength={1}
               keyboardType="numeric"
               className="text-center text-white"
@@ -76,6 +103,9 @@ export function TypeCodeForm({
         <View className="w-1/5">
           <Input>
             <Input.Field
+              onChangeText={(v) => {
+                handleCode(1, v);
+              }}
               maxLength={1}
               keyboardType="number-pad"
               className="text-center text-white"
@@ -86,6 +116,9 @@ export function TypeCodeForm({
         <View className="w-1/5">
           <Input>
             <Input.Field
+              onChangeText={(v) => {
+                handleCode(2, v);
+              }}
               maxLength={1}
               keyboardType="numeric"
               className="text-center text-white"
@@ -96,6 +129,9 @@ export function TypeCodeForm({
         <View className="w-1/5">
           <Input>
             <Input.Field
+              onChangeText={(v) => {
+                handleCode(3, v);
+              }}
               maxLength={1}
               keyboardType="numeric"
               className="text-center text-white"
@@ -104,7 +140,7 @@ export function TypeCodeForm({
           </Input>
         </View>
       </View>
-      <Button>
+      <Button onPress={() => send()}>
         <Button.Title>Enviar</Button.Title>
       </Button>
     </>

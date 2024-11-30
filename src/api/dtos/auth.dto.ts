@@ -8,6 +8,15 @@ export const LoginSchema = z.object({
   }),
 });
 
+export const ChangePasswordSchema = z.object({
+  password: zExt.string({
+    min: 8,
+  }),
+  confirmPassword: zExt.string({
+    min: 8,
+  }),
+});
+
 export const CreateAccountSchema = z.object({
   name: zExt.string({ min: 3 }),
   email: zExt.string().email("Formato inválido"),
@@ -18,6 +27,7 @@ export const GetRecoverPasswordCodeSchema = z.object({
   email: zExt.string().email("Formato inválido"),
 });
 
+export type ChangePasswordSchema = z.infer<typeof ChangePasswordSchema>;
 export type LoginDTO = z.infer<typeof LoginSchema>;
 export type CreateAccountDTO = z.infer<typeof CreateAccountSchema>;
 export type AuthResponse = { token: string };
