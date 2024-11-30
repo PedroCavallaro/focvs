@@ -125,20 +125,27 @@ export function WorkoutSampling({
 
   const popSet = useCallback(
     (exerciseId: string) => {
+      console.log("oi");
       setRefreshedWorkout((prev) => {
+        const ids: string[] = [];
         const exercises = prev.exercises.map((exercise) => {
           if (exercise.id !== exerciseId) return exercise;
 
           if (exercise.sets.length <= 1) return exercise;
+
+          ids.push(exercise.sets[exercise.sets.length - 1]?.id ?? "");
 
           exercise.sets = exercise.sets.slice(0, exercise.sets.length - 1);
 
           return exercise;
         });
 
+        console.log(ids);
+
         return {
           ...prev,
           exercises,
+          deletedSets: [...(prev.deletedSets ?? []), ...ids],
         };
       });
     },
