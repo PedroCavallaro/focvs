@@ -71,7 +71,6 @@ export class WorkoutRepository extends Repository {
   }
 
   async copyWorkoutToAccount(link: string, signature: string) {
-    console.log(link);
     const res = await this.api.post<WorkoutDetails>(`${link}`, {
       body: { signature },
     });
@@ -95,6 +94,14 @@ export class WorkoutRepository extends Repository {
 
   async deleteWorkout(id: string) {
     const res = await this.api.delete<WorkoutDetails[]>(`/workout/${id}`);
+
+    return res;
+  }
+
+  async copyWorkoutById(workoutId: string) {
+    const res = await this.api.post(`/workout/copy`, {
+      body: { workoutId },
+    });
 
     return res;
   }

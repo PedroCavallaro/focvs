@@ -1,4 +1,4 @@
-import { Workout } from "../dtos";
+import { PerformedWorkout, Workout } from "../dtos";
 import { HttpClient } from "../http";
 import { Repository } from "./repository";
 import {
@@ -17,6 +17,14 @@ export class StatisticsRepository extends Repository {
 
   static build(api: HttpClient) {
     return { statistics: new StatisticsRepository(api) };
+  }
+
+  async getPerformedWorkout(date: string): Promise<PerformedWorkout> {
+    const res = await this.api.get<PerformedWorkout>(
+      `/statistics/performed-workout/${date}`,
+    );
+
+    return res;
   }
 
   async getAllStatics(): Promise<StatisticsResponse> {

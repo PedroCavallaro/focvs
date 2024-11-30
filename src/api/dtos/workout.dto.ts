@@ -53,6 +53,7 @@ export type SaveWorkoutDTO = z.infer<typeof SaveWorkout>;
 export type UpdateWorkoutDTO = z.infer<typeof UpdateWorkout>;
 type WorkoutResponse = z.infer<typeof SaveWorkout>;
 
+// fix this types
 export type Workout = WorkoutResponse & {
   id: string;
   signature: string;
@@ -76,6 +77,13 @@ export type WorkoutDetails = WorkoutResponse & {
   exerciseAmount: number;
 };
 export type WorkoutExercise = z.infer<typeof AddExerciseSchema>;
+
+export type PerformedWorkout = Workout &
+  WorkoutDetails &
+  WorkoutResponse & {
+    performedAt: Date;
+    spentMinutes: number;
+  };
 
 type CurrentSets = {
   [key: string]: number;

@@ -25,6 +25,11 @@ export function WorkoutSumary({
   const { mutate: delteWorkout } = useMutation({
     mutationFn: (id: string) => api.workout.deleteWorkout(id),
   });
+
+  const { mutate: copyWorkout } = useMutation({
+    mutationFn: (id: string) => api.workout.copyWorkoutById(id),
+  });
+
   const { showToast } = useToast(() => (
     <Toast>
       <Toast.Content
@@ -54,11 +59,14 @@ export function WorkoutSumary({
             okText="Copiar"
             closeText="Cancelar"
             onClose={() => closeCopyWorkoutModal()}
-            onOk={() => console.log("IMPLEMENT THIS")}
+            onOk={() => {
+              copyWorkout(workout.id);
+              closeCopyWorkoutModal();
+            }}
           />
         </BaseModal>
       ),
-      [],
+      [workout],
     );
 
   const {
