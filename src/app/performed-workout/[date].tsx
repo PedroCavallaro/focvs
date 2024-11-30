@@ -19,6 +19,8 @@ export default function WorkoutPage() {
     return `${day}/${month}/${year}`;
   }, [date]);
 
+  console.log(workout?.spentMinutes);
+
   return (
     <View className="flex-col gap-8">
       {workout && (
@@ -34,7 +36,7 @@ export default function WorkoutPage() {
                     Treino realizdo em: {parsedDate}
                   </Text>
                   <Text className="font-regular text-white">
-                    Tempo total: {workout.spentMinutes} minutos
+                    Tempo total: {workout?.spentMinutes ?? 0} minutos
                   </Text>
                 </View>
               </View>

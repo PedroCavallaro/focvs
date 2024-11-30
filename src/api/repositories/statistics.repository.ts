@@ -30,7 +30,7 @@ export class StatisticsRepository extends Repository {
   async getAllStatics(): Promise<StatisticsResponse> {
     const statistics = await Promise.all([
       this.getAllPerformedWorkouts(),
-      this.getHours(),
+      this.getWorkoutAmount(),
       this.getImprovements(),
       this.getEvolution(),
     ]);
@@ -44,11 +44,17 @@ export class StatisticsRepository extends Repository {
   }
 
   async getImprovements(): Promise<ExerciseImprovement[]> {
-    const res = await this.api.get<ExerciseImprovement[]>(
-      "/statistics/last-improvements",
-    );
+    try {
+      const res = await this.api.get<ExerciseImprovement[]>(
+        "/statistics/last-improvements",
+      );
 
-    return res;
+      return res;
+    } catch (error) {
+      console.log(error);
+
+      return [];
+    }
   }
 
   async getEvolution(): Promise<Evolution[]> {
@@ -63,7 +69,7 @@ export class StatisticsRepository extends Repository {
     return res;
   }
 
-  async getHours(): Promise<WorkoutHoursResponse[]> {
+  async getWorkoutAmount(): Promise<WorkoutHoursResponse[]> {
     const res = await this.api.get<WorkoutHoursResponse[]>(
       "/statistics/workouts-between-days",
       {

@@ -19,15 +19,19 @@ async function save(
   workout: SaveWorkoutDTO | UpdateWorkoutDTO,
   updating: boolean,
 ) {
-  if (updating) {
-    const parsedUpdateWorkout = UpdateWorkout.parse(workout);
+  try {
+    if (updating) {
+      const parsedUpdateWorkout = UpdateWorkout.parse(workout);
 
-    return await api.workout.updateWorkout(parsedUpdateWorkout);
+      return await api.workout.updateWorkout(parsedUpdateWorkout);
+    }
+
+    const parsedWorkout = SaveWorkout.parse(workout);
+
+    return await api.workout.createWorkout(parsedWorkout);
+  } catch (error) {
+    console.log(error);
   }
-
-  const parsedWorkout = SaveWorkout.parse(workout);
-
-  return await api.workout.createWorkout(parsedWorkout);
 }
 
 export function WorkoutSampling({
@@ -146,12 +150,22 @@ export function WorkoutSampling({
       setRefreshedWorkout((prev) => {
         if (prev.exercises.length === 1) return prev;
 
+        const exercise = prev.exercises.find(
+          (exercise) => exercise.id === exerciseId,
+        );
+
+        const ids = exercise?.sets.map((s) => s.id);
+
         const exercises = prev.exercises.filter(
           (exercise) => exercise.id !== exerciseId,
         );
 
         return {
           ...prev,
+          deletedSets: [
+            ...(prev?.deletedSets ?? []),
+            ...(ids ?? []),
+          ] as string[],
           exercises,
         };
       });

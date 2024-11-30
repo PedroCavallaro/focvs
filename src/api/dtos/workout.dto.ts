@@ -31,7 +31,7 @@ export const SaveWorkout = z.object({
   exercises: z.array(AddExerciseSchema, {
     invalid_type_error: "Exercícios devem ser um array",
   }),
-  deletedSets: z.array(z.string()).optional(),
+  deletedSets: z.array(z.string().optional()).optional(),
 });
 
 export const UpdateWorkout = z.object({
@@ -51,7 +51,7 @@ export const UpdateWorkout = z.object({
 export type ExerciseSet = z.infer<typeof ExerciseSetSchema>;
 export type SaveWorkoutDTO = z.infer<typeof SaveWorkout>;
 export type UpdateWorkoutDTO = z.infer<typeof UpdateWorkout>;
-type WorkoutResponse = z.infer<typeof SaveWorkout>;
+type WorkoutResponse = z.infer<typeof SaveWorkout> & { copied: boolean };
 
 // fix this types
 export type Workout = WorkoutResponse & {
