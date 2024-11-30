@@ -2,6 +2,8 @@ import { ScrollView, Text, View } from "react-native";
 import { Image } from "expo-image";
 import { ExerciseImprovement } from "@/src/api/dtos/statistics.dto";
 import { useMemo } from "react";
+import { ArrowRight } from "lucide-react-native";
+import { colors } from "@/src/style";
 
 export function ExerciseEvolution({ data }: { data: ExerciseImprovement[] }) {
   const parsedData = useMemo(
@@ -34,9 +36,15 @@ export function ExerciseEvolution({ data }: { data: ExerciseImprovement[] }) {
                     />
                     <View className="flex-col gap-4">
                       <Text className="text-white">{e.exercise.name}</Text>
-                      <Text className="font-light text-white">
-                        {`${e?.oldPr?.weight}kg`} {"->"} {`${e.pr.weight}kg`}
-                      </Text>
+                      <View className="flex-row items-center justify-center gap-1">
+                        <Text className="items-center font-light text-white">
+                          {`${e?.oldPr?.weight}kg`}
+                        </Text>
+                        <ArrowRight color={colors.orange[500]} size={12} />
+                        <Text className="font-light text-white">
+                          {`${e.pr.weight}kg`}
+                        </Text>
+                      </View>
                     </View>
                   </>
                 )}
