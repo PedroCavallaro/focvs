@@ -113,26 +113,21 @@ export function WorkoutSumary({
           <View className="flex-row gap-4">
             <Text className="font- text-2xl text-white">{workout.name}</Text>
           </View>
-          {!workout.copied ? (
-            <View className="flex-row gap-3">
-              <View className="overflow-hidden rounded-full">
-                <Image
-                  // eslint-disable-next-line @typescript-eslint/no-require-imports
-                  source={require("../../../assets/images/user-icon.png")}
-                  style={{
-                    width: 24,
-                    height: 24,
-                  }}
-                />
-                {/* <UserCircle size={24} color={colors.orange[500]} /> */}
-              </View>
-              <Text className="text-white opacity-70">
-                {workout?.user?.name}
-              </Text>
+
+          <View className="flex-row gap-3">
+            <View className="overflow-hidden rounded-full">
+              <Image
+                // eslint-disable-next-line @typescript-eslint/no-require-imports
+                source={require("../../../assets/images/user-icon.png")}
+                style={{
+                  width: 24,
+                  height: 24,
+                }}
+              />
+              {/* <UserCircle size={24} color={colors.orange[500]} /> */}
             </View>
-          ) : (
-            <Text className="text-white opacity-70">Treino copiado</Text>
-          )}
+            <Text className="text-white opacity-70">{workout?.user?.name}</Text>
+          </View>
         </View>
         <View className="flex-row gap-4">
           {user?.id !== workout.user.id && (

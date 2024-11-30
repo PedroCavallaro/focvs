@@ -45,6 +45,8 @@ export default function WorkoutPage() {
 
           <View className="flex-col gap-8">
             {workout.exercises?.map((e, i) => {
+              console.log(e.sets);
+
               return (
                 <ExerciseCard
                   exercise={e}
