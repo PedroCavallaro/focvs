@@ -1,7 +1,7 @@
 import { api } from "@/src/api";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
-import { WorkoutConfigurationTemplate } from "../__workout-configuration__/workoutConfigurationTemplate";
+import { WorkoutConfigurationTemplate } from "../../features/workout-configuration/template/workoutConfigurationTemplate";
 
 export default function UpdateWorkout() {
   const { id } = useLocalSearchParams();

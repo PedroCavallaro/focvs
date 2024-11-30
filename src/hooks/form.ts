@@ -3,6 +3,7 @@ import { Path, useForm as useReactHookForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export function useForm<T extends {}>({ schema }: { schema: ZodSchema<T> }) {
   const {
     formState: { errors },

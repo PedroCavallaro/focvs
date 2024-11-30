@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { DayOfWeek, daysOfWeek } from "@/src/utils";
 import { colors } from "@/src/style";
-import { ChangeWorkoutInfo } from "@/src/app/__workout-configuration__/workoutConfigurationTemplate";
+import { ChangeWorkoutInfo } from "@/src/features/workout-configuration/template/workoutConfigurationTemplate";
 import { SaveWorkoutDTO } from "@/src/api/dtos";
 
 export function WorkoutInfoForm({

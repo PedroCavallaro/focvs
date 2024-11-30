@@ -2,13 +2,7 @@ import { Input } from "@/src/components/input";
 import { colors } from "@/src/style";
 import { Search } from "lucide-react-native";
 import { useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  Animated,
-} from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { WorkoutDetailsCard } from "@/src/features/home/workoutDetailsCard";
 import { router } from "expo-router";
 import { useSearch } from "@/src/hooks/search";
@@ -16,7 +10,7 @@ import { Footer } from "@/src/components/footer";
 import { Header } from "@/src/components/header";
 
 export default function SearchPage() {
-  const { fetchWorkouts, query, workouts, handleScroll, animation, setQuery } =
+  const { fetchWorkouts, query, workouts, handleScroll, setQuery } =
     useSearch();
 
   useEffect(() => {
